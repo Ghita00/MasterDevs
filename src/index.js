@@ -69,6 +69,7 @@ app.use('/api/groups', require('./routes/group-routes'))
 app.use('/api/users', require('./routes/user-routes'))
 app.use('/api/profiles', require('./routes/profile-routes'))
 app.use('/api/children', require('./routes/child-routes'))
+app.use('/api/childrenProfile', require('./routes/child-profile-routes'))
 app.use('/api/github', require('./routes/github-routes'))
 app.use('/api/community', require('./routes/community-routes'))
 

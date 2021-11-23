@@ -2313,6 +2313,19 @@
 .loginButton:hover {
   text-decoration: none;
 }
+.loginChild {
+  padding-left: 3rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: -0.1px;
+  text-decoration: none;
+  text-align: left;
+  color: #000000;
+  position: relative;
+}
+.loginChild:hover {
+  text-decoration: none;
+}
 .signupButton {
   padding-left: 3rem;
 

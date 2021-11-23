@@ -29,6 +29,10 @@ const LogInScreen = Loadable({
   loader: () => import("./components/LogInScreen"),
   loading: () => Loading,
 });
+const LogInScreenChild = Loadable({
+  loader: () => import("./components/LogInScreenChild"),
+  loading: () => Loading,
+});
 const CommunityInterface = Loadable({
   loader: () => import("./components/CommunityManagementScreen"),
   loading: () => Loading,
@@ -232,6 +236,7 @@ class App extends React.Component {
               <Route path="/about" component={AboutScreen} />
               <Route path="/signup" component={SignUpScreen} />
               <Route path="/login" component={LogInScreen} />
+              <Route path="/loginchild" component={LogInScreenChild} />
               <Route path="/faqs" component={FaqsScreen} />
               <Route path="/forgotpsw" component={ForgotPasswordScreen} />
               <Route

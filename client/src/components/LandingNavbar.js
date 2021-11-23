@@ -16,6 +16,9 @@ const LandingNavbar = ({ language }) => {
         <Link to="/login" className="loginButton">
           {texts.logIn}
         </Link>
+        <Link to='/loginchild' className='loginChild'>
+          {'Bambino'}
+        </Link>
         <Link to="/signup" className="signupButton">
           {texts.signUp}
         </Link>
