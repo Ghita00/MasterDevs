@@ -71,7 +71,7 @@ const Notification = require('../models/notification')
 const Parent = require('../models/parent')
 const Reply = require('../models/reply')
 const Child = require('../models/child')
-// const ChildProfile = require('../models/childProfile')
+const ChildProfile = require('../models/childProfile')
 const Announcement = require('../models/announcement')
 // const Framily = require('../models/framily')
 const Password_Reset = require('../models/password-reset')
@@ -960,6 +960,21 @@ router.get('/:userId/children/:childId', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Unauthorized') }
   const child_id = req.params.childId
   Child.findOne({ child_id })
+    .populate('image')
+    .lean()
+    .exec()
+    .then(child => {
+      if (!child) {
+        return res.status(404).send('Child not found')
+      }
+      res.json(child)
+    }).catch(next)
+})
+
+router.get('/:userId/childUser/:childId', (req, res, next) => {
+  if (!req.user_id) { return res.status(401).send('Unauthorized') }
+  const child_user_id = req.params.childId
+  ChildProfile.findOne({ child_user_id })
     .populate('image')
     .lean()
     .exec()
