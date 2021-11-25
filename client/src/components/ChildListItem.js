@@ -94,10 +94,10 @@ class ChildListItem extends React.Component {
                 </h1>
                 <h2>{texts[child.gender]}</h2>
               </div>
-              {this.state.verified
-              ? 
+              {this.state.verified &&
+              (
                 <img src={Images.couple} width={'60'} height={'60'} align="right" vertical-align="middle" alt="birthday icon"/>
-              : null
+              )
             } 
             </div>
             
