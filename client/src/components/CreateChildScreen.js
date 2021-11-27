@@ -178,11 +178,10 @@ class CreateChildScreen extends React.Component {
         Log.info(response);
         //cambiato
         const auth =(this.props.match.params.bool)
-        if(auth){
-
+        console.log(typeof(auth));
+        if(auth==="true"){
           const { pathname } = history.location;
           history.push(`${pathname}/profile`);
-
         } else {
           history.goBack();
         }
@@ -283,7 +282,7 @@ class CreateChildScreen extends React.Component {
     return (
       
       <React.Fragment>
-      {console.log(this.props.match.params.bool)}
+      
         <div
           id="editChildProfileHeaderContainer"
           style={{ backgroundColor: background }}
