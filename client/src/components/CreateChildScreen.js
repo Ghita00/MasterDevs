@@ -176,9 +176,13 @@ class CreateChildScreen extends React.Component {
       })
       .then((response) => {
         Log.info(response);
+        //cambiato
         const auth =(this.props.match.params.bool)
         if(auth){
-          history.push("./profile");
+
+          const { pathname } = history.location;
+          history.push(`${pathname}/profile`);
+
         } else {
           history.goBack();
         }
