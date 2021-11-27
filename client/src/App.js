@@ -73,8 +73,8 @@ const EditProfileScreen = Loadable({
   loader: () => import("./components/EditProfileScreen"),
   loading: () => Loading,
 });
-const ChildProfileScreen = Loadable({
-  loader: () => import("./components/ChildProfileScreen"),
+const CreateChildProfileScreen = Loadable({
+  loader: () => import("./components/CreateChildProfileScreen"),
   loading: () => Loading,
 });
 const CreateChildScreen = Loadable({
@@ -274,12 +274,12 @@ class App extends React.Component {
               />
               <PrivateRoute
                 exact
-                path="/profiles/:profileId/children/create"
+                path="/profiles/:profileId/children/create/:bool"
                 component={CreateChildScreen}
               />
               <PrivateRoute
-                path="/profiles/:profileId/children/:childId"
-                component={ChildProfileScreen}
+                path="/profiles/:profileId/children/create/:bool/profile"
+                component={CreateChildProfileScreen}
               />
 
               <PrivateRoute
