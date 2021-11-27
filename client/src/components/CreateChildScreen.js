@@ -38,7 +38,7 @@ const dataURLtoFile = (dataurl, filename) => {
 class CreateChildScreen extends React.Component {
   constructor(props) {
     super(props);
-    const { history } = this.props;
+    const { history } = this.props; 
     const { state } = history.location;
     if (state !== undefined) {
       this.state = {
@@ -176,7 +176,13 @@ class CreateChildScreen extends React.Component {
       })
       .then((response) => {
         Log.info(response);
-        history.goBack();
+        const auth =(this.props.match.params.bool)
+        if(auth){
+          history.push("./profile");
+        } else {
+          history.goBack();
+        }
+        
       })
       .catch((error) => {
         Log.error(error);
@@ -195,6 +201,7 @@ class CreateChildScreen extends React.Component {
   handleAdd = () => {
     const { history } = this.props;
     const { pathname } = history.location;
+  
     history.push({
       pathname: `${pathname}/additional`,
       state: {
@@ -270,7 +277,9 @@ class CreateChildScreen extends React.Component {
     }
     const bottomBorder = { borderBottom: "1px solid rgba(0,0,0,0.1)" };
     return (
+      
       <React.Fragment>
+      {console.log(this.props.match.params.bool)}
         <div
           id="editChildProfileHeaderContainer"
           style={{ backgroundColor: background }}
