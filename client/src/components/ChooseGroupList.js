@@ -1,15 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
-import GroupListItem from "./GroupListItem";
+import ChooseGroupItem from "./ChooseGroupItem";
 import withLanguage from "./LanguageContext";
 
-const GroupList = ({ groupIds }) => {
+const ChooseGroupList = ({ groupIds }) => {
   const { length } = groupIds;
   const blocks = [...Array(Math.ceil(length / 4)).keys()];
   return (
     <div className="suggestionsContainer">
       <ul>
+          
         {blocks.map((block, blockIndex) => {
           let indexes;
           if (length <= 4) {
@@ -23,9 +24,11 @@ const GroupList = ({ groupIds }) => {
           }
           return (
             <LazyLoad key={blockIndex} height={350} once offset={150}>
+            
               {indexes.map((index) => (
                 <li key={index} style={{ margin: "1rem 0" }}>
-                  <GroupListItem groupId={groupIds[index]} />
+                  <input type="checkbox"  className="choices" id = {groupIds[index]} value = {groupIds[index]}/>
+                  <ChooseGroupItem groupId={groupIds[index]} />
                 </li>
               ))}
             </LazyLoad>
@@ -36,8 +39,8 @@ const GroupList = ({ groupIds }) => {
   );
 };
 
-GroupList.propTypes = {
+ChooseGroupList.propTypes = {
   groupIds: PropTypes.array,
 };
 
-export default withLanguage(GroupList);
+export default withLanguage(ChooseGroupList);

@@ -8,7 +8,7 @@ import withLanguage from "./LanguageContext";
 import Log from "./Log";
 import axios from "axios";
 // import getMyGroups from "./MyFamiliesShareScreen";
-import GroupList from "./GroupList";
+import ChooseGroupList from "./ChooseGroupList";
 
 
 
@@ -30,7 +30,8 @@ class CreateChildProfileScreen extends React.Component {
       password: "",
       passwordConfirm: "",
       birthdate:"",
-      myGroups:[]
+      myGroups:[],
+      selectedGroups:[]
     };
     
   }
@@ -91,7 +92,7 @@ class CreateChildProfileScreen extends React.Component {
       <div className="myGroupsContainer">
         <div className="myGroupsContainerHeader">{texts.myGroups} </div>
         {myGroups.length > 0 ? (
-          <GroupList groupIds={myGroups} />
+          <ChooseGroupList groupIds={myGroups} />
         ) : (
           <div className="myGroupsContainerPrompt">{texts.myGroupsPrompt}</div>
         )}
@@ -145,7 +146,19 @@ class CreateChildProfileScreen extends React.Component {
     const { history, dispatch } = this.props;
     const info = this.state
     const id = this.props.match.params.profileId
-    
+    let selectedGroups = []
+    let groups = document.getElementsByClassName('choices')
+    for(var i=0 ; i<groups.length ; i++){
+      if(groups[i].checked){
+        selectedGroups += [groups[i].value]
+      }
+    }
+    this.setState({
+      selectedGroups: selectedGroups
+    })
+    console.log(this.state.myGroups)
+    console.log(this.state.selectedGroups)
+    /*
     axios
       .post(`/api/users/${id}/childrenProfile`, info)
       .then((response) => {
@@ -155,13 +168,24 @@ class CreateChildProfileScreen extends React.Component {
       .catch((error) => {
         Log.error(error);
         console.log('ops')
-      });
+      }); */
   };
 
   handleSubmit = (event) => {
+    let selectedGroups = []
+    let groups = document.getElementsByClassName('choices')
+    for(var i=0 ; i<groups.length ; i++){
+      if(groups[i].checked){
+        selectedGroups += [groups[i].value]
+      }
+    }
+      
+    this.setState({
+      selectedGroups: selectedGroups
+    })
     event.preventDefault();
     if (this.validate()) {
-      this.submit();
+      this.submit(); 
     }
     this.setState({ formIsValidated: true });
   };
@@ -192,9 +216,9 @@ class CreateChildProfileScreen extends React.Component {
   filledInput = () => {
     const { state } = this;
     return (
-      state.email &&
+      (state.email &&
       state.password &&
-      state.passwordConfirm
+      state.passwordConfirm)
     );
   };
 

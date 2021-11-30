@@ -35,20 +35,8 @@ const getGroupMembers = (groupId) => {
       return [];
     });
 };
-const getGroupSettings = (groupId) => {
-  return axios
-    .get(`/api/groups/${groupId}/settings`)
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      Log.error(error);
-      return {
-        open: "",
-      };
-    });
-};
-class GroupListItem extends React.Component {
+
+class ChooseGroupItem extends React.Component {
   state = { fetchedGroupData: false, group: {} };
 
   async componentDidMount() {
@@ -56,7 +44,7 @@ class GroupListItem extends React.Component {
     const group = await getGroup(groupId);
     const members = await getGroupMembers(groupId);
     // group.kids = await getGroupKids(groupId);
-    group.settings = await getGroupSettings(groupId);
+    //group.settings = await getGroupSettings(groupId);
     group.members = members.filter(
       (member) => member.user_accepted && member.group_accepted
     );
@@ -79,7 +67,7 @@ class GroupListItem extends React.Component {
         tabIndex={-42}
         className="row no-gutters"
         id="suggestionContainer"
-        onClick={this.handleNavigation}
+        //onClick={this.handleNavigation}
       >
         <div className="col-2-10">
           <Avatar
@@ -92,7 +80,6 @@ class GroupListItem extends React.Component {
           <div id="suggestionInfoContainer">
             <h1>{group.name}</h1>
             <h2>{`${texts.members}: ${group.members.length}`}</h2>
-            <h3>{group.settings.open ? texts.open : texts.closed}</h3>
           </div>
         </div>
       </div>
@@ -104,10 +91,10 @@ class GroupListItem extends React.Component {
   }
 }
 
-GroupListItem.propTypes = {
+ChooseGroupItem.propTypes = {
   groupId: PropTypes.string,
   language: PropTypes.string,
   history: PropTypes.object,
 };
 
-export default withRouter(withLanguage(GroupListItem));
+export default withRouter(withLanguage(ChooseGroupItem));
