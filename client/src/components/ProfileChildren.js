@@ -39,7 +39,10 @@ class ProfileChildren extends React.Component {
   addChild = () => {
     const { history } = this.props;
     const { pathname } = history.location;
-    history.push(`${pathname}/create/${false}`);//cambiato
+    history.push({
+      pathname: `${pathname}/create`,
+      bool: false
+    });//cambiato
   };
 
   showOptions(){
@@ -49,7 +52,10 @@ class ProfileChildren extends React.Component {
   addChildProfile = () => {
     const { history } = this.props;
     const { pathname } = history.location;
-    history.push(`${pathname}/create/${true}`);
+    history.push({
+      pathname: `${pathname}/create`,
+      bool: true
+    });
   }
 
   render() {

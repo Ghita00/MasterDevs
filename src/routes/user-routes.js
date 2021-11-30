@@ -956,6 +956,89 @@ router.post('/:id/children', childProfileUpload.single('photo'), async (req, res
   }
 })
 
+router.post('/:id/childrenProfile'/* , childProfileUpload.single('photo') */, async (req, res, next) => {
+  // console.log(req)
+  // console.log(req.body)
+  if (req.user_id !== req.params.id) { return res.status(401).send('Unauthorized') }
+  const {
+    image: imagePath, given_name, family_name, gender, background, other_info, special_needs, allergies, birthdate
+  } = req.body
+  const { file } = req
+  console.log(imagePath, given_name, family_name, gender, background, other_info, special_needs, allergies, birthdate)
+  console.log(file)
+  if (!(birthdate && given_name && family_name && gender && background)) {
+    return res.status(400).send('Bad Request')
+  }
+  const parent_id = req.params.id
+  const child = {
+    birthdate,
+    given_name,
+    family_name,
+    gender,
+    allergies,
+    other_info,
+    special_needs,
+    background,
+    suspended: false
+  }
+  const image_id = objectid()
+  const child_id = objectid()
+  const image = {
+    image_id,
+    owner_type: 'child',
+    owner_id: child_id
+  }
+  if (file) {
+    const fileName = file.filename.split('.')
+    image.path = `/images/profiles/${file.filename}`
+    image.thumbnail_path = `/images/profiles/${fileName[0]}_t.${fileName[1]}`
+    await sharp(path.join(__dirname, `../../images/profiles/${file.filename}`))
+      .resize({
+        height: 200,
+        fit: sharp.fit.cover
+      })
+      .toFile(path.join(__dirname, `../../images/profiles/${fileName[0]}_t.${fileName[1]}`))
+  } else {
+    image.path = imagePath
+    image.thumbnail_path = imagePath
+  }
+  child.child_id = child_id
+  child.image_id = image_id
+  const parent = {
+    parent_id,
+    child_id
+  }
+  const child_profile = {
+    child_user_id: child_id,
+    activity: true,
+    chat: true,
+    partecipation: true,
+    manage: true
+  }
+  const email = req.body.email
+  const user = {
+    user_id: child_id,
+    provider: 'families_share',
+    role: 'child',
+    email: email,
+    token: jwt.sign({ child_id, email }, process.env.SERVER_SECRET),
+    password: req.body.password,
+    language: 'it',
+    last_login: new Date()
+  }
+
+  try {
+    await User.create(user)
+    await Image.create(image)
+    await Child.create(child)
+    await Parent.create(parent)
+    await ChildProfile.create(child_profile)
+    res.status(200).send('Child created')
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.get('/:userId/children/:childId', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Unauthorized') }
   const child_id = req.params.childId

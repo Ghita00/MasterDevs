@@ -168,8 +168,12 @@ class CreateChildScreen extends React.Component {
     bodyFormData.append("special_needs", special_needs);
     bodyFormData.append("allergies", allergies);
     bodyFormData.append("birthdate", birthdate);
-    const auth =(this.props.match.params.bool)
-    if(auth==="true"){ // cambiato
+    // const auth =(this.props.location.bool)
+    if(this.props.location.bool !== undefined){
+      sessionStorage.setItem("bool", this.props.location.info)
+    }
+    let auth = JSON.parse(sessionStorage.getItem("info"));
+    if(auth){ // cambiato
       const { pathname } = history.location;
       history.push({
         pathname:`${pathname}/profile`,
@@ -248,6 +252,7 @@ class CreateChildScreen extends React.Component {
   };
 
   render() {
+    
     const { classes, language, history } = this.props;
     const texts = Texts[language].createChildScreen;
     const {

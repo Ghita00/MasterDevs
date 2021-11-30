@@ -6,6 +6,8 @@ import { withSnackbar } from "notistack";
 import Texts from "../Constants/Texts";
 import withLanguage from "./LanguageContext";
 import registrationActions from "../Actions/RegistrationActions";
+import Log from "./Log";
+import axios from "axios";
 
 
 
@@ -15,8 +17,8 @@ class CreateChildProfileScreen extends React.Component {
     this.state = {
       file:"",
       image:"",
-      givenName: "",
-      familyName: "",
+      given_name: "",
+      family_name: "",
       gender: "",
       allergies:"",
       other_info:"",
@@ -41,8 +43,8 @@ class CreateChildProfileScreen extends React.Component {
     this.setState({
       file:o[0],
       image:o[1],
-      givenName: o[2],
-      familyName: o[3],
+      given_name: o[2],
+      family_name: o[3],
       gender: o[4],
       background:o[5],
       other_info:o[6],
@@ -98,23 +100,18 @@ class CreateChildProfileScreen extends React.Component {
   submit = () => {
     const { history, dispatch } = this.props;
     const info = this.state
-    /*
+    const id = this.props.match.params.profileId
+    
     axios
-      .post(`/api/users/${userId}/children`, bodyFormData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(`/api/users/${id}/childrenProfile`, info)
       .then((response) => {
         Log.info(response);    
-        history.goBack();
+        history.push(`/profiles/${id}/children`);
       })
       .catch((error) => {
         Log.error(error);
-        history.goBack();
-      });*/
-      console.log(info)
-      // history.push(`/profiles/${this.props.match.params.profileId}/children`);
+        console.log('ops')
+      });
   };
 
   handleSubmit = (event) => {

@@ -278,12 +278,12 @@ class App extends React.Component {
               />
               <PrivateRoute
                 exact
-                path="/profiles/:profileId/children/create/:bool"
+                path="/profiles/:profileId/children/create"
                 component={CreateChildScreen}
               />
               
               <PrivateRoute
-                path="/profiles/:profileId/children/create/:bool/profile"
+                path="/profiles/:profileId/children/create/profile"
                 component={CreateChildProfileScreen}
               />
 
