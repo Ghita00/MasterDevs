@@ -168,6 +168,13 @@ class CreateChildScreen extends React.Component {
     bodyFormData.append("special_needs", special_needs);
     bodyFormData.append("allergies", allergies);
     bodyFormData.append("birthdate", birthdate);
+    const auth =(this.props.match.params.bool)
+    if(auth==="true"){ // cambiato
+      const { pathname } = history.location;
+      history.push({
+        pathname:`${pathname}/profile`,
+        info: [file, image, given_name, family_name, gender, background, other_info, special_needs, allergies, birthdate]})
+    } else {
     axios
       .post(`/api/users/${userId}/children`, bodyFormData, {
         headers: {
@@ -175,22 +182,14 @@ class CreateChildScreen extends React.Component {
         },
       })
       .then((response) => {
-        Log.info(response);
-        //cambiato
-        const auth =(this.props.match.params.bool)
-        console.log(typeof(auth));
-        if(auth==="true"){
-          const { pathname } = history.location;
-          history.push(`${pathname}/profile`);
-        } else {
-          history.goBack();
-        }
-        
+        Log.info(response);    
+        history.goBack();
       })
       .catch((error) => {
         Log.error(error);
         history.goBack();
       });
+    }
   };
 
   handleSave = (event) => {
