@@ -5,9 +5,10 @@ import { connect } from "react-redux";
 import { withSnackbar } from "notistack";
 import Texts from "../Constants/Texts";
 import withLanguage from "./LanguageContext";
-import registrationActions from "../Actions/RegistrationActions";
 import Log from "./Log";
 import axios from "axios";
+// import getMyGroups from "./MyFamiliesShareScreen";
+import GroupList from "./GroupList";
 
 
 
@@ -28,13 +29,36 @@ class CreateChildProfileScreen extends React.Component {
       email: "",
       password: "",
       passwordConfirm: "",
-      birthdate:""
-      //user_id: this.props.match.params.profileId
+      birthdate:"",
+      myGroups:[]
     };
     
   }
 
-  componentDidMount() {
+  getMyGroups = (id) => {
+    return axios
+      .get(`/api/users/${id}/groups`)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        Log.error(error);
+        return [];
+      });
+  };
+  
+
+  async componentDidMount() {
+
+    let id = this.props.match.params.profileId
+    const groups = await this.getMyGroups(id);
+    const myGroups = groups
+     .filter((group) => group.user_accepted && group.group_accepted)
+     .map((group) => group.group_id);
+    // const pendingInvites = groups
+    //  .filter(
+    //  (group) => group.group_accepted && !group.user_accepted
+    //).length;
     
     if(this.props.location.info !== undefined){
       sessionStorage.setItem("info", JSON.stringify(this.props.location.info))
@@ -50,10 +74,30 @@ class CreateChildProfileScreen extends React.Component {
       other_info:o[6],
       special_needs:o[7],
       allergies:o[8],
-      birthdate: Date.parse(o[9])
+      birthdate: Date.parse(o[9]),
+      myGroups: myGroups
       
     })
+    // console.log(pendingInvites)
+
   }
+
+  
+  renderGroupSection = () => {
+    const { language } = this.props;
+    const { myGroups } = this.state;
+    const texts = Texts[language].myFamiliesShareScreen;
+    return (
+      <div className="myGroupsContainer">
+        <div className="myGroupsContainerHeader">{texts.myGroups} </div>
+        {myGroups.length > 0 ? (
+          <GroupList groupIds={myGroups} />
+        ) : (
+          <div className="myGroupsContainerPrompt">{texts.myGroupsPrompt}</div>
+        )}
+      </div>
+    );
+  };
 
   validate = () => {
     const { language } = this.props;
@@ -216,6 +260,7 @@ class CreateChildProfileScreen extends React.Component {
         />
         <span>{texts.passwordPrompt}</span>
         <span className="invalid-feedback" id="passwordConfirmErr" />
+        {this.renderGroupSection()}
         <div className="row no-gutters">
           <input
             type="submit"
