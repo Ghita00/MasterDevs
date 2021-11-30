@@ -170,9 +170,10 @@ class CreateChildScreen extends React.Component {
     bodyFormData.append("birthdate", birthdate);
     // const auth =(this.props.location.bool)
     if(this.props.location.bool !== undefined){
-      sessionStorage.setItem("bool", this.props.location.info)
+      sessionStorage.setItem("bool", this.props.location.bool)
     }
-    let auth = JSON.parse(sessionStorage.getItem("info"));
+    let auth = JSON.parse(sessionStorage.getItem("bool"));
+    console.log(auth)
     if(auth){ // cambiato
       const { pathname } = history.location;
       history.push({
