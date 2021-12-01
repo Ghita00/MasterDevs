@@ -17,6 +17,7 @@ class ChildListItem extends React.Component {
   componentDidMount() {
     const { userId, childId} = this.props;
     
+
     axios
       .get(`/api/users/${userId}/children/${childId}`)
       .then((response) => {
@@ -40,8 +41,7 @@ class ChildListItem extends React.Component {
     axios
       .get(`/api/users/${userId}/childUser/${childId}`)
       .then((response) => {
-        this.setState({ verified: response.data.child_user_id !== ""});
-        
+        this.setState({ verified: response.data.child_id !== ""});
       })
       .catch((error) => {
         Log.error(error);
