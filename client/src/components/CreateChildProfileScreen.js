@@ -145,47 +145,36 @@ class CreateChildProfileScreen extends React.Component {
   submit = () => {
     const { history, dispatch } = this.props;
     const info = this.state
-    const id = this.props.match.params.profileId
-    let selectedGroups = []
-    let groups = document.getElementsByClassName('choices')
-    for(var i=0 ; i<groups.length ; i++){
-      if(groups[i].checked){
-        selectedGroups += [groups[i].value]
-      }
-    }
-    this.setState({
-      selectedGroups: selectedGroups
-    })
-    console.log(this.state.myGroups)
-    console.log(this.state.selectedGroups)
-    /*
+    const profileId = this.props.match.params.profileId
+
+    
     axios
-      .post(`/api/users/${id}/childrenProfile`, info)
+      .post(`/api/users/${profileId}/childrenProfile`, info)
       .then((response) => {
         Log.info(response);    
-        history.push(`/profiles/${id}/children`);
+        history.push(`/profiles/${profileId}/children`);
       })
       .catch((error) => {
         Log.error(error);
         console.log('ops')
-      }); */
+      }); 
   };
 
   handleSubmit = (event) => {
-    let selectedGroups = []
+    let selectedGroup = []
     let groups = document.getElementsByClassName('choices')
     for(var i=0 ; i<groups.length ; i++){
       if(groups[i].checked){
-        selectedGroups += [groups[i].value]
+        selectedGroup.push(groups[i].value);
       }
     }
-      
-    this.setState({
-      selectedGroups: selectedGroups
-    })
+    
     event.preventDefault();
     if (this.validate()) {
-      this.submit(); 
+      this.setState({
+        selectedGroups: selectedGroup
+      },function(){this.submit()});
+       
     }
     this.setState({ formIsValidated: true });
   };

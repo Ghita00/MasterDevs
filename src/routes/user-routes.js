@@ -956,16 +956,12 @@ router.post('/:id/children', childProfileUpload.single('photo'), async (req, res
   }
 })
 
-router.post('/:id/childrenProfile'/* , childProfileUpload.single('photo') */, async (req, res, next) => {
-  // console.log(req)
-  // console.log(req.body)
+router.post('/:id/childrenProfile', childProfileUpload.single('photo'), async (req, res, next) => {
   if (req.user_id !== req.params.id) { return res.status(401).send('Unauthorized') }
   const {
     image: imagePath, given_name, family_name, gender, background, other_info, special_needs, allergies, birthdate
   } = req.body
   const { file } = req
-  console.log(imagePath, given_name, family_name, gender, background, other_info, special_needs, allergies, birthdate)
-  console.log(file)
   if (!(birthdate && given_name && family_name && gender && background)) {
     return res.status(400).send('Bad Request')
   }
@@ -1033,6 +1029,21 @@ router.post('/:id/childrenProfile'/* , childProfileUpload.single('photo') */, as
     await Child.create(child)
     await Parent.create(parent)
     await ChildProfile.create(child_profile)
+    let groups = req.body.selectedGroups
+    for (var i = 0; i < groups.length; i++) {
+      let member = {
+        group_id: groups[i],
+        user_id: child_id,
+        admin: false,
+        user_accepted: true,
+        group_accepted: false
+      }
+      Member.create(member).then(() => {
+        nh.newRequestNotification(child_id, groups[i])
+        res.status(200).send('Joined succesfully')
+      }).catch(next)
+    }
+
     res.status(200).send('Child created')
   } catch (error) {
     next(error)
@@ -1065,6 +1076,18 @@ router.get('/:userId/childUser/:childId', (req, res, next) => {
       if (!child) {
         return res.status(404).send('Child not found')
       }
+      res.json(child)
+    }).catch(next)
+})
+
+router.get('/MemberChildUser/:groupId/:childId', (req, res, next) => {
+  const group_id = req.params.groupId
+  const user_id = req.params.childId
+  Member.findOne({ group_id, user_id })
+    .populate('image')
+    .lean()
+    .exec()
+    .then(child => {
       res.json(child)
     }).catch(next)
 })
