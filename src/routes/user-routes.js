@@ -1073,9 +1073,6 @@ router.get('/:userId/childUser/:childId', (req, res, next) => {
     .lean()
     .exec()
     .then(child => {
-      if (!child) {
-        return res.status(404).send('Child not found')
-      }
       res.json(child)
     }).catch(next)
 })
