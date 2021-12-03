@@ -173,8 +173,7 @@ class CreateChildScreen extends React.Component {
       sessionStorage.setItem("bool", this.props.location.bool)
     }
     let auth = JSON.parse(sessionStorage.getItem("bool"));
-    console.log(auth)
-    if(auth){ // cambiato
+    if(auth){ 
       const { pathname } = history.location;
       history.push({
         pathname:`${pathname}/profile`,
