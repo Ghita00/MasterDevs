@@ -87,8 +87,8 @@ router.post('/', async (req, res, next) => {
     return res.status(400).send('Bad Request')
   }
   try {
-    const user = 
-     User.findOne({ email })  
+    const user =
+     User.findOne({ email })
     if (user) {
       return res.status(409).send('User already exists')
     }
@@ -106,7 +106,7 @@ router.post('/', async (req, res, next) => {
       language,
       last_login: new Date()
     }
-    const profile = {   
+    const profile = {
       given_name,
       family_name,
       user_id,
@@ -149,7 +149,7 @@ router.post('/', async (req, res, next) => {
       }
     }
     await User.create(newUser)
-    await Profile.create(profile) 
+    await Profile.create(profile)
     await Image.create(image)
     await Address.create(address)
     await Rating.create(rating)
@@ -165,15 +165,13 @@ router.post('/', async (req, res, next) => {
     next(err)
   }
 })
-
-
 router.post('/authenticate/email', async (req, res, next) => {
   const {
     email, password, deviceToken, language, origin
   } = req.body
   try {
     const user = await User.findOne({ email })
-    if (!user) {                                                
+    if (!user) {
       return res.status(401).send('Authentication failure')
     }
     const passwordMatch = await user.comparePassword(password)
@@ -193,8 +191,8 @@ router.post('/authenticate/email', async (req, res, next) => {
       }
     }
 
-    if (user.role == 'parent') {
-      const profile = await Profile.findOne({ user_id: user.user_id }) 
+    if (user.role === 'parent') {
+      const profile = await Profile.findOne({ user_id: user.user_id })
         .populate('image')
         .lean()
         .exec()
@@ -226,16 +224,12 @@ router.post('/authenticate/email', async (req, res, next) => {
         user.version = 'latest'
       }
       await user.save()
-      res.json(response) 
-
-
-    } else if (user.role == 'child') {
-
-      const child = await Child.findOne({ child_id: user.user_id }) 
+      res.json(response)
+    } else if (user.role === 'child') {
+      const child = await Child.findOne({ child_id: user.user_id })
         .populate('image')
         .lean()
         .exec()
-      
       const token = jwt.sign(
         { user_id: user.user_id, email },
         process.env.SERVER_SECRET
@@ -258,15 +252,12 @@ router.post('/authenticate/email', async (req, res, next) => {
         user.version = 'latest'
       }
       await user.save()
-      res.json(response) 
+      res.json(response)
     }
-
   } catch (error) {
     next(error)
   }
 })
-
-
 router.post('/authenticate/google', async (req, res, next) => {
   const { deviceToken, language, origin, response } = req.body
   const { user: googleProfile, idToken: googleToken } = response
@@ -782,7 +773,6 @@ router.get('/:id/events', async (req, res, next) => {
 
 router.get('/:id/profile', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Unauthorized') }
-  
   const user_id = req.params.id
   Profile.findOne({ user_id })
     .populate('image')
@@ -791,7 +781,6 @@ router.get('/:id/profile', (req, res, next) => {
     .exec()
     .then(profile => {
       if (!profile) {
-
         const child_id = req.params.id
         Child.findOne({ child_id })
           .populate('image')
@@ -804,12 +793,10 @@ router.get('/:id/profile', (req, res, next) => {
             }
             res.json(profile)
           }).catch(next)
-
       } else {
         res.json(profile)
       }
     }).catch(next)
-  
 })
 
 router.patch('/:id/profile', profileUpload.single('photo'), async (req, res, next) => {
