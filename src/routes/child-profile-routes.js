@@ -22,7 +22,7 @@ router.get('/', (req, res, next) => {
     }).catch(next)
 })
 
-router.get('/rights', (req, res, next) => {
+router.get('/rights/changeactivity', (req, res, next) => {
   if (!req.activity) { return res.status(401).send('Not authenticated') }
   const { ids } = req.query
   if (!ids) {
@@ -37,7 +37,7 @@ router.get('/rights', (req, res, next) => {
     }).catch(next)
 })
 
-router.get('/rights', (req, res, next) => {
+router.get('/rights/changechat', (req, res, next) => {
   if (!req.chat) { return res.status(401).send('Not authenticated') }
   const { ids } = req.query
   if (!ids) {
@@ -52,7 +52,7 @@ router.get('/rights', (req, res, next) => {
     }).catch(next)
 })
 
-router.get('/rights', (req, res, next) => {
+router.get('/rights/changepartecipation', (req, res, next) => {
   if (!req.partecipation) { return res.status(401).send('Not authenticated') }
   const { ids } = req.query
   if (!ids) {
@@ -67,7 +67,7 @@ router.get('/rights', (req, res, next) => {
     }).catch(next)
 })
 
-router.get('/rights', (req, res, next) => {
+router.get('/rights/changemanage', (req, res, next) => {
   if (!req.manage) { return res.status(401).send('Not authenticated') }
   const { ids } = req.query
   if (!ids) {
