@@ -21,44 +21,43 @@ router.get('/', (req, res, next) => {
       res.json(profiles)
     }).catch(next)
 })
+router.get('/rights/:child_user_id/getRights', (req, res, next) => {
+  if (!req.user_id) { return res.status(401).send('Not authenticated') }
+  ChildProfile.findOne({ child_user_id: req.params.child_user_id })
+    .then(rights => {
+      res.json(rights)
+    })
+    .catch(next)
+})
 
-router.get('/rights/changeactivity', (req, res, next) => {
-  if (!req.activity) { return res.status(401).send('Not authenticated') }
-  const { ids } = req.query
-  if (!ids) {
-    return res.status(400).send('Bad Request')
-  }
-  ChildProfile.find({ activity: { $in: ids } })
+router.post('/rights/:child_user_id/changeactivity', (req, res, next) => {
+  if (!req.user_id) { return res.status(401).send('Not authenticated') }
+  ChildProfile.findOne({ child_user_id: req.params.child_user_id })
     .select('activity')
     .lean()
     .exec()
     .then(child => {
+      console.log(child)
       child.activity = !child.activity
     }).catch(next)
 })
 
-router.get('/rights/changechat', (req, res, next) => {
-  if (!req.chat) { return res.status(401).send('Not authenticated') }
-  const { ids } = req.query
-  if (!ids) {
-    return res.status(400).send('Bad Request')
-  }
-  ChildProfile.find({ chat: { $in: ids } })
-    .select('chat')
-    .lean()
-    .exec()
-    .then(child => {
-      child.chat = !child.chat
-    }).catch(next)
+router.post('/rights/:child_user_id/changechat', (req, res, next) => {
+  if (!req.user_id) { return res.status(401).send('Not authenticated') }
+  let bool = ChildProfile.findOne({ child_user_id: req.params.child_user_id })
+  console.log(bool.schema.chat)
+  ChildProfile.updateOne(
+    { child_user_id: req.params.child_user_id },
+    { $set: { chat: !bool.chat } })
 })
 
-router.get('/rights/changepartecipation', (req, res, next) => {
-  if (!req.partecipation) { return res.status(401).send('Not authenticated') }
+router.post('/rights/:child_user_id/changepartecipation', (req, res, next) => {
+  if (!req.user_id) { return res.status(401).send('Not authenticated') }
   const { ids } = req.query
   if (!ids) {
     return res.status(400).send('Bad Request')
   }
-  ChildProfile.find({ partecipation: { $in: ids } })
+  ChildProfile.findOne({ child_user_id: { $in: req.child_user_id } })
     .select('partecipation')
     .lean()
     .exec()
@@ -67,13 +66,13 @@ router.get('/rights/changepartecipation', (req, res, next) => {
     }).catch(next)
 })
 
-router.get('/rights/changemanage', (req, res, next) => {
-  if (!req.manage) { return res.status(401).send('Not authenticated') }
+router.post('/rights/:child_user_id/changemanage', (req, res, next) => {
+  if (!req.user_id) { return res.status(401).send('Not authenticated') }
   const { ids } = req.query
   if (!ids) {
     return res.status(400).send('Bad Request')
   }
-  ChildProfile.find({ manage: { $in: ids } })
+  ChildProfile.findOne({ child_user_id: { $in: req.child_user_id } })
     .select('manage')
     .lean()
     .exec()

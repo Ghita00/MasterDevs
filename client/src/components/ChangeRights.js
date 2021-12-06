@@ -1,29 +1,65 @@
 import React from "react";
 import axios from "axios";
 import Texts from "../Constants/Texts";
+import Log from "./Log"
 
-class ChangeRightsScreen extends React.Component {
-  state = {
+
+class ChangeRights extends React.Component {
+  constructor(props){
+    super(props)
+  
+  this.state = {
     activity: false,
     chat: false,
     partecipation: false,
     manage: false,
+    child_id: this.props.id
   };
+}
 
-  switchActivity(){
-    axios.get("api/childProfile/rights/changeactivity")
+  getRights = () => {
+    return axios
+    .get(`/api/childrenProfile/rights/${this.state.child_id}/getRights`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      Log.error(error);
+      return [];
+    });
+  }
+  async componentDidMount(){
+    let rights = await this.getRights();
+    this.setState(
+      {    
+        activity: rights.activity,
+        chat: rights.chat,
+        partecipation: rights.partecipation,
+        manage: rights.manage,
+      }
+    )
   }
 
-  switchChat(){
-    axios.get("api/childProfile/rights/changechat")
+  switchActivity = ()=>
+  {
+    axios.post(`/api/childrenProfile/rights/${this.state.child_id}/changeactivity`)
+
   }
 
-  switchPartecipation(){
-    axios.get("api/childProfile/rights/changepartecipation")
+  switchChat= ()=>
+  {
+    axios.post(`/api/childrenProfile/rights/${this.state.child_id}/changechat`)
+    console.log("fine chat");
   }
 
-  switchManage(){
-    axios.get("api/childProfile/rights/changemanage")
+  switchPartecipation= ()=>
+  {
+    axios.post(`/api/childrenProfile/rights/${this.state.child_id}/changepartecipation`)
+  }
+
+  switchManage= ()=>
+  {
+    axios.post(`/api/childrenProfile/rights/${this.state.child_id}/changemanage`)
   }
 
   render() {
@@ -35,24 +71,26 @@ class ChangeRightsScreen extends React.Component {
     } = this.state;
     const { language } = this.props;
     const formClass = [];
-    const texts = Texts[language].changeRightsScreen;
+    //console.log(this.props.id);
+    // const texts = Texts[language].changeRightsScreen;
     return (
+    
       <div id="changeRightsContainer">
-        <h1>{texts.prompt}</h1>
+        <h1> diritti donne not found</h1>
         <form
           ref={(form) => {
             this.formEl = form;
           }}
             className={formClass}
           >
-          <input type="checkbox" id= "activity" name="medium" onChange={switchActivity} /><span>activity</span>
-          <input type="checkbox" id="chat" name="medium" onChange={switchChat}/><span>chat</span>
-          <input type="checkbox" id="partecipation" name="medium" onChange={switchPartecipation}/><span>partecipation</span>
-          <input type="checkbox" id="manage" name="medium" onChange={switchManage}/><span>manage</span>
+          <input type="checkbox" id= "activity" name="medium" checked= {this.state.activity} onChange={this.switchActivity} /><span>activity</span>
+          <input type="checkbox" id="chat" name="medium" checked= {this.state.chat} onChange={this.switchChat}/><span>chat</span>
+          <input type="checkbox" id="partecipation" name="medium" checked= {this.state.partecipation} onChange={this.switchPartecipation}/><span>partecipation</span>
+          <input type="checkbox" id="manage" name="medium" checked= {this.state.manage} onChange={this.switchManage}/><span>manage</span>
           </form>
       </div>
     );
   }
 }
 
-export default ChangeRightsScreen;
+export default ChangeRights;
