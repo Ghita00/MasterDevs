@@ -1,5 +1,7 @@
 import React from "react";
 import axios from "axios";
+import { withRouter } from "react-router-dom";
+import withLanguage from "./LanguageContext";
 import Texts from "../Constants/Texts";
 import Log from "./Log"
 
@@ -8,28 +10,30 @@ class ChangeRights extends React.Component {
   constructor(props){
     super(props)
   
-  this.state = {
-    activity: false,
-    chat: false,
-    partecipation: false,
-    manage: false,
-    child_id: this.props.id
-  };
-}
+    this.state = {
+      activity:false,
+      chat:false,
+      partecipation:false,
+      manage:false,
+      child_id:null,
+    };
+  }
 
   getRights = () => {
     return axios
-    .get(`/api/childrenProfile/rights/${this.state.child_id}/getRights`)
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      Log.error(error);
-      return [];
-    });
-  }
-  async componentDidMount(){
-    let rights = await this.getRights();
+      .get('api/profiles/${this.state.user_id}/children/${this.state.child_id}/edit/changeRights')
+      .then((response) => {
+        const rights = response.data;
+        this.setState({rights})
+      })
+      .catch((error) => {
+        Log.error(error);
+      });
+  } 
+  componentDidMount(){
+    // Da inserire una funzione per recuperare il genitore del figlio in oggetto altrimenti la getRights
+    // di questo metodo non funziona bene
+    const { rights } = this.getRights();
     this.setState(
       {    
         activity: rights.activity,
@@ -40,39 +44,67 @@ class ChangeRights extends React.Component {
     )
   }
 
-  switchActivity = ()=>
+  changeActivity = ()=>
   {
-    axios.post(`/api/childrenProfile/rights/${this.state.child_id}/changeactivity`)
-
+    { 
+      this.state.activity = !(this.state.activity)  
+    }
   }
 
-  switchChat= ()=>
+  changeChat = ()=>
   {
-    axios.post(`/api/childrenProfile/rights/${this.state.child_id}/changechat`)
-    console.log("fine chat");
+    {
+      this.state.chat = !(this.state.chat) 
+    }
   }
 
-  switchPartecipation= ()=>
+  changePartecipation = ()=>
   {
-    axios.post(`/api/childrenProfile/rights/${this.state.child_id}/changepartecipation`)
+    {
+      this.state.partecipation = !(this.state.partecipation) 
+    } 
   }
 
-  switchManage= ()=>
+  changeManage = ()=>
   {
-    axios.post(`/api/childrenProfile/rights/${this.state.child_id}/changemanage`)
+    {
+      this.state.manage = !(this.state.manage) 
+    } 
   }
+
+  handleSubmit = () => {
+    const { rights } = {
+      activity: this.activity, 
+      chat: this.chat, 
+      partecipation: this.partecipation, 
+      manage: this.manage,
+    };
+    axios
+      .post(
+        "api/profiles/${this.state.user_id}/children/${this.state.child_id}/edit/changeRights",
+        {
+          rights,
+        },
+        {
+          headers: {
+            child_user_id: this.state.child_id,
+          },
+        }
+      )
+      .then((response) => {
+        const child = response.data;
+        localStorage.setItem("rights", JSON.stringify(child));
+      })
+      .catch((error) => {
+        Log.error(error);
+      });
+    }
 
   render() {
-    const {
-      activity,
-      chat,
-      partecipation,
-      manage,
-    } = this.state;
     const { language } = this.props;
     const formClass = [];
-    //console.log(this.props.id);
-    // const texts = Texts[language].changeRightsScreen;
+    console.log(this.props.id);
+    const texts = Texts[language].changeRightsScreen;
     return (
     
       <div id="changeRightsContainer">
@@ -83,14 +115,17 @@ class ChangeRights extends React.Component {
           }}
             className={formClass}
           >
-          <input type="checkbox" id= "activity" name="medium" checked= {this.state.activity} onChange={this.switchActivity} /><span>activity</span>
-          <input type="checkbox" id="chat" name="medium" checked= {this.state.chat} onChange={this.switchChat}/><span>chat</span>
-          <input type="checkbox" id="partecipation" name="medium" checked= {this.state.partecipation} onChange={this.switchPartecipation}/><span>partecipation</span>
-          <input type="checkbox" id="manage" name="medium" checked= {this.state.manage} onChange={this.switchManage}/><span>manage</span>
+          <input type="checkbox" id= "activity" name="medium" checked= {this.state.activity} onChange={this.changeActivity} /><span>activity</span>
+          <input type="checkbox" id="chat" name="medium" checked= {this.state.chat} onChange={this.changeChat}/><span>chat</span>
+          <input type="checkbox" id="partecipation" name="medium" checked= {this.state.partecipation} onChange={this.changePartecipation}/><span>partecipation</span>
+          <input type="checkbox" id="manage" name="medium" checked= {this.state.manage} onChange={this.changeManage}/><span>manage</span>
+          <button type="button" onClick={this.handleSubmit}>
+                {texts.change};
+          </button>
           </form>
       </div>
     );
   }
 }
 
-export default ChangeRights;
+export default withRouter(withLanguage(ChangeRights));
