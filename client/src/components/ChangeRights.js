@@ -40,26 +40,7 @@ class ChangeRights extends React.Component {
     )
   }
 
-  switchActivity = (bool)=>
-  {
-    axios.post(`/api/childrenProfile/rights/${this.state.child_id}/changeactivity/${bool}`)
-
-  }
-
-  switchChat= (bool)=>
-  {
-    axios.post(`/api/childrenProfile/rights/${this.state.child_id}/changechat/${bool}`)
-  }
-
-  switchPartecipation= (bool)=>
-  {
-    axios.post(`/api/childrenProfile/rights/${this.state.child_id}/changepartecipation/${bool}`)
-  }
-
-  switchManage= (bool)=>
-  {
-    axios.post(`/api/childrenProfile/rights/${this.state.child_id}/changemanage/${bool}`)
-  }
+  
 
   render() {
     const {
@@ -67,11 +48,33 @@ class ChangeRights extends React.Component {
       chat,
       partecipation,
       manage,
+      child_id
     } = this.state;
+    console.log(this.state)
     const { language } = this.props;
     const formClass = [];
     //console.log(this.props.id);
     // const texts = Texts[language].changeRightsScreen;
+    function switchActivity()
+    {
+      axios.post(`/api/childrenProfile/rights/${child_id}/changeactivity/${activity}`)
+
+    }
+
+    function switchChat()
+    {
+      axios.post(`/api/childrenProfile/rights/${child_id}/changechat/${chat}`)
+    }
+
+    function switchPartecipation()
+    {
+      axios.post(`/api/childrenProfile/rights/${child_id}/changepartecipation/${partecipation}`)
+    }
+
+    function switchManage()
+    {
+      axios.post(`/api/childrenProfile/rights/${child_id}/changemanage/${manage}`)
+    }
     return (
     
       <div id="changeRightsContainer">
@@ -82,10 +85,10 @@ class ChangeRights extends React.Component {
           }}
             className={formClass}
           >
-          <input type="checkbox" id= "activity" name="medium" checked= {this.state.activity} onClick={this.switchActivity(this.state.activity)} /><span>activity</span>
-          <input type="checkbox" id="chat" name="medium" checked= {this.state.chat} onClick={this.switchChat(this.state.chat)}/><span>chat</span>
-          <input type="checkbox" id="partecipation" name="medium" checked= {this.state.partecipation} onClick={this.switchPartecipation(this.state.partecipation)}/><span>partecipation</span>
-          <input type="checkbox" id="manage" name="medium" checked= {this.state.manage} onClick={this.switchManage(this.state.manage)}/><span>manage</span>
+          <input type="checkbox" id= "activity" name="medium" checked= {this.state.activity} onClick={function(){switchActivity()}} /><span>activity</span>
+          <input type="checkbox" id="chat" name="medium" checked= {this.state.chat} onClick={function(){switchChat()}}/><span>chat</span>
+          <input type="checkbox" id="partecipation" name="medium" checked= {this.state.partecipation} onClick={function(){switchPartecipation()}}/><span>partecipation</span>
+          <input type="checkbox" id="manage" name="medium" checked= {this.state.manage} onClick={function(){switchManage()}}/><span>manage</span>
           </form>
       </div>
     );

@@ -33,7 +33,7 @@ router.get('/rights/:child_user_id/getRights', (req, res, next) => {
 router.post('/rights/:child_user_id/changeactivity/:bool', /* async */ (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
   // let child_user_id = req.body.child_user_id
-  console.log('activity' + req.params)
+  console.log('activity' + req.params.bool)
   // await ChildProfile.updateOne({}, {})
 })
 
