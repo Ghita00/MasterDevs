@@ -9,6 +9,7 @@ import Images from "../Constants/Images";
 import Texts from "../Constants/Texts";
 import ConfirmDialog from "./ConfirmDialog";
 import Log from "./Log";
+import ChangeRights from "./ChangeRights";
 
 class ChildProfileInfo extends React.Component {
   state = { modalIsOpen: false, confirmDialogIsOpen: false, deleteIndex: "" };
@@ -221,6 +222,7 @@ class ChildProfileInfo extends React.Component {
             )}
           </div>
         )}
+        <div><ChangeRights id={this.props.match.params.childId}/></div>
       </React.Fragment>
     );
   }

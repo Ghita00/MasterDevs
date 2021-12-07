@@ -25,11 +25,6 @@ const styles = () => ({
 
 const Loading = <LoadingSpinner />;
 
-const ChangeRights = Loadable({
-  loader: () => import("./components/ChangeRights"),
-  loading: () => Loading,
-});
-
 const LogInScreen = Loadable({
   loader: () => import("./components/LogInScreen"),
   loading: () => Loading,
@@ -92,10 +87,6 @@ const SearchGroupScreen = Loadable({
 });
 const EditChildProfileScreen = Loadable({
   loader: () => import("./components/EditChildProfileScreen"),
-  loading: () => Loading,
-});
-const EditChildUserProfileScreen = Loadable({
-  loader: () => import("./components/EditChildUserProfileScreen"),
   loading: () => Loading,
 });
 const EditActivityScreen = Loadable({
@@ -278,11 +269,6 @@ class App extends React.Component {
               />
               <PrivateRoute
                 exact
-                path="/profiles/:profileId/child_user/:child_userId/edit"
-                component={EditChildUserProfileScreen}
-              />
-              <PrivateRoute
-                exact
                 path="/profiles/:profileId/children/create/additional"
                 component={AdditionalInfoScreen}
               />
@@ -300,12 +286,6 @@ class App extends React.Component {
                 path="/profiles/:profileId/edit"
                 component={EditProfileScreen}
               />
-
-              <PrivateRoute
-                path="/profiles/:profileId/child_user/:child_userId/edit/changeRights"
-                component= {ChangeRights}
-              />
-              
               <Route
                 path="/profiles/:profileId"
                 render={(props) =>
