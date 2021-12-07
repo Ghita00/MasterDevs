@@ -75,7 +75,7 @@ class ChangeRights extends React.Component {
     return (
     
       <div id="changeRightsContainer">
-        <h1> diritti donne not found</h1>
+        <h1> diritti </h1>
         <form
           ref={(form) => {
             this.formEl = form;
