@@ -21,6 +21,7 @@ router.get('/', (req, res, next) => {
       res.json(profiles)
     }).catch(next)
 })
+
 router.get('/rights/:child_user_id/getRights', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
   ChildProfile.findOne({ child_user_id: req.params.child_user_id })
@@ -30,25 +31,36 @@ router.get('/rights/:child_user_id/getRights', (req, res, next) => {
     .catch(next)
 })
 
-router.post('/rights/:child_user_id/changeactivity/:bool', /* async */ (req, res, next) => {
+router.post('/rights/:child_user_id/changeactivity/:bool', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
-  // let child_user_id = req.body.child_user_id
-  console.log('activity' + req.params.bool)
-  // await ChildProfile.updateOne({}, {})
+  console.log('activity' + !req.params.bool)
+  /* let input = !req.params.bool
+  let exec = { $set: { activity: input } } */
+  ChildProfile.updateOne({ child_user_id: req.params.child_user_id }, /* exec */ { activity: !req.params.activity })
 })
 
 router.post('/rights/:child_user_id/changechat/:bool', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
-  console.log('chat' + req.params.bool)
+  console.log('chat' + !req.params.bool)
+  /* let input = !req.params.bool
+  let exec = { $set: { chat: input } } */
+  ChildProfile.updateOne({ child_user_id: req.params.child_user_id }, /* exec */ { chat: !req.params.chat })
 })
+
 router.post('/rights/:child_user_id/changepartecipation/:bool', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
-  console.log('partecipate' + req.params.bool)
+  console.log('partecipate' + !req.params.bool)
+  /* let input = !req.params.bool
+  let exec = { $set: { partecipation: input } } */
+  ChildProfile.updateOne({ child_user_id: req.params.child_user_id }, /* exec */ { partecipation: !req.params.partecipation })
 })
 
 router.post('/rights/:child_user_id/changemanage/:bool', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
-  console.log('manage' + req.params.bool)
+  console.log('manage' + !req.params.bool)
+  /* let input = !req.params.bool
+  let exec = { $set: { manage: input } } */
+  ChildProfile.updateOne({ child_user_id: req.params.child_user_id }, /* exec */ { manage: !req.params.manage })
 })
 
 module.exports = router

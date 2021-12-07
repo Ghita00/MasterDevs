@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import Texts from "../Constants/Texts";
 import Log from "./Log"
 
 
@@ -28,6 +27,7 @@ class ChangeRights extends React.Component {
       return [];
     });
   }
+
   async componentDidMount(){
     let rights = await this.getRights();
     this.setState(
@@ -39,9 +39,7 @@ class ChangeRights extends React.Component {
       }
     )
   }
-
   
-
   render() {
     const {
       activity,
@@ -53,8 +51,7 @@ class ChangeRights extends React.Component {
     console.log(this.state)
     const { language } = this.props;
     const formClass = [];
-    //console.log(this.props.id);
-    // const texts = Texts[language].changeRightsScreen;
+
     function switchActivity()
     {
       axios.post(`/api/childrenProfile/rights/${child_id}/changeactivity/${activity}`)
