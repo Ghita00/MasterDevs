@@ -61,7 +61,7 @@ class ChildListItem extends React.Component {
   render() {
     const { language, history, childId } = this.props;
     const { pathname } = history.location;
-    const { child, fetchedChild } = this.state;
+    const { child, fetchedChild, verified } = this.state;
     const texts = Texts[language].childListItem;
     const route = `${pathname}/${childId}`;
     return (
@@ -83,7 +83,10 @@ class ChildListItem extends React.Component {
               <div
                 role="button"
                 tabIndex={-42}
-                onClick={() => history.push(route)}
+                onClick={() => history.push({
+                  pathname: route,
+                  verified: verified
+                })}
                 id="childInfoContainer"
                 className="verticalCenter"
               >

@@ -31,6 +31,22 @@ router.get('/rights/:child_user_id/getRights', (req, res, next) => {
     .catch(next)
 })
 
+router.patch('/rights/:child_user_id/changerights', async (req, res, next) => {
+  if (!req.user_id) { return res.status(401).send('Not authenticated') }
+  const {
+    activity, chat, partecipation, manage
+  } = req.body
+  console.log(activity, chat, partecipation, manage)
+  let child_user_id = req.params.child_user_id
+  let exec = { $set: { activity: activity, chat: chat, partecipation: partecipation, manage: manage } }
+  await ChildProfile.updateOne({ child_user_id }, exec).then(console.log('update eseguito'))
+  /* let input = !req.params.bool
+  let exec = { $set: { activity: input } }
+  let child_user_id = req.params.child_user_id
+  console.log('cambia attività')
+  await ChildProfile.updateOne({ child_user_id }, exec).then(console.log('cambia attività')) */
+})
+
 router.post('/rights/:child_user_id/changeactivity/:bool', async (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
   console.log('activity' + !req.params.bool)
