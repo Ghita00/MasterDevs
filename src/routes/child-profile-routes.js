@@ -21,6 +21,7 @@ router.get('/', (req, res, next) => {
       res.json(profiles)
     }).catch(next)
 })
+
 router.get('/rights/:child_user_id/getRights', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
   ChildProfile.findOne({ child_user_id: req.params.child_user_id })
@@ -30,55 +31,38 @@ router.get('/rights/:child_user_id/getRights', (req, res, next) => {
     .catch(next)
 })
 
-router.post('/rights/:child_user_id/changeactivity', (req, res, next) => {
+router.post('/rights/:child_user_id/changeactivity/:bool', async (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
-  ChildProfile.findOne({ child_user_id: req.params.child_user_id })
-    .select('activity')
-    .lean()
-    .exec()
-    .then(child => {
-      console.log(child)
-      child.activity = !child.activity
-    }).catch(next)
+  console.log('activity' + !req.params.bool)
+  let input = !req.params.bool
+  let exec = { $set: { activity: input } }
+  let child_user_id = req.params.child_user_id
+  console.log('cambia attività')
+  await ChildProfile.updateOne({ child_user_id }, exec).then(console.log('cambia attività'))
 })
 
-router.post('/rights/:child_user_id/changechat', (req, res, next) => {
+router.post('/rights/:child_user_id/changechat/:bool', async (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
-  let bool = ChildProfile.findOne({ child_user_id: req.params.child_user_id })
-  console.log(bool.schema.chat)
-  ChildProfile.updateOne(
-    { child_user_id: req.params.child_user_id },
-    { $set: { chat: !bool.chat } })
+  console.log('chat' + !req.params.bool)
+  let input = !req.params.bool
+  let exec = { $set: { chat: input } }
+  await ChildProfile.updateOne({ child_user_id: req.params.child_user_id }, exec)
 })
 
-router.post('/rights/:child_user_id/changepartecipation', (req, res, next) => {
+router.post('/rights/:child_user_id/changepartecipation/:bool', async (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
-  const { ids } = req.query
-  if (!ids) {
-    return res.status(400).send('Bad Request')
-  }
-  ChildProfile.findOne({ child_user_id: { $in: req.child_user_id } })
-    .select('partecipation')
-    .lean()
-    .exec()
-    .then(child => {
-      child.partecipation = !child.partecipation
-    }).catch(next)
+  console.log('partecipate' + !req.params.bool)
+  let input = !req.params.bool
+  let exec = { $set: { partecipation: input } }
+  await ChildProfile.updateOne({ child_user_id: req.params.child_user_id }, exec)
 })
 
-router.post('/rights/:child_user_id/changemanage', (req, res, next) => {
+router.post('/rights/:child_user_id/changemanage/:bool', async (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
-  const { ids } = req.query
-  if (!ids) {
-    return res.status(400).send('Bad Request')
-  }
-  ChildProfile.findOne({ child_user_id: { $in: req.child_user_id } })
-    .select('manage')
-    .lean()
-    .exec()
-    .then(child => {
-      child.manage = !child.manage
-    }).catch(next)
+  console.log('manage' + !req.params.bool)
+  let input = !req.params.bool
+  let exec = { $set: { manage: input } }
+  await ChildProfile.updateOne({ child_user_id: req.params.child_user_id }, exec)
 })
 
 module.exports = router
