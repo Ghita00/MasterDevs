@@ -184,7 +184,9 @@ class EditChildProfileScreen extends React.Component {
     
     // da qui salviamo i diritti
     let choices_rights = document.getElementsByClassName("choices_rights");
-    axios
+    console.log(choices_rights)
+    if(choices_rights.length > 0){
+      axios
       .patch(`/api/childrenProfile/rights/${childId}/changerights`,
         {activity: choices_rights[0].checked,
         chat: choices_rights[1].checked,
@@ -198,6 +200,8 @@ class EditChildProfileScreen extends React.Component {
         Log.error(error);
         //history.goBack();
       });
+    }
+    
 
     axios
       .patch(`/api/users/${userId}/children/${childId}`, bodyFormData, {

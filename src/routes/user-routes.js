@@ -1179,6 +1179,11 @@ router.delete('/:userId/children/:childId', async (req, res, next) => {
     await Child.deleteOne({ child_id })
     await Parent.deleteMany({ child_id })
     await Image.deleteOne({ owner_id: child_id })
+    if (ChildProfile.findOne({ child_user_id: child_id }) !== null) {
+      await ChildProfile.deleteOne({ child_user_id: child_id })
+      await Member.deleteMany({ user_id: child_id })
+      await User.deleteOne({ user_id: child_id })
+    }
     res.status(200).send('Child deleted')
   } catch (error) {
     next(error)
