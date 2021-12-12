@@ -8,6 +8,7 @@ import withLanguage from "./LanguageContext";
 import Texts from "../Constants/Texts";
 import LoadingSpinner from "./LoadingSpinner";
 import Log from "./Log";
+import ChangeRights from "./ChangeRights";
 
 const dataURLtoFile = (dataurl, filename) => {
   const arr = dataurl.split(",");
@@ -180,6 +181,28 @@ class EditChildProfileScreen extends React.Component {
     bodyFormData.append("special_needs", special_needs);
     bodyFormData.append("allergies", allergies);
     bodyFormData.append("birthdate", birthdate);
+    
+    // da qui salviamo i diritti
+    let choices_rights = document.getElementsByClassName("choices_rights");
+    console.log(choices_rights)
+    if(choices_rights.length > 0){
+      axios
+      .patch(`/api/childrenProfile/rights/${childId}/changerights`,
+        {activity: choices_rights[0].checked,
+        chat: choices_rights[1].checked,
+        partecipation: choices_rights[2].checked,
+        manage: choices_rights[3].checked})
+      .then((response) => {
+        Log.info(response);
+        //history.goBack();
+      })
+      .catch((error) => {
+        Log.error(error);
+        //history.goBack();
+      });
+    }
+    
+
     axios
       .patch(`/api/users/${userId}/children/${childId}`, bodyFormData, {
         headers: {
@@ -250,6 +273,13 @@ class EditChildProfileScreen extends React.Component {
     if (formIsValidated) {
       formClass.push("was-validated");
     }
+    
+    if(this.props.location.verified !== undefined){
+      sessionStorage.setItem("verified", this.props.location.verified)
+    }
+    let auth = JSON.parse(sessionStorage.getItem("verified"));
+    
+    
     return fetchedChildData ? (
       <React.Fragment>
         <div
@@ -446,6 +476,12 @@ class EditChildProfileScreen extends React.Component {
             </div>
           </form>
         </div>
+
+        <div>
+        {(auth && 
+        <ChangeRights id={this.props.match.params.childId}/>)}
+        </div>
+
       </React.Fragment>
     ) : (
       <LoadingSpinner />

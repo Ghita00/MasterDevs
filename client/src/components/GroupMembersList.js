@@ -127,7 +127,7 @@ export default class GroupMembersList extends React.Component {
                   handleRemoveAdmin={this.handleRemoveAdmin}
                 />
               ) : (
-                <ChildContact member={sortedItems[itemIndex]} />
+                <ChildContact groupId={groupId} member={sortedItems[itemIndex]} />
               )}
             </li>
           ))}

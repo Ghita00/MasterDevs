@@ -71,7 +71,7 @@ const Notification = require('../models/notification')
 const Parent = require('../models/parent')
 const Reply = require('../models/reply')
 const Child = require('../models/child')
-// const ChildProfile = require('../models/childProfile')
+const ChildProfile = require('../models/childProfile')
 const Announcement = require('../models/announcement')
 // const Framily = require('../models/framily')
 const Password_Reset = require('../models/password-reset')
@@ -87,7 +87,8 @@ router.post('/', async (req, res, next) => {
     return res.status(400).send('Bad Request')
   }
   try {
-    const user = await User.findOne({ email })
+    const user =
+     User.findOne({ email })
     if (user) {
       return res.status(409).send('User already exists')
     }
@@ -164,7 +165,6 @@ router.post('/', async (req, res, next) => {
     next(err)
   }
 })
-
 router.post('/authenticate/email', async (req, res, next) => {
   const {
     email, password, deviceToken, language, origin
@@ -190,43 +190,74 @@ router.post('/authenticate/email', async (req, res, next) => {
         })
       }
     }
-    const profile = await Profile.findOne({ user_id: user.user_id })
-      .populate('image')
-      .lean()
-      .exec()
-    if (profile.suspended) {
-      await Profile.updateOne({ user_id: user.user_id }, { suspended: false })
-      const usersChildren = await Parent.find({ parent_id: user.user_id })
-      const childIds = usersChildren.map(usersChildren.child_id)
-      await Child.updateMany({ child_id: { $in: childIds } }, { suspended: false })
+
+    if (user.role === 'parent') {
+      const profile = await Profile.findOne({ user_id: user.user_id })
+        .populate('image')
+        .lean()
+        .exec()
+      if (profile.suspended) {
+        await Profile.updateOne({ user_id: user.user_id }, { suspended: false })
+        const usersChildren = await Parent.find({ parent_id: user.user_id })
+        const childIds = usersChildren.map(usersChildren.child_id)
+        await Child.updateMany({ child_id: { $in: childIds } }, { suspended: false })
+      }
+      const token = jwt.sign(
+        { user_id: user.user_id, email },
+        process.env.SERVER_SECRET
+      )
+      const response = {
+        id: user.user_id,
+        email,
+        name: `${profile.given_name} ${profile.family_name}`,
+        image: profile.image.path,
+        token,
+        role: user.role
+      }
+
+      user.last_login = new Date()
+      user.language = language
+      user.token = token
+      if (origin === 'native') {
+        user.version = req.body.version
+      } else {
+        user.version = 'latest'
+      }
+      await user.save()
+      res.json(response)
+    } else if (user.role === 'child') {
+      const child = await Child.findOne({ child_id: user.user_id })
+        .populate('image')
+        .lean()
+        .exec()
+      const token = jwt.sign(
+        { user_id: user.user_id, email },
+        process.env.SERVER_SECRET
+      )
+
+      const response = {
+        id: user.user_id,
+        email,
+        name: `${child.given_name} ${child.family_name}`,
+        image: child.image.path,
+        token,
+        role: user.role
+      }
+      user.last_login = new Date()
+      user.language = language
+      user.token = token
+      if (origin === 'native') {
+        user.version = req.body.version
+      } else {
+        user.version = 'latest'
+      }
+      await user.save()
+      res.json(response)
     }
-    const token = jwt.sign(
-      { user_id: user.user_id, email },
-      process.env.SERVER_SECRET
-    )
-    const response = {
-      id: user.user_id,
-      email,
-      name: `${profile.given_name} ${profile.family_name}`,
-      image: profile.image.path,
-      token,
-      role: user.role
-    }
-    user.last_login = new Date()
-    user.language = language
-    user.token = token
-    if (origin === 'native') {
-      user.version = req.body.version
-    } else {
-      user.version = 'latest'
-    }
-    await user.save()
-    res.json(response)
   } catch (error) {
     next(error)
   }
 })
-
 router.post('/authenticate/google', async (req, res, next) => {
   const { deviceToken, language, origin, response } = req.body
   const { user: googleProfile, idToken: googleToken } = response
@@ -440,7 +471,20 @@ router.post('/changepassword', async (req, res, next) => {
   }
 })
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id/checkchildren', (req, res, next) => {
+  if (!req.user_id) { return res.status(401).send('Unauthorized') }
+  const user_id = req.params.id
+  Profile.findOne({ user_id })
+    .populate('image')
+    .populate('address')
+    .lean()
+    .exec()
+    .then(profile => {
+      res.json(profile)
+    }).catch(next)
+})
+
+router.get('/:id', (req, res, next) => { // (*)
   if (req.user_id !== req.params.id) { return res.status(401).send('Unauthorized') }
   const { id } = req.params
   User.findOne({ user_id: id }).then(user => {
@@ -740,7 +784,7 @@ router.get('/:id/events', async (req, res, next) => {
   }
 })
 
-router.get('/:id/profile', (req, res, next) => {
+router.get('/:id/profile', (req, res, next) => { // (*)
   if (!req.user_id) { return res.status(401).send('Unauthorized') }
   const user_id = req.params.id
   Profile.findOne({ user_id })
@@ -750,9 +794,21 @@ router.get('/:id/profile', (req, res, next) => {
     .exec()
     .then(profile => {
       if (!profile) {
-        return res.status(404).send('Profile not found')
+        const child_id = req.params.id
+        Child.findOne({ child_id })
+          .populate('image')
+          .populate('address')
+          .lean()
+          .exec()
+          .then(profile => {
+            if (!profile) {
+              return res.status(404).send('Profile not found')
+            }
+            res.json(profile)
+          }).catch(next)
+      } else {
+        res.json(profile)
       }
-      res.json(profile)
     }).catch(next)
 })
 
@@ -956,6 +1012,100 @@ router.post('/:id/children', childProfileUpload.single('photo'), async (req, res
   }
 })
 
+router.post('/:id/childrenProfile', childProfileUpload.single('photo'), async (req, res, next) => {
+  if (req.user_id !== req.params.id) { return res.status(401).send('Unauthorized') }
+  const {
+    image: imagePath, given_name, family_name, gender, background, other_info, special_needs, allergies, birthdate
+  } = req.body
+  const { file } = req
+  if (!(birthdate && given_name && family_name && gender && background)) {
+    return res.status(400).send('Bad Request')
+  }
+  const parent_id = req.params.id
+  const child = {
+    birthdate,
+    given_name,
+    family_name,
+    gender,
+    allergies,
+    other_info,
+    special_needs,
+    background,
+    suspended: false
+  }
+  const image_id = objectid()
+  const child_id = objectid()
+  const image = {
+    image_id,
+    owner_type: 'child',
+    owner_id: child_id
+  }
+  if (file) {
+    const fileName = file.filename.split('.')
+    image.path = `/images/profiles/${file.filename}`
+    image.thumbnail_path = `/images/profiles/${fileName[0]}_t.${fileName[1]}`
+    await sharp(path.join(__dirname, `../../images/profiles/${file.filename}`))
+      .resize({
+        height: 200,
+        fit: sharp.fit.cover
+      })
+      .toFile(path.join(__dirname, `../../images/profiles/${fileName[0]}_t.${fileName[1]}`))
+  } else {
+    image.path = imagePath
+    image.thumbnail_path = imagePath
+  }
+  child.child_id = child_id
+  child.image_id = image_id
+  const parent = {
+    parent_id,
+    child_id
+  }
+  const child_profile = {
+    child_user_id: child_id,
+    activity: true,
+    chat: true,
+    partecipation: true,
+    manage: true
+  }
+  const email = req.body.email
+  const user = {
+    user_id: child_id,
+    provider: 'families_share',
+    role: 'child',
+    email: email,
+    token: jwt.sign({ child_id, email }, process.env.SERVER_SECRET),
+    password: req.body.password,
+    language: 'it',
+    last_login: new Date()
+  }
+
+  try {
+    await User.create(user)
+    await Image.create(image)
+    await Child.create(child)
+    await Parent.create(parent)
+    await ChildProfile.create(child_profile)
+    let groups = req.body.selectedGroups
+    for (var i = 0; i < groups.length; i++) {
+      let member = {
+        group_id: groups[i],
+        user_id: child_id,
+        admin: false,
+        user_accepted: true,
+        group_accepted: false
+      }
+      Member.create(member).then(() => {
+        nh.newRequestNotification(child_id, groups[i])
+        res.status(200).send('Joined succesfully')
+      }).catch(next)
+    }
+
+    res.status(200).send('Child created')
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.get('/:userId/children/:childId', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Unauthorized') }
   const child_id = req.params.childId
@@ -967,6 +1117,30 @@ router.get('/:userId/children/:childId', (req, res, next) => {
       if (!child) {
         return res.status(404).send('Child not found')
       }
+      res.json(child)
+    }).catch(next)
+})
+
+router.get('/:userId/childUser/:childId', (req, res, next) => {
+  if (!req.user_id) { return res.status(401).send('Unauthorized') }
+  const child_user_id = req.params.childId
+  ChildProfile.findOne({ child_user_id })
+    .populate('image')
+    .lean()
+    .exec()
+    .then(child => {
+      res.json(child)
+    }).catch(next)
+})
+
+router.get('/MemberChildUser/:groupId/:childId', (req, res, next) => {
+  const group_id = req.params.groupId
+  const user_id = req.params.childId
+  Member.findOne({ group_id, user_id })
+    .populate('image')
+    .lean()
+    .exec()
+    .then(child => {
       res.json(child)
     }).catch(next)
 })
@@ -1018,13 +1192,18 @@ router.delete('/:userId/children/:childId', async (req, res, next) => {
     await Child.deleteOne({ child_id })
     await Parent.deleteMany({ child_id })
     await Image.deleteOne({ owner_id: child_id })
+    if (ChildProfile.findOne({ child_user_id: child_id }) !== null) {
+      await ChildProfile.deleteOne({ child_user_id: child_id })
+      await Member.deleteMany({ user_id: child_id })
+      await User.deleteOne({ user_id: child_id })
+    }
     res.status(200).send('Child deleted')
   } catch (error) {
     next(error)
   }
 })
 
-router.get('/:userId/children/:childId/parents', (req, res, next) => {
+router.get('/:userId/children/:childId/parents', (req, res, next) => { // (*)
   if (!req.user_id) { return res.status(401).send('Unauthorized') }
   const child_id = req.params.childId
   Parent.find({ child_id }).then(parents => {

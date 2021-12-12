@@ -9,17 +9,19 @@ import Texts from "../Constants/Texts";
 import withLanguage from "./LanguageContext";
 import Avatar from "./Avatar";
 import Log from "./Log";
+import Images from "../Constants/Images";
 
 class ChildListItem extends React.Component {
-  state = { fetchedChild: false, child: {} };
+  state = { fetchedChild: false, child: {}, verified: false};
 
   componentDidMount() {
-    const { userId, childId } = this.props;
+    const { userId, childId} = this.props;
+    
     axios
       .get(`/api/users/${userId}/children/${childId}`)
       .then((response) => {
         const child = response.data;
-        this.setState({ fetchedChild: true, child });
+        this.setState({ fetchedChild: true, child});
       })
       .catch((error) => {
         Log.error(error);
@@ -32,15 +34,34 @@ class ChildListItem extends React.Component {
             given_name: "",
             family_name: "",
             child_id: "",
-          },
+          }
         });
+      });
+    axios
+      .get(`/api/users/${userId}/childUser/${childId}`)
+      .then((response) => {
+        this.setState({ verified: response.data.child_id !== null});
+      })
+      .catch((error) => {
+        Log.error(error);/*
+        this.setState({
+          fetchedChild: true,
+          child: {
+            image: { path: "" },
+            birthdate: new Date(),
+            gender: "unspecified",
+            given_name: "",
+            family_name: "",
+            child_id: "",
+          }
+        });*/
       });
   }
 
   render() {
     const { language, history, childId } = this.props;
     const { pathname } = history.location;
-    const { child, fetchedChild } = this.state;
+    const { child, fetchedChild, verified } = this.state;
     const texts = Texts[language].childListItem;
     const route = `${pathname}/${childId}`;
     return (
@@ -62,7 +83,10 @@ class ChildListItem extends React.Component {
               <div
                 role="button"
                 tabIndex={-42}
-                onClick={() => history.push(route)}
+                onClick={() => history.push({
+                  pathname: route,
+                  verified: verified
+                })}
                 id="childInfoContainer"
                 className="verticalCenter"
               >
@@ -72,7 +96,14 @@ class ChildListItem extends React.Component {
                 </h1>
                 <h2>{texts[child.gender]}</h2>
               </div>
+              {this.state.verified &&
+              (
+                <img src={Images.couple} width={'60'} height={'60'} align="right" vertical-align="middle" alt="birthday icon"/>
+              )
+            } 
             </div>
+            
+            
           </React.Fragment>
         ) : (
           <Skeleton avatar active paragraph={{ rows: 1 }} />

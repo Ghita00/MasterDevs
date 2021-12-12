@@ -27,7 +27,6 @@ class ChangeRights extends React.Component {
       return [];
     });
   }
-
   async componentDidMount(){
     let rights = await this.getRights();
     this.setState(
@@ -52,26 +51,30 @@ class ChangeRights extends React.Component {
     const { language } = this.props;
     const formClass = [];
 
-    function switchActivity()
+    const switchActivity = ()=>
     {
-      axios.post(`/api/childrenProfile/rights/${child_id}/changeactivity/${activity}`)
-
+      //axios.post(`/api/childrenProfile/rights/${child_id}/changeactivity/${activity}`)
+      this.setState({activity: !this.state.activity})
+    }
+    
+    const switchChat = ()=>
+    {
+      //axios.post(`/api/childrenProfile/rights/${child_id}/changeactivity/${activity}`)
+      this.setState({chat: !this.state.chat})
     }
 
-    function switchChat()
+    const switchPartecipation = ()=>
     {
-      axios.post(`/api/childrenProfile/rights/${child_id}/changechat/${chat}`)
+      //axios.post(`/api/childrenProfile/rights/${child_id}/changeactivity/${activity}`)
+      this.setState({partecipation: !this.state.partecipation})
     }
 
-    function switchPartecipation()
+    const switchManage = ()=>
     {
-      axios.post(`/api/childrenProfile/rights/${child_id}/changepartecipation/${partecipation}`)
+      //axios.post(`/api/childrenProfile/rights/${child_id}/changeactivity/${activity}`)
+      this.setState({manage: !this.state.manage})
     }
 
-    function switchManage()
-    {
-      axios.post(`/api/childrenProfile/rights/${child_id}/changemanage/${manage}`)
-    }
     return (
     
       <div id="changeRightsContainer">
@@ -80,12 +83,14 @@ class ChangeRights extends React.Component {
           ref={(form) => {
             this.formEl = form;
           }}
-            className={formClass}
+            className="rights"
           >
-          <input type="checkbox" id= "activity" name="medium" checked= {this.state.activity} onClick={function(){switchActivity()}} /><span>activity</span>
-          <input type="checkbox" id="chat" name="medium" checked= {this.state.chat} onClick={function(){switchChat()}}/><span>chat</span>
-          <input type="checkbox" id="partecipation" name="medium" checked= {this.state.partecipation} onClick={function(){switchPartecipation()}}/><span>partecipation</span>
-          <input type="checkbox" id="manage" name="medium" checked= {this.state.manage} onClick={function(){switchManage()}}/><span>manage</span>
+          
+          <input type="checkbox" className="choices_rights" id= "activity" name="medium" checked= {this.state.activity} onClick={function(){switchActivity()}} /><span>activity</span><br/>
+          <input type="checkbox" className="choices_rights" id="chat" name="medium" checked= {this.state.chat} onClick={function(){switchChat()}}/><span>chat</span><br/>
+          <input type="checkbox" className="choices_rights" id="partecipation" name="medium" checked= {this.state.partecipation} onClick={function(){switchPartecipation()}}/><span>partecipation</span><br/>
+          <input type="checkbox" className="choices_rights" id="manage" name="medium" checked= {this.state.manage} onClick={function(){switchManage()}}/><span>manage</span>
+        
           </form>
       </div>
     );
