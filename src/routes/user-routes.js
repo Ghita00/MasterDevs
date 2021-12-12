@@ -812,6 +812,20 @@ router.get('/:id/profile', (req, res, next) => { // (*)
     }).catch(next)
 })
 
+router.get('/:id/checkchildren', (req, res, next) => {
+  if (!req.user_id) { return res.status(401).send('Unauthorized') }
+  const user_id = req.params.id
+  Profile.findOne({ user_id })
+    .populate('image')
+    .populate('address')
+    .lean()
+    .exec()
+    .then(profile => {
+      console.log(profile)
+      res.json(profile)
+    }).catch(next)
+})
+
 router.patch('/:id/profile', profileUpload.single('photo'), async (req, res, next) => {
   if (req.user_id !== req.params.id) { return res.status(401).send('Unauthorized') }
   const user_id = req.params.id
