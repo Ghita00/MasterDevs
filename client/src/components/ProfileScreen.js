@@ -9,6 +9,7 @@ import ProfileNavbar from "./ProfileNavbar";
 import LoadingSpinner from "./LoadingSpinner";
 import Log from "./Log";
 
+
 const ProfileInfo = Loadable({
   loader: () => import("./ProfileInfo"),
   loading: () => <div />,
@@ -19,7 +20,7 @@ const ProfileChildren = Loadable({
 });
 
 const getMyChildren = (userId) => {
-  return axios
+  return axios 
     .get(`/api/users/${userId}/children`)
     .then((response) => {
       return response.data;
