@@ -98,7 +98,7 @@ class ChildListItem extends React.Component {
               </div>
               {this.state.verified &&
               (
-                <img src={Images.couple} width={'60'} height={'60'} align="right" vertical-align="middle" alt="birthday icon"/>
+                <img src={Images.childImage} width={'60'} height={'60'} align="right" vertical-align="middle" alt="figliNostri icon"/>
               )
             } 
             </div>
