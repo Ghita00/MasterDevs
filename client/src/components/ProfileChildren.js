@@ -31,19 +31,38 @@ class ProfileChildren extends React.Component {
       myProfile,
       children: usersChildren,
       profileId,
+      options: false
     };
+    this.showOptions = this.showOptions.bind(this);
   }
 
   addChild = () => {
     const { history } = this.props;
     const { pathname } = history.location;
-    history.push(`${pathname}/create`);
+    history.push({
+      pathname: `${pathname}/create`,
+      bool: false
+    });//cambiato
   };
+
+  showOptions(){
+    this.setState({options: !this.state.options});
+  }
+
+  addChildProfile = () => {
+    const { history } = this.props;
+    const { pathname } = history.location;
+    history.push({
+      pathname: `${pathname}/create`,
+      bool: true
+    });
+  }
 
   render() {
     const { classes, language } = this.props;
     const { children, profileId, myProfile } = this.state;
     const texts = Texts[language].profileChildren;
+    
     return (
       <React.Fragment>
         {children.length > 0 ? (
@@ -62,9 +81,29 @@ class ProfileChildren extends React.Component {
             color="primary"
             aria-label="Add"
             className={classes.add}
+            onClick={this.showOptions}
+          >
+            <i className="fas fa-child" />
+          </Fab>
+        )}
+        {this.state.options && (
+          <Fab
+            color="primary"
+            aria-label="Add"
+            className={"Child"}
             onClick={this.addChild}
           >
             <i className="fas fa-child" />
+          </Fab>
+        )
+        } {this.state.options && (
+          <Fab
+            color="primary"
+            aria-label="Add"
+            className={"ChildP"}
+            onClick={this.addChildProfile}
+          >
+            <i>+</i>
           </Fab>
         )}
       </React.Fragment>

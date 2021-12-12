@@ -38,7 +38,7 @@ const dataURLtoFile = (dataurl, filename) => {
 class CreateChildScreen extends React.Component {
   constructor(props) {
     super(props);
-    const { history } = this.props;
+    const { history } = this.props; 
     const { state } = history.location;
     if (state !== undefined) {
       this.state = {
@@ -168,6 +168,17 @@ class CreateChildScreen extends React.Component {
     bodyFormData.append("special_needs", special_needs);
     bodyFormData.append("allergies", allergies);
     bodyFormData.append("birthdate", birthdate);
+    // const auth =(this.props.location.bool)
+    if(this.props.location.bool !== undefined){
+      sessionStorage.setItem("bool", this.props.location.bool)
+    }
+    let auth = JSON.parse(sessionStorage.getItem("bool"));
+    if(auth){ 
+      const { pathname } = history.location;
+      history.push({
+        pathname:`${pathname}/profile`,
+        info: [file, image, given_name, family_name, gender, background, other_info, special_needs, allergies, birthdate]})
+    } else {
     axios
       .post(`/api/users/${userId}/children`, bodyFormData, {
         headers: {
@@ -175,13 +186,14 @@ class CreateChildScreen extends React.Component {
         },
       })
       .then((response) => {
-        Log.info(response);
+        Log.info(response);    
         history.goBack();
       })
       .catch((error) => {
         Log.error(error);
         history.goBack();
       });
+    }
   };
 
   handleSave = (event) => {
@@ -195,6 +207,7 @@ class CreateChildScreen extends React.Component {
   handleAdd = () => {
     const { history } = this.props;
     const { pathname } = history.location;
+  
     history.push({
       pathname: `${pathname}/additional`,
       state: {
@@ -239,6 +252,7 @@ class CreateChildScreen extends React.Component {
   };
 
   render() {
+    
     const { classes, language, history } = this.props;
     const texts = Texts[language].createChildScreen;
     const {
@@ -270,7 +284,9 @@ class CreateChildScreen extends React.Component {
     }
     const bottomBorder = { borderBottom: "1px solid rgba(0,0,0,0.1)" };
     return (
+      
       <React.Fragment>
+      
         <div
           id="editChildProfileHeaderContainer"
           style={{ backgroundColor: background }}

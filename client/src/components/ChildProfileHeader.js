@@ -35,8 +35,17 @@ class ChildProfileHeader extends React.Component {
   handleEdit = () => {
     const { history } = this.props;
     const { pathname } = history.location;
-    const newPath = `${pathname}/edit`;
-    history.push(newPath);
+    const newPath = `${pathname}/edit`; /*
+    if(this.props.location.verified !== undefined){
+      sessionStorage.setItem("verified", this.props.location.bool)
+    }
+    let auth = JSON.parse(sessionStorage.getItem("verified"));
+    console.log('auth '+auth)
+    this.setState({verified: auth})*/
+    history.push({
+      pathname: newPath,
+      verified: this.props.location.verified
+    });
   };
 
   handleOptions = () => {
