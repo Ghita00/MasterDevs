@@ -12,5 +12,4 @@ const AboutHeader = () => {
   );
 };
 
-
 export default AboutHeader;
