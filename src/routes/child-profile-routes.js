@@ -26,6 +26,7 @@ router.get('/rights/:child_user_id/getRights', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
   ChildProfile.findOne({ child_user_id: req.params.child_user_id })
     .then(rights => {
+      console.log(rights)
       res.json(rights)
     })
     .catch(next)
