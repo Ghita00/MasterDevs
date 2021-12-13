@@ -17,7 +17,37 @@ class ProfileHeader extends React.Component {
     confirmDialogIsOpen: false,
     action: "",
     imageModalIsOpen: false,
+    verified: false,
+    manage: false
   };
+
+  getRights = (id) => {
+    axios
+    .get(`/api/childrenProfile/rights/${id}/getRights`)
+    .then((response) => {
+      this.setState({ manage: response.data.manage})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
+
+  getProfile = (user_id) => {
+    axios
+    .get(`/api/users/${user_id}/checkchildren`)
+    .then((response) => {
+      this.setState({verified: response.data !== null}, ()=>{console.log(this.state.verified)})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
+
+  componentDidMount(){
+    const userId = JSON.parse(localStorage.getItem("user")).id
+    this.getProfile(userId)
+    this.getRights(userId)
+  }
 
   handleImageModalOpen = () => {
     const target = document.querySelector(".ReactModalPortal");
@@ -39,7 +69,15 @@ class ProfileHeader extends React.Component {
     const { pathname } = history.location;
     const parentPath = pathname.slice(0, pathname.lastIndexOf("/"));
     const newPath = `${parentPath}/edit`;
-    history.push(newPath);
+    const userId = JSON.parse(localStorage.getItem("user")).id
+    if(this.state.verified){
+      history.push(newPath);
+    } else if(this.state.manage){
+      history.push(`${parentPath}/children/${userId}/edit`);
+    } else {
+      alert('non puoi modificare')
+    }
+    
   };
 
   handleOptions = () => {
