@@ -1106,7 +1106,7 @@ router.post('/:id/childrenProfile', childProfileUpload.single('photo'), async (r
         user_id: child_id,
         admin: false,
         user_accepted: true,
-        group_accepted: false
+        group_accepted: true
       }
       Member.create(member).then(() => {
         nh.newRequestNotification(child_id, groups[i])
