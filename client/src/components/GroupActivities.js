@@ -79,10 +79,35 @@ class GroupActivities extends React.Component {
       showAddOptions: false,
       fetchedData: false,
       optionsModalIsOpen: false,
+      activity_right: false,
+      verified: false
     };
   }
 
+  getRights = (id) => {
+    axios
+    .get(`/api/childrenProfile/rights/${id}/getRights`)
+    .then((response) => {
+      this.setState({ activity_right: response.data.activity})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
+  
+  getProfile = (user_id) => {
+    axios
+    .get(`/api/users/${user_id}/checkchildren`)
+    .then((response) => {
+      this.setState({verified: response.data !== null})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
+
   async componentDidMount() {
+    const userId = JSON.parse(localStorage.getItem("user")).id;
     const { group } = this.state;
     const { group_id: groupId } = group;
     const activities = await fetchActivites(groupId);
@@ -98,15 +123,22 @@ class GroupActivities extends React.Component {
       pendingActivities,
       plans,
     });
+    this.getProfile(userId);
+    this.getRights(userId);
   }
 
   add = (type) => {
-    const { history } = this.props;
-    const {
-      group: { group_id: groupId },
-    } = this.state;
-    const path = `/groups/${groupId}/${type}/create`;
-    history.push(path);
+    if (this.state.verified || this.state.activity_right){
+      const { history } = this.props;
+      const {
+        group: { group_id: groupId },
+      } = this.state;
+      const path = `/groups/${groupId}/${type}/create`;
+      history.push(path);
+    }else {
+      alert("non puoi fare attività")
+    }
+
   };
 
   toggleAdd = () => {
