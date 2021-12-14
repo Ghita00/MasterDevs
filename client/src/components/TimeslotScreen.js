@@ -161,7 +161,31 @@ class TimeslotScreen extends React.Component {
       },
     },
     adminChanges: {},
+    verified: false,
+    partecipation: false
   };
+
+  getRights = (id) => {
+    axios
+    .get(`/api/childrenProfile/rights/${id}/getRights`)
+    .then((response) => {
+      this.setState({ partecipation: response.data.partecipation})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
+
+  getProfile = (user_id) => {
+    axios
+    .get(`/api/users/${user_id}/checkchildren`)
+    .then((response) => {
+      this.setState({verified: response.data !== null})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
 
   async componentDidMount() {
     document.addEventListener("message", this.handleMessage, false);
@@ -208,6 +232,8 @@ class TimeslotScreen extends React.Component {
       admins,
       external: "",
     });
+    this.getProfile(userId);
+    this.getRights(userId);
   }
 
   componentWillUnmount() {
@@ -298,31 +324,36 @@ class TimeslotScreen extends React.Component {
   };
 
   handleSave = () => {
-    const { history } = this.props;
-    const { pathname } = history.location;
-    const { timeslot, adminChanges } = JSON.parse(JSON.stringify(this.state));
-    timeslot.adminChanges = adminChanges;
-    timeslot.extendedProperties.shared.children = JSON.stringify(
-      timeslot.extendedProperties.shared.children
-    );
-    timeslot.extendedProperties.shared.parents = JSON.stringify(
-      timeslot.extendedProperties.shared.parents
-    );
-    timeslot.extendedProperties.shared.externals = JSON.stringify(
-      timeslot.extendedProperties.shared.externals
-    );
+    if(this.state.verified || this.state.partecipation){
+      const { history } = this.props;
+      const { pathname } = history.location;
+      const { timeslot, adminChanges } = JSON.parse(JSON.stringify(this.state));
+      timeslot.adminChanges = adminChanges;
+      timeslot.extendedProperties.shared.children = JSON.stringify(
+        timeslot.extendedProperties.shared.children
+      );
+      timeslot.extendedProperties.shared.parents = JSON.stringify(
+        timeslot.extendedProperties.shared.parents
+      );
+      timeslot.extendedProperties.shared.externals = JSON.stringify(
+        timeslot.extendedProperties.shared.externals
+      );
 
-    axios
-      .patch(`/api${pathname}`, {
-        ...timeslot,
-      })
-      .then((response) => {
-        Log.info(response);
-        this.handleGoBack();
-      })
-      .catch((error) => {
-        Log.error(error);
-      });
+      axios
+        .patch(`/api${pathname}`, {
+          ...timeslot,
+        })
+        .then((response) => {
+          Log.info(response);
+          this.handleGoBack();
+        })
+        .catch((error) => {
+          Log.error(error);
+        });
+    } else {
+      alert('non puoi modificare le partecipazioni')
+    }
+    
   };
 
   handleConfirmDialogClose = (choice) => {
