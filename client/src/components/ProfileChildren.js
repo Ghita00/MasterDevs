@@ -6,11 +6,11 @@ import ChildListItem from "./ChildListItem";
 import Texts from "../Constants/Texts";
 import withLanguage from "./LanguageContext";
 
-const styles = () => ({
+const styles = {
   add: {
-    position: "fixed",
-    bottom: "5%",
-    right: "5%",
+    position: "absolute",
+    right: 0,
+    bottom: 0,
     height: "5rem",
     width: "5rem",
     borderRadius: "50%",
@@ -19,7 +19,27 @@ const styles = () => ({
     zIndex: 100,
     fontSize: "2rem",
   },
-});
+  addChild: {
+    right: "0.5rem",
+    height: "4rem",
+    width: "4rem",
+    borderRadius: "50%",
+    border: "solid 0.5px #999",
+    backgroundColor: "#ff6f00",
+    zIndex: 100,
+    fontSize: "2rem",
+  },
+  addChildProfile: {
+    right: "0.5rem",
+    height: "4rem",
+    width: "4rem",
+    borderRadius: "50%",
+    border: "solid 0.5px #999",
+    backgroundColor: "#ff6f00",
+    zIndex: 100,
+    fontSize: "2rem",
+  },
+};
 
 class ProfileChildren extends React.Component {
   constructor(props) {
@@ -76,7 +96,16 @@ class ProfileChildren extends React.Component {
         ) : (
           <div className="addChildPrompt">{texts.addChildPrompt}</div>
         )}
-        {myProfile && (
+        <div
+          className="row no-gutters"
+          style={{
+            margin : "5px",
+            bottom: "8rem",
+            right: "7%",
+            zIndex: 100,
+            position: "fixed",
+          }}
+        >
           <Fab
             color="primary"
             aria-label="Add"
@@ -85,26 +114,50 @@ class ProfileChildren extends React.Component {
           >
             <i className="fas fa-child" />
           </Fab>
-        )}
+        </div>
         {this.state.options && (
-          <Fab
-            color="primary"
-            aria-label="Add"
-            className={"Child"}
-            onClick={this.addChild}
-          >
-            <i className="fas fa-child" />
-          </Fab>
-        )
-        } {this.state.options && (
-          <Fab
-            color="primary"
-            aria-label="Add"
-            className={"ChildP"}
-            onClick={this.addChildProfile}
-          >
-            <i>+</i>
-          </Fab>
+          <React.Fragment>
+            <div
+              className="row no-gutters"
+              style={{
+                bottom: "14rem",
+                right: "7%",
+                zIndex: 100,
+                position: "fixed",
+                alignItems: "center",
+              }}
+            >
+              <div className=" activitiesFabLabel"><div>Bimbo stringa</div></div>
+              <Fab
+                color="primary"
+                aria-label="Add"
+                className={"Child"}
+                onClick={this.addChild}
+              >
+                <i className="fas fa-child" />
+              </Fab>
+            </div>
+            <div
+              className="row no-gutters"
+              style={{
+                bottom: "20rem",
+                zIndex: 100,
+                position: "fixed",
+                right: "7%",
+                alignItems: "center",
+              }}
+            >
+              <div className=" activitiesFabLabel"><div>Bimbo utente</div></div>
+              <Fab
+                color="primary"
+                aria-label="Add"
+                className={"ChildP"}
+                onClick={this.addChildProfile}
+              >
+                <i className={"fas fa-plus"} />
+              </Fab>
+            </div>
+          </React.Fragment>
         )}
       </React.Fragment>
     );

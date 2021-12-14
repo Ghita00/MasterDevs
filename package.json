@@ -42,6 +42,7 @@
     "objectid": "^3.2.1",
     "path": "^0.12.7",
     "pdfmake": "^0.1.72",
+    "react-alert": "^7.0.3",
     "react-script": "^2.0.5",
     "sharp": "^0.29.2"
   },
