@@ -544,7 +544,7 @@ class TimeslotScreen extends React.Component {
       case "children":
         participants = timeslot.extendedProperties.shared.children;
         profiles = childrenProfiles.filter((profile) =>
-          participants.includes(profile.child_id)
+          participants.includes(profile.child_id) 
         );
         showing = showChildren;
         // participantsHeader = `${participants.length} ${
@@ -639,7 +639,6 @@ class TimeslotScreen extends React.Component {
       parentProfiles: unfilteredParentProfiles,
       parents,
     } = this.state;
-
     const parentParticipants = timeslot.extendedProperties.shared.parents;
     const parentProfiles = unfilteredParentProfiles.filter((profile) =>
       parents.includes(profile.user_id)
@@ -664,6 +663,7 @@ class TimeslotScreen extends React.Component {
       children,
       timeslot,
     } = this.state;
+    console.log(unfilteredChildrenProfiles)
     const childrenProfiles = unfilteredChildrenProfiles.filter((profile) =>
       children.includes(profile.child_id)
     );
@@ -922,16 +922,23 @@ class TimeslotScreen extends React.Component {
                 <div className="activityInfoHeader">
                   {timeslot.userCanEdit
                     ? texts.allUsersAvailabilities
-                    : texts.userAvailability}
+                    : texts.userAvailability
+                  }
                 </div>
                 {this.getUserSubscribe()}
+                { 
+                  // sistemata visualizzazione altri bambini
+                }
                 <div className="activityInfoHeader">
-                  {timeslot.userCanEdit
-                    ? texts.allChildrenAvailabilities
-                    : texts.childrenAvailability}
-                </div>
+                  { (this.state.verified) ? (
+                      timeslot.userCanEdit 
+                      ? texts.allChildrenAvailabilities
+                      : texts.childrenAvailability
+                  ) : ''
+                  }
+                </div> 
                 {this.getChildrenSubscribes()}
-                {timeslot.userCanEdit && (
+                {timeslot.userCanEdit &&  (
                   <div className="activityInfoHeader">
                     {texts.externalAvailabilities}
                   </div>
