@@ -1519,7 +1519,15 @@ router.patch(
             oldChildren.splice(oldChildren.indexOf(c), 1)
           }
         })
-        extendedProperties.shared.children = JSON.stringify(oldChildren)
+        if (children.includes(req.user_id)) {
+          extendedProperties.shared.children = JSON.stringify([...new Set([...oldChildren, req.user_id])])
+          console.log(extendedProperties.shared.children)
+          extendedProperties.shared.parents = JSON.stringify(oldParents.filter(u => u !== req.user_id))
+        } else if (oldChildren.includes(req.user_id)) {
+          extendedProperties.shared.children = JSON.stringify(oldChildren.filter(u => u !== req.user_id))
+        } else {
+          extendedProperties.shared.children = JSON.stringify(oldChildren)
+        }
       } else {
         if (adminChanges) {
           if (Object.keys(adminChanges).length > 0) {
