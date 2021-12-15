@@ -17,8 +17,12 @@ const ProfileChildren = Loadable({
   loader: () => import("./ProfileChildren"),
   loading: () => <div />,
 });
+const ProfileParents = Loadable({
+  loader: () => import("./ProfileParents"),
+  loading: () => <div />,
+});
 
-const getMyChildren = (userId) => {
+const getMyChildren = async (userId) => {
   return axios
     .get(`/api/users/${userId}/children`)
     .then((response) => {
@@ -29,7 +33,32 @@ const getMyChildren = (userId) => {
       return [];
     });
 };
-const getMyProfile = (userId) => {
+
+// TODO: funzione precedente da cui partire se non funziona tutto il resto
+/*const getMyParents = (userId) => {
+  return axios
+    .get(`/api/users/${userId}/parents`) 
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      Log.error(error);
+      return [];
+    });
+};*/
+
+const getMyParents = async (userId, childId) => {
+  try {
+    const response = await axios
+      .get(`/api/users/${userId}/childUser/${childId}/parents`);
+    return response.data;
+  } catch (error) {
+    Log.error(error);
+    return [];
+  }
+};
+
+const getMyProfile = async (userId) => {
   return axios
     .get(`/api/users/${userId}/profile`)
     .then((response) => {
@@ -51,32 +80,63 @@ const getMyProfile = (userId) => {
     });
 };
 
+
 class ProfileScreen extends React.Component {
   state = {
     profile: {},
-    children: [],
+    relatives: [],
     fetchedProfile: false,
+    isParent: false // TODO: sistemare bug (adesso i profili bambini chiamano la component ProfileParents.js solo aggiornando la pagina, devono chiamarla da subito)
   };
+
+  getProfile = async (userId) => {
+    axios
+    .get(`/api/users/${userId}/checkchildren`)
+    .then((response) => {
+      this.setState({isParent: response.data !== null})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
 
   async componentDidMount() {
     const { match } = this.props;
     const { profileId } = match.params;
     const profile = await getMyProfile(profileId);
 
-    const children = await getMyChildren(profileId);
-    this.setState({
-      fetchedProfile: true,
-      children,
-      profile,
-    });
+    await this.getProfile(JSON.parse(localStorage.getItem("user")).id);
+
+    console.log(this.state.isParent);
+
+    if (true) {  // da fixare 
+      const relatives = await getMyChildren(profileId);  
+      this.setState({
+        fetchedProfile: true,
+        relatives,
+        profile,
+      });
+    } else {
+      const relatives = await getMyParents(profileId);
+      this.setState({
+        fetchedProfile: true,
+        relatives,
+        profile,
+      },()=> {console.log(relatives);});
+    }
   }
+  
 
   render() {
     const { match } = this.props;
     const { profileId } = match.params;
-    const { fetchedProfile, children } = this.state;
+    const { fetchedProfile, relatives } = this.state;
     const currentPath = match.url;
     const { profile } = this.state;
+
+    console.log(relatives);
+
+
     return fetchedProfile ? (
       <React.Fragment>
         <ProfileHeader
@@ -84,13 +144,14 @@ class ProfileScreen extends React.Component {
           photo={path(profile, ["image", "path"])}
         />
         <React.Fragment>
-          <ProfileNavbar />
+          <ProfileNavbar isParent={this.state.isParent}/>
           <Switch>
             <Route
               exact
               path={`${currentPath}/info`}
               render={(props) => <ProfileInfo {...props} profile={profile} />}
             />
+            {this.state.isParent ? (
             <Route
               exact
               path={`${currentPath}/children`}
@@ -98,10 +159,22 @@ class ProfileScreen extends React.Component {
                 <ProfileChildren
                   {...props}
                   profileId={profileId}
-                  usersChildren={children}
+                  usersChildren={relatives}
+                />
+              )}
+            /> ) : (
+            <Route
+              
+              path={`${currentPath}/parents`}
+              render={(props) => (
+                <ProfileParents
+                  {...props}
+                  profileId={profileId}
+                  usersParents={relatives}
                 />
               )}
             />
+            )}
           </Switch>
         </React.Fragment>
       </React.Fragment>
@@ -110,6 +183,7 @@ class ProfileScreen extends React.Component {
     );
   }
 }
+
 
 ProfileScreen.propTypes = {
   match: PropTypes.object,
