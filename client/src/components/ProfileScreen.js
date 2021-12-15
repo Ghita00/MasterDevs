@@ -22,7 +22,7 @@ const ProfileParents = Loadable({
   loading: () => <div />,
 });
 
-const getMyChildren = (userId) => {
+const getMyChildren = async (userId) => {
   return axios
     .get(`/api/users/${userId}/children`)
     .then((response) => {
@@ -58,7 +58,7 @@ const getMyParents = async (userId, childId) => {
   }
 };
 
-const getMyProfile = (userId) => {
+const getMyProfile = async (userId) => {
   return axios
     .get(`/api/users/${userId}/profile`)
     .then((response) => {
@@ -80,15 +80,16 @@ const getMyProfile = (userId) => {
     });
 };
 
+
 class ProfileScreen extends React.Component {
   state = {
     profile: {},
     relatives: [],
     fetchedProfile: false,
-    isParent: true
+    isParent: false // TODO: sistemare bug (adesso i profili bambini chiamano la component ProfileParents.js solo aggiornando la pagina, devono chiamarla da subito)
   };
 
-  getProfile = (userId) => {
+  getProfile = async (userId) => {
     axios
     .get(`/api/users/${userId}/checkchildren`)
     .then((response) => {
@@ -103,15 +104,17 @@ class ProfileScreen extends React.Component {
     const { match } = this.props;
     const { profileId } = match.params;
     const profile = await getMyProfile(profileId);
-    this.getProfile(JSON.parse(localStorage.getItem("user")).id);
 
-    if (this.state.isParent) {  
+    await this.getProfile(JSON.parse(localStorage.getItem("user")).id);
+
+    console.log(this.state.isParent);
+
+    if (true) {  // da fixare 
       const relatives = await getMyChildren(profileId);  
       this.setState({
         fetchedProfile: true,
         relatives,
         profile,
-        isParent: true
       });
     } else {
       const relatives = await getMyParents(profileId);
@@ -119,10 +122,10 @@ class ProfileScreen extends React.Component {
         fetchedProfile: true,
         relatives,
         profile,
-        isParent: false
-      });
+      },()=> {console.log(relatives);});
     }
   }
+  
 
   render() {
     const { match } = this.props;
@@ -131,6 +134,9 @@ class ProfileScreen extends React.Component {
     const currentPath = match.url;
     const { profile } = this.state;
 
+    console.log(relatives);
+
+
     return fetchedProfile ? (
       <React.Fragment>
         <ProfileHeader
@@ -138,7 +144,7 @@ class ProfileScreen extends React.Component {
           photo={path(profile, ["image", "path"])}
         />
         <React.Fragment>
-          <ProfileNavbar />
+          <ProfileNavbar isParent={this.state.isParent}/>
           <Switch>
             <Route
               exact
@@ -158,7 +164,7 @@ class ProfileScreen extends React.Component {
               )}
             /> ) : (
             <Route
-              exact
+              
               path={`${currentPath}/parents`}
               render={(props) => (
                 <ProfileParents
