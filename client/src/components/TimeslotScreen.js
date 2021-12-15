@@ -209,6 +209,9 @@ class TimeslotScreen extends React.Component {
     } else {
       children = await getUsersChildren(userId);
       parents = [userId];
+      if(!this.state.verified){
+        children = [userId]
+      }
     }
     if (shared.externals) {
       shared.externals = JSON.parse(shared.externals);
@@ -231,7 +234,7 @@ class TimeslotScreen extends React.Component {
       parents,
       admins,
       external: "",
-    });
+    }, ()=>{console.log(parents)});
     this.getProfile(userId);
     this.getRights(userId);
   }
