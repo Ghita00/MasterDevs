@@ -415,6 +415,7 @@ class TimeslotScreen extends React.Component {
         ).given_name;
         timeslot.extendedProperties.shared.children.push(id);
         snackMessage = `${texts.childSubscribe1} ${childName} ${texts.childSubscribe2}`;
+        console.log(snackMessage);
       }
       this.setState({ timeslot, madeChanges: true });
     } else {

@@ -96,13 +96,22 @@ class ChildListItem extends React.Component {
                 </h1>
                 <h2>{texts[child.gender]}</h2>
               </div>
-              {this.state.verified &&
-              (
-                <img src={Images.couple} width={'60'} height={'60'} align="right" vertical-align="middle" alt="birthday icon"/>
-              )
-            } 
+              {this.state.verified && (
+              <div className="col-5-10">
+                <img
+                  src={Images.childImage}
+                  alt="figliNostri"
+                  route={route}
+                  className="center"
+                  width={'60'} 
+                  height={'60'} 
+                  align="right" 
+                  vertical-align="middle"
+                />
+              </div>
+            )}
             </div>
-            
+
             
           </React.Fragment>
         ) : (
