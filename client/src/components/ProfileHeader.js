@@ -77,7 +77,6 @@ class ProfileHeader extends React.Component {
     } else {
       alert("non puoi modificare")
     }
-    
   };
 
   handleOptions = () => {
@@ -230,7 +229,7 @@ class ProfileHeader extends React.Component {
             </button>
           </div>
           <div className="col-6-10" />
-          {profileId === JSON.parse(localStorage.getItem("user")).id ? (
+          {profileId === JSON.parse(localStorage.getItem("user")).id && this.state.manage? (
             <React.Fragment>
               <div className="col-1-10">
                 <button

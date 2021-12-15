@@ -127,7 +127,7 @@ class ProfileChildren extends React.Component {
                 alignItems: "center",
               }}
             >
-              <div className=" activitiesFabLabel"><div>Bimbo stringa</div></div>
+              <div className=" activitiesFabLabel"><div>Bimbo</div></div>
               <Fab
                 color="primary"
                 aria-label="Add"

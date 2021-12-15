@@ -135,6 +135,7 @@ class ChangeRights extends React.Component {
                 </MuiThemeProvider>
               </div>
             </div>
+            <hr/>
           </div>
         </div>
     );

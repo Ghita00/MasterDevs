@@ -111,11 +111,7 @@ class ChildListItem extends React.Component {
               </div>
             )}
             </div>
-            
-            
 
-            
-            
             
           </React.Fragment>
         ) : (
