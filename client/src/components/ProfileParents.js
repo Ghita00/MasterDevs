@@ -1,8 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Fab from "@material-ui/core/Fab";
 import { withStyles } from "@material-ui/core/styles";
-import ChildListItem from "./ChildListItem";
+import ParentListItem from "./ParentListItem";
 import Texts from "../Constants/Texts";
 import withLanguage from "./LanguageContext";
 
@@ -25,62 +24,33 @@ class ProfileParents extends React.Component {
   constructor(props) {
     super(props);
     const userId = JSON.parse(localStorage.getItem("user")).id;
-    const { profileId, usersChildren } = this.props;
+    const { profileId, usersParents } = this.props;
     const myProfile = userId === profileId;
     this.state = {
       myProfile,
-      children: usersChildren,
+      parents: usersParents,
       profileId,
     };
   }
 
-  // TODO: togliere la seguente funzione commentata (funzione che aggiunge i bambini)
-  /*
-  addChild = () => {
-    const { history } = this.props;
-    const { pathname } = history.location;
-    history.push(`${pathname}/create`);
-  }; */
-
   render() {
     const { classes, language } = this.props;
-    const { children, profileId, myProfile } = this.state;
+    const { parent, profileId, myProfile } = this.state;
     const texts = Texts[language].ProfileParents;
     return (
       <React.Fragment>
-        {/*
-        
-        TODO: questa parte fa in modo che venga visualizzata la lista di bambini, va modificata in modo che sia visualizzata la lista di genitori
-        
-        children.length > 0 ? (
+        {
+        parent.length > 0 ? (
           <ul>
-            {children.map((child, index) => (
+            {parent.map((parent, index) => (
               <li key={index}>
-                <ChildListItem childId={child.child_id} userId={profileId} />
+                <ParentListItem Id={parent.user_id} userId={profileId} />
               </li>
             ))}
           </ul>
         ) : (
-          <div className="addChildPrompt">{texts.addChildPrompt}</div>
-        )*/}
-
-
-        {/*
-        
-        TODO: questa parte mostra il bottone per aggiungere bambini (va tolta)
-        
-        myProfile && (
-          <Fab
-            color="primary"
-            aria-label="Add"
-            className={classes.add}
-            onClick={this.addChild}
-          >
-            <i className="fas fa-child" />
-          </Fab>
-        )*/}
-
-
+          <div className="addParentPrompt">{texts.addParentPrompt}</div>
+        )}
       </React.Fragment>
     );
   }

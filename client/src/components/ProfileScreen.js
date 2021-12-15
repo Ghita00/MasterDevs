@@ -34,8 +34,8 @@ const getMyChildren = (userId) => {
     });
 };
 
-// TODO: funzione ancora da provare e sistemare
-const getMyParents = (userId) => {
+// TODO: funzione precedente da cui partire se non funziona tutto il resto
+/*const getMyParents = (userId) => {
   return axios
     .get(`/api/users/${userId}/parents`) 
     .then((response) => {
@@ -45,6 +45,17 @@ const getMyParents = (userId) => {
       Log.error(error);
       return [];
     });
+};*/
+
+const getMyParents = async (userId, childId) => {
+  try {
+    const response = await axios
+      .get(`/api/users/${userId}/childUser/${childId}/parents`);
+    return response.data;
+  } catch (error) {
+    Log.error(error);
+    return [];
+  }
 };
 
 const getMyProfile = (userId) => {
@@ -74,7 +85,7 @@ class ProfileScreen extends React.Component {
     profile: {},
     relatives: [],
     fetchedProfile: false,
-    isParent: true // TODO: sistemare bug (adesso i profili bambini chiamano la component ProfileParents.js solo aggiornando la pagina, devono chiamarla da subito)
+    isParent: true
   };
 
   getProfile = (userId) => {
@@ -92,7 +103,6 @@ class ProfileScreen extends React.Component {
     const { match } = this.props;
     const { profileId } = match.params;
     const profile = await getMyProfile(profileId);
-
     this.getProfile(JSON.parse(localStorage.getItem("user")).id);
 
     if (this.state.isParent) {  
@@ -135,7 +145,7 @@ class ProfileScreen extends React.Component {
               path={`${currentPath}/info`}
               render={(props) => <ProfileInfo {...props} profile={profile} />}
             />
-            {this.state.isParent ? ( // (*)
+            {this.state.isParent ? (
             <Route
               exact
               path={`${currentPath}/children`}
@@ -149,12 +159,12 @@ class ProfileScreen extends React.Component {
             /> ) : (
             <Route
               exact
-              path={`${currentPath}/children`}  // TODO: mettere il percorso giusto
+              path={`${currentPath}/parents`}
               render={(props) => (
                 <ProfileParents
                   {...props}
                   profileId={profileId}
-                  usersChildren={relatives} // TODO: cambiare "usersChildren" in "usersParents" quando verrà implementato il component ProfileParents.js
+                  usersParents={relatives}
                 />
               )}
             />
