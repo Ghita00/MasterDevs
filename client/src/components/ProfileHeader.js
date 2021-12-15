@@ -75,7 +75,7 @@ class ProfileHeader extends React.Component {
     } else if(this.state.manage){
       history.push(`${parentPath}/children/${userId}/edit`);
     } else {
-      alert('non puoi modificare')
+      alert("non puoi modificare")
     }
     
   };

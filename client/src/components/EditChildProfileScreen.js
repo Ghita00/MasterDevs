@@ -183,15 +183,18 @@ class EditChildProfileScreen extends React.Component {
     bodyFormData.append("birthdate", birthdate);
     
     // da qui salviamo i diritti
-    let choices_rights = document.getElementsByClassName("choices_rights");
-    console.log(choices_rights)
-    if(choices_rights.length > 0){
+    let activity_rights = document.getElementById("choices_rights1").checked;
+    let chat_rights = document.getElementById("choices_rights2").checked;
+    let partecipation_rights = document.getElementById("choices_rights3").checked;
+    let manage_rights = document.getElementById("choices_rights4").checked;
+    console.log(activity_rights,chat_rights,partecipation_rights,manage_rights);
+    if(activity_rights !== undefined){
       axios
       .patch(`/api/childrenProfile/rights/${childId}/changerights`,
-        {activity: choices_rights[0].checked,
-        chat: choices_rights[1].checked,
-        partecipation: choices_rights[2].checked,
-        manage: choices_rights[3].checked})
+        {activity: activity_rights,
+        chat: chat_rights,
+        partecipation: partecipation_rights,
+        manage: manage_rights})
       .then((response) => {
         Log.info(response);
         //history.goBack();
@@ -278,8 +281,7 @@ class EditChildProfileScreen extends React.Component {
       sessionStorage.setItem("verified", this.props.location.verified)
     }
     let auth = JSON.parse(sessionStorage.getItem("verified"));
-    
-    
+
     return fetchedChildData ? (
       <React.Fragment>
         <div
