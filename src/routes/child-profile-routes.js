@@ -2,7 +2,6 @@ const express = require('express')
 const router = new express.Router()
 
 const ChildProfile = require('../models/childProfile')
-const Parent = require('../models/parent')
 
 router.get('/', (req, res, next) => {
   if (!req.child_user_id) { return res.status(401).send('Not authenticated') }
@@ -23,29 +22,11 @@ router.get('/', (req, res, next) => {
     }).catch(next)
 })
 
-router.get('/:child_user_id/parents', (req, res, next) => { // (*)
-  if (!req.child_user_id) { return res.status(401).send('Not authenticated') }
-  const { ids } = req.query
-  if (!ids) {
-    return res.status(400).send('Bad Request')
-  }
-  Parent.find({ child_user_id: { $in: ids } })
-    .select('given_name family_name image_id user_id')
-    .populate('image')
-    .lean()
-    .exec()
-    .then(profiles => {
-      if (profiles.length === 0) {
-        return res.status(404).send('Parent not found')
-      }
-      res.json(profiles)
-    }).catch(next)
-})
-
 router.get('/rights/:child_user_id/getRights', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
   ChildProfile.findOne({ child_user_id: req.params.child_user_id })
     .then(rights => {
+      console.log(rights)
       res.json(rights)
     })
     .catch(next)
@@ -60,6 +41,11 @@ router.patch('/rights/:child_user_id/changerights', async (req, res, next) => {
   let child_user_id = req.params.child_user_id
   let exec = { $set: { activity: activity, chat: chat, partecipation: partecipation, manage: manage } }
   await ChildProfile.updateOne({ child_user_id }, exec).then(console.log('update eseguito'))
+  /* let input = !req.params.bool
+  let exec = { $set: { activity: input } }
+  let child_user_id = req.params.child_user_id
+  console.log('cambia attività')
+  await ChildProfile.updateOne({ child_user_id }, exec).then(console.log('cambia attività')) */
 })
 
 router.post('/rights/:child_user_id/changeactivity/:bool', async (req, res, next) => {

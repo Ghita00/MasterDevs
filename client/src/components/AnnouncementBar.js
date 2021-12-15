@@ -25,10 +25,33 @@ const dataURLtoFile = (dataurl, filename) => {
 };
 
 class AnnouncementBar extends React.Component {
-  state = { message: "", photos: [] };
+  state = { message: "", photos: [] , verified:false, chat:false};
 
+  getRights = (id) => {
+    axios
+    .get(`/api/childrenProfile/rights/${id}/getRights`)
+    .then((response) => {
+      this.setState({ chat: response.data.chat})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
+
+  getProfile = (user_id) => {
+    axios
+    .get(`/api/users/${user_id}/checkchildren`)
+    .then((response) => {
+      this.setState({verified: response.data !== null}, ()=>{console.log(this.state.verified)})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
   componentDidMount() {
     document.addEventListener("message", this.handleMessage, false);
+    this.getProfile(JSON.parse(localStorage.getItem("user")).id);
+    this.getRights(JSON.parse(localStorage.getItem("user")).id);
   }
 
   componentWillUnmount() {
@@ -50,28 +73,34 @@ class AnnouncementBar extends React.Component {
   };
 
   handleSend = () => {
-    const { groupId, handleRefresh } = this.props;
-    const { message, photos } = this.state;
-    if (message || photos.length > 0) {
-      const user_id = JSON.parse(localStorage.getItem("user")).id;
-      const bodyFormData = new FormData();
-      if (photos.length > 0) {
-        for (let i = 0; i < photos.length; i += 1) {
-          bodyFormData.append("photo", photos[i].photo);
+   
+    if (this.state.verified || this.state.chat){
+      const { groupId, handleRefresh } = this.props;
+      const { message, photos } = this.state;
+      if (message || photos.length > 0) {
+        const user_id = JSON.parse(localStorage.getItem("user")).id;
+        const bodyFormData = new FormData();
+        if (photos.length > 0) {
+          for (let i = 0; i < photos.length; i += 1) {
+            bodyFormData.append("photo", photos[i].photo);
+          }
         }
+        bodyFormData.append("message", message);
+        bodyFormData.append("user_id", user_id);
+        axios
+          .post(`/api/groups/${groupId}/announcements`, bodyFormData)
+          .then((response) => {
+            Log.info(response);
+            handleRefresh();
+          })
+          .catch((error) => {
+            Log.error(error);
+          });
+        this.setState({ message: "", photos: [] });
       }
-      bodyFormData.append("message", message);
-      bodyFormData.append("user_id", user_id);
-      axios
-        .post(`/api/groups/${groupId}/announcements`, bodyFormData)
-        .then((response) => {
-          Log.info(response);
-          handleRefresh();
-        })
-        .catch((error) => {
-          Log.error(error);
-        });
-      this.setState({ message: "", photos: [] });
+    }
+    else{
+      alert("non puoi scrivere");
     }
   };
 

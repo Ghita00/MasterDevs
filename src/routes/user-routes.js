@@ -484,7 +484,7 @@ router.get('/:id/checkchildren', (req, res, next) => {
     }).catch(next)
 })
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', (req, res, next) => { // (*)
   if (req.user_id !== req.params.id) { return res.status(401).send('Unauthorized') }
   const { id } = req.params
   User.findOne({ user_id: id }).then(user => {
@@ -784,7 +784,7 @@ router.get('/:id/events', async (req, res, next) => {
   }
 })
 
-router.get('/:id/profile', (req, res, next) => {
+router.get('/:id/profile', (req, res, next) => { // (*)
   if (!req.user_id) { return res.status(401).send('Unauthorized') }
   const user_id = req.params.id
   Profile.findOne({ user_id })
@@ -809,6 +809,20 @@ router.get('/:id/profile', (req, res, next) => {
       } else {
         res.json(profile)
       }
+    }).catch(next)
+})
+
+router.get('/:id/checkchildren', (req, res, next) => {
+  if (!req.user_id) { return res.status(401).send('Unauthorized') }
+  const user_id = req.params.id
+  Profile.findOne({ user_id })
+    .populate('image')
+    .populate('address')
+    .lean()
+    .exec()
+    .then(profile => {
+      console.log(profile)
+      res.json(profile)
     }).catch(next)
 })
 
@@ -1092,7 +1106,7 @@ router.post('/:id/childrenProfile', childProfileUpload.single('photo'), async (r
         user_id: child_id,
         admin: false,
         user_accepted: true,
-        group_accepted: false
+        group_accepted: true
       }
       Member.create(member).then(() => {
         nh.newRequestNotification(child_id, groups[i])
@@ -1203,7 +1217,7 @@ router.delete('/:userId/children/:childId', async (req, res, next) => {
   }
 })
 
-router.get('/:userId/children/:childId/parents', (req, res, next) => {
+router.get('/:userId/children/:childId/parents', (req, res, next) => { // (*)
   if (!req.user_id) { return res.status(401).send('Unauthorized') }
   const child_id = req.params.childId
   Parent.find({ child_id }).then(parents => {

@@ -161,7 +161,31 @@ class TimeslotScreen extends React.Component {
       },
     },
     adminChanges: {},
+    verified: false,
+    partecipation: false
   };
+
+  getRights = (id) => {
+    axios
+    .get(`/api/childrenProfile/rights/${id}/getRights`)
+    .then((response) => {
+      this.setState({ partecipation: response.data.partecipation})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
+
+  getProfile = (user_id) => {
+    axios
+    .get(`/api/users/${user_id}/checkchildren`)
+    .then((response) => {
+      this.setState({verified: response.data !== null})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
 
   async componentDidMount() {
     document.addEventListener("message", this.handleMessage, false);
@@ -185,6 +209,9 @@ class TimeslotScreen extends React.Component {
     } else {
       children = await getUsersChildren(userId);
       parents = [userId];
+      if(!this.state.verified){
+        children = [userId]
+      }
     }
     if (shared.externals) {
       shared.externals = JSON.parse(shared.externals);
@@ -207,7 +234,9 @@ class TimeslotScreen extends React.Component {
       parents,
       admins,
       external: "",
-    });
+    }, ()=>{console.log(parents)});
+    this.getProfile(userId);
+    this.getRights(userId);
   }
 
   componentWillUnmount() {
@@ -298,31 +327,36 @@ class TimeslotScreen extends React.Component {
   };
 
   handleSave = () => {
-    const { history } = this.props;
-    const { pathname } = history.location;
-    const { timeslot, adminChanges } = JSON.parse(JSON.stringify(this.state));
-    timeslot.adminChanges = adminChanges;
-    timeslot.extendedProperties.shared.children = JSON.stringify(
-      timeslot.extendedProperties.shared.children
-    );
-    timeslot.extendedProperties.shared.parents = JSON.stringify(
-      timeslot.extendedProperties.shared.parents
-    );
-    timeslot.extendedProperties.shared.externals = JSON.stringify(
-      timeslot.extendedProperties.shared.externals
-    );
+    if(this.state.verified || this.state.partecipation){
+      const { history } = this.props;
+      const { pathname } = history.location;
+      const { timeslot, adminChanges } = JSON.parse(JSON.stringify(this.state));
+      timeslot.adminChanges = adminChanges;
+      timeslot.extendedProperties.shared.children = JSON.stringify(
+        timeslot.extendedProperties.shared.children
+      );
+      timeslot.extendedProperties.shared.parents = JSON.stringify(
+        timeslot.extendedProperties.shared.parents
+      );
+      timeslot.extendedProperties.shared.externals = JSON.stringify(
+        timeslot.extendedProperties.shared.externals
+      );
 
-    axios
-      .patch(`/api${pathname}`, {
-        ...timeslot,
-      })
-      .then((response) => {
-        Log.info(response);
-        this.handleGoBack();
-      })
-      .catch((error) => {
-        Log.error(error);
-      });
+      axios
+        .patch(`/api${pathname}`, {
+          ...timeslot,
+        })
+        .then((response) => {
+          Log.info(response);
+          this.handleGoBack();
+        })
+        .catch((error) => {
+          Log.error(error);
+        });
+    } else {
+      alert('non puoi modificare le partecipazioni')
+    }
+    
   };
 
   handleConfirmDialogClose = (choice) => {
@@ -513,7 +547,7 @@ class TimeslotScreen extends React.Component {
       case "children":
         participants = timeslot.extendedProperties.shared.children;
         profiles = childrenProfiles.filter((profile) =>
-          participants.includes(profile.child_id)
+          participants.includes(profile.child_id) 
         );
         showing = showChildren;
         // participantsHeader = `${participants.length} ${
@@ -608,7 +642,6 @@ class TimeslotScreen extends React.Component {
       parentProfiles: unfilteredParentProfiles,
       parents,
     } = this.state;
-
     const parentParticipants = timeslot.extendedProperties.shared.parents;
     const parentProfiles = unfilteredParentProfiles.filter((profile) =>
       parents.includes(profile.user_id)
@@ -633,6 +666,7 @@ class TimeslotScreen extends React.Component {
       children,
       timeslot,
     } = this.state;
+    console.log(unfilteredChildrenProfiles)
     const childrenProfiles = unfilteredChildrenProfiles.filter((profile) =>
       children.includes(profile.child_id)
     );
@@ -891,16 +925,23 @@ class TimeslotScreen extends React.Component {
                 <div className="activityInfoHeader">
                   {timeslot.userCanEdit
                     ? texts.allUsersAvailabilities
-                    : texts.userAvailability}
+                    : texts.userAvailability
+                  }
                 </div>
                 {this.getUserSubscribe()}
+                { 
+                  // sistemata visualizzazione altri bambini
+                }
                 <div className="activityInfoHeader">
-                  {timeslot.userCanEdit
-                    ? texts.allChildrenAvailabilities
-                    : texts.childrenAvailability}
-                </div>
+                  { (this.state.verified) ? (
+                      timeslot.userCanEdit 
+                      ? texts.allChildrenAvailabilities
+                      : texts.childrenAvailability
+                  ) : ''
+                  }
+                </div> 
                 {this.getChildrenSubscribes()}
-                {timeslot.userCanEdit && (
+                {timeslot.userCanEdit &&  (
                   <div className="activityInfoHeader">
                     {texts.externalAvailabilities}
                   </div>
