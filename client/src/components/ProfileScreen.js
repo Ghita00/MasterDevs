@@ -45,7 +45,7 @@ const getMyChildren = async (userId) => {
       Log.error(error);
       return [];
     });
-};*/
+};
 
 const getMyParents = async (userId, childId) => {
   try {
@@ -56,7 +56,7 @@ const getMyParents = async (userId, childId) => {
     Log.error(error);
     return [];
   }
-};
+};*/
 
 const getMyProfile = async (userId) => {
   return axios
@@ -109,21 +109,21 @@ class ProfileScreen extends React.Component {
 
     console.log(this.state.isParent);
 
-    if (true) {  // da fixare 
+    // if (true) { 
       const relatives = await getMyChildren(profileId);  
       this.setState({
         fetchedProfile: true,
         relatives,
         profile,
       });
-    } else {
+    /*} else {
       const relatives = await getMyParents(profileId);
       this.setState({
         fetchedProfile: true,
         relatives,
         profile,
       },()=> {console.log(relatives);});
-    }
+    }*/
   }
   
 

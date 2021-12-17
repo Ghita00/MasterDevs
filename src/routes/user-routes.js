@@ -1203,6 +1203,22 @@ router.delete('/:userId/children/:childId', async (req, res, next) => {
   }
 })
 
+router.get('/:id/parents', (req, res, next) => {
+  if (!req.user_id) { return res.status(401).send('Unauthorized') }
+  const { id } = req.params
+  Parent.find({ child_id: id })
+    .then(parents => {
+      if (parents.length === 0) {
+        res.status(404).send('Parents not found')
+      }
+      const parentIds = parents.map(parent => parent.parent_id)
+      return Profile.find({ user_id: { $in: parentIds } })
+        .then(parentProfiles => {
+          res.json(parentProfiles)
+        }).catch(next)
+    })
+})
+
 router.get('/:userId/children/:childId/parents', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Unauthorized') }
   const child_id = req.params.childId
