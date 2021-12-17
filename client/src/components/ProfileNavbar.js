@@ -30,7 +30,7 @@ const ProfileNavbar = ({isParent, language, history }) => {
           </h1>
 
         </div>
-        {isParent ? (
+        {//isParent ? (
         <div className="col-1-2">
           <h1
             id="children"
@@ -40,7 +40,7 @@ const ProfileNavbar = ({isParent, language, history }) => {
             {texts.children} 
           </h1>
         </div>
-        ) : (
+        /*) : (
         <div className="col-1-2">
           <h1
             id="parents"
@@ -50,7 +50,7 @@ const ProfileNavbar = ({isParent, language, history }) => {
             {"GENITORI"} 
           </h1>
         </div>
-        )}
+        )*/}
       </div>
     </div>
   );

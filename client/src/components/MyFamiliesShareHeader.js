@@ -142,7 +142,11 @@ class MyFamiliesShareHeader extends React.Component {
         break;
       case "myprofile":
         const userId = JSON.parse(localStorage.getItem("user")).id;
-        history.push(`/profiles/${userId}/info`);
+        if (this.state.verified) {
+          history.push(`/profiles/${userId}/info`);
+        } else {
+          history.push(`/profiles/${userId}/children/${userId}`);
+        }
         break;
       case "mycalendar":
         history.push(`/myfamiliesshare/calendar`);

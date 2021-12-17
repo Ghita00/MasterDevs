@@ -10,12 +10,37 @@ import ConfirmDialog from "./ConfirmDialog";
 import ExpandedImageModal from "./ExpandedImageModal";
 import Log from "./Log";
 
+
 class ChildProfileHeader extends React.Component {
   state = {
     optionsModalIsOpen: false,
     confirmDialogIsOpen: false,
     imageModalIsOpen: false,
+    isParent: false,
+    manage: false
   };
+
+  getRights = (id) => {
+    axios
+    .get(`/api/childrenProfile/rights/${id}/getRights`)
+    .then((response) => {
+      this.setState({ manage: response.data.manage})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
+
+  getProfile = (id) => {
+    axios
+    .get(`/api/users/${id}/checkchildren`)
+    .then((response) => {
+      this.setState({isParent: response.data !== null})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
 
   handleImageModalOpen = () => {
     const target = document.querySelector(".ReactModalPortal");
@@ -78,6 +103,12 @@ class ChildProfileHeader extends React.Component {
     this.setState({ confirmDialogIsOpen: false });
   };
 
+  componentDidMount() {
+    const userId= JSON.parse(localStorage.getItem("user")).id;
+    this.getProfile(userId);
+    this.getRights(userId);
+  }
+
   render() {
     const { language, background, history, match, photo, name } = this.props;
     const { profileId } = match.params;
@@ -116,6 +147,7 @@ class ChildProfileHeader extends React.Component {
             {profileId === JSON.parse(localStorage.getItem("user")).id ? (
               <React.Fragment>
                 <div className="col-1-10">
+                {(this.state.isParent || this.state.manage) && (
                   <button
                     type="button"
                     className="transparentButton center"
@@ -123,7 +155,10 @@ class ChildProfileHeader extends React.Component {
                   >
                     <i className="fas fa-pencil-alt" />
                   </button>
+                )}
+ 
                 </div>
+                { (this.state.isParent) ? (  
                 <div className="col-1-10">
                   <button
                     type="button"
@@ -133,6 +168,9 @@ class ChildProfileHeader extends React.Component {
                     <i className="fas fa-ellipsis-v" />
                   </button>
                 </div>
+                ) : (
+                  <div />
+                )}
               </React.Fragment>
             ) : (
               <div />

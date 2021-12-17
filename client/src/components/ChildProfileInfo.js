@@ -11,7 +11,23 @@ import ConfirmDialog from "./ConfirmDialog";
 import Log from "./Log";
 
 class ChildProfileInfo extends React.Component {
-  state = { modalIsOpen: false, confirmDialogIsOpen: false, deleteIndex: "" };
+  state = { 
+    modalIsOpen: false, 
+    confirmDialogIsOpen: false, 
+    deleteIndex: "",
+    verified: false
+  };
+
+  getProfile = (id) => {
+    axios
+    .get(`/api/users/${id}/checkchildren`)
+    .then((response) => {
+      this.setState({verified: response.data !== null})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
 
   handleConfirmDialogOpen = (index) => {
     this.setState({ confirmDialogIsOpen: true, deleteIndex: index });
@@ -68,8 +84,12 @@ class ChildProfileInfo extends React.Component {
 
   handleRedirectToParent = (parent) => {
     const { history } = this.props;
-    history.push(`/profiles/${parent.user_id}/info`);
+    history.push(`/profiles/${parent.user_id}/info`); //state della push
   };
+
+  componentDidMount() {
+    this.getProfile(JSON.parse(localStorage.getItem("user")).id);
+  }
 
   render() {
     const {
@@ -84,8 +104,8 @@ class ChildProfileInfo extends React.Component {
       parents,
     } = this.props;
     const { profileId } = match.params;
-    const { confirmDialogIsOpen, modalIsOpen } = this.state;
-    const isParent = JSON.parse(localStorage.getItem("user")).id === profileId;
+    const { confirmDialogIsOpen, modalIsOpen, verified } = this.state;
+    const isParent = (JSON.parse(localStorage.getItem("user")).id === profileId) && verified;
     const texts = Texts[language].childProfileInfo;
     return (
       <React.Fragment>

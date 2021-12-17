@@ -229,7 +229,7 @@ class ProfileHeader extends React.Component {
             </button>
           </div>
           <div className="col-6-10" />
-          {profileId === JSON.parse(localStorage.getItem("user")).id && this.state.manage? (
+          {profileId === JSON.parse(localStorage.getItem("user")).id ? (
             <React.Fragment>
               <div className="col-1-10">
                 <button

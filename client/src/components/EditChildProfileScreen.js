@@ -32,12 +32,25 @@ class EditChildProfileScreen extends React.Component {
     fetchedChildData: false,
     month: moment().month() + 1,
     year: moment().year(),
+    isParent: false
   };
+
+  getProfile = (id) => {
+    axios
+    .get(`/api/users/${id}/checkchildren`)
+    .then((response) => {
+      this.setState({isParent: response.data !== null})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
 
   componentDidMount() {
     const { history } = this.props;
     const { state } = history.location;
     document.addEventListener("message", this.handleMessage, false);
+    this.getProfile(JSON.parse(localStorage.getItem("user")).id);
     if (state !== undefined) {
       this.setState({ ...state });
     } else {
@@ -183,18 +196,18 @@ class EditChildProfileScreen extends React.Component {
     bodyFormData.append("birthdate", birthdate);
     
     // da qui salviamo i diritti
-    let activity_rights = document.getElementById("choices_rights1").checked;
-    let chat_rights = document.getElementById("choices_rights2").checked;
-    let partecipation_rights = document.getElementById("choices_rights3").checked;
-    let manage_rights = document.getElementById("choices_rights4").checked;
+    let activity_rights = document.getElementById("choices_rights1");
+    let chat_rights = document.getElementById("choices_rights2");
+    let partecipation_rights = document.getElementById("choices_rights3");
+    let manage_rights = document.getElementById("choices_rights4");
     console.log(activity_rights,chat_rights,partecipation_rights,manage_rights);
-    if(activity_rights !== undefined){
+    if(activity_rights !== undefined && activity_rights !== null){
       axios
       .patch(`/api/childrenProfile/rights/${childId}/changerights`,
-        {activity: activity_rights,
-        chat: chat_rights,
-        partecipation: partecipation_rights,
-        manage: manage_rights})
+        {activity: activity_rights.checked,
+        chat: chat_rights.checked,
+        partecipation: partecipation_rights.checked,
+        manage: manage_rights.checked})
       .then((response) => {
         Log.info(response);
         //history.goBack();
@@ -480,7 +493,7 @@ class EditChildProfileScreen extends React.Component {
         </div>
 
         <div>
-        {(auth && 
+        {(auth && this.state.isParent &&
         <ChangeRights id={this.props.match.params.childId}/>)}
         </div>
 
