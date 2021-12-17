@@ -4,7 +4,7 @@ import LazyLoad from "react-lazyload";
 import ChooseGroupItem from "./ChooseGroupItem";
 import withLanguage from "./LanguageContext";
 
-const ChooseGroupList = ({ groupIds }) => {
+const ChooseGroupList = ({ groupIds, groupBools }) => {
   const { length } = groupIds;
   const blocks = [...Array(Math.ceil(length / 4)).keys()];
   return (
@@ -27,7 +27,12 @@ const ChooseGroupList = ({ groupIds }) => {
             
               {indexes.map((index) => (
                 <li key={index} style={{ margin: "1rem 0" }}>
-                  <input type="checkbox"  className="choices" id = {groupIds[index]} value = {groupIds[index]}/>
+                  {
+                    groupBools !== undefined ?
+                    <input type="checkbox"  className="choices" id = {groupIds[index]} value = {groupIds[index]} checked={groupBools[index]}/>
+                    :
+                    <input type="checkbox"  className="choices" id = {groupIds[index]} value = {groupIds[index]}/>
+                  }
                   <ChooseGroupItem groupId={groupIds[index]} />
                 </li>
               ))}
