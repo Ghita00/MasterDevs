@@ -79,7 +79,7 @@ class GroupActivities extends React.Component {
       showAddOptions: false,
       fetchedData: false,
       optionsModalIsOpen: false,
-      activity_right: false,
+      activity_right: true,
       verified: false
     };
   }

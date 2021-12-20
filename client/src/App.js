@@ -258,6 +258,10 @@ class App extends React.Component {
                 component={PendingRequestsScreen}
               />
               <PrivateRoute
+                path="/myfamiliesshare/childActivities"
+                component={PendingRequestsScreen}
+              />
+              <PrivateRoute
                 path="/myfamiliesshare/calendar"
                 component={MyCalendarScreen}
               />

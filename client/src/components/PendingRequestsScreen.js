@@ -15,19 +15,33 @@ class PendingRequestsScreen extends React.Component {
     let requests_type;
     const { history } = this.props;
     const { pathname } = history.location;
+    console.log(pathname)
     if (pathname.includes("members")) {
       requests_type = "group_members";
     } else if (pathname.includes("invites")) {
       requests_type = "user_groups";
-    } else {
+    } else if(pathname.includes("activities")){
       requests_type = "group_activities";
+    } else{
+      requests_type = "child_activities"
     }
+    
     this.state = {
       fetchedRequests: false,
       requests_type,
     };
   }
-
+  getMyGroups = async (id) => {
+    return  axios
+      .get(`/api/users/${id}/groups`)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        Log.error(error);
+        return [];
+      });
+  };
   componentDidMount() {
     const { match } = this.props;
     const { groupId } = match.params;
@@ -96,6 +110,22 @@ class PendingRequestsScreen extends React.Component {
             this.setState({ fetchedRequests: true, requests: [] });
           });
         break;
+      case "child_activities": //TO DO
+          //console.log(await this.getMyGroups(userId))
+          axios
+          .get(`/api/childrenProfile/${userId}/activities`)
+          .then((res) => {
+            console.log(res.data)
+            const activities = res.data.filter(
+              (activity) => activity.status === "accepted"
+            );
+            this.setState({ fetchedRequests: true, requests: activities },()=>{console.log(this.state.requests)});
+          })
+          .catch((error) => {
+            Log.error(error);
+            this.setState({ fetchedRequests: true, requests: [] });
+          });
+        break;
       default:
     }
   }
@@ -153,6 +183,8 @@ class PendingRequestsScreen extends React.Component {
             Log.error(error);
           });
         break;
+      case "child_activities": //TO DO
+        break;
       default:
     }
   };
@@ -205,6 +237,8 @@ class PendingRequestsScreen extends React.Component {
             Log.error(error);
           });
         break;
+      case "child_activities": //TO DO
+          break;
       default:
     }
   };
@@ -246,6 +280,8 @@ class PendingRequestsScreen extends React.Component {
             className="fas fa-certificate center"
           />
         );
+      case "child_activities":
+        return  <div></div>
       default:
         return <div />;
     }
@@ -297,9 +333,13 @@ class PendingRequestsScreen extends React.Component {
       backNavTitle = texts.invites;
     } else if (requests_type === "group_members") {
       backNavTitle = texts.requests;
-    } else {
+    } else if (requests_type === "group_activities"){
       backNavTitle = texts.activities;
+    } else{
+      // backNavTitle = texts.child_activities;
+      backNavTitle = "Proposte bambini"
     }
+    
     const rowStyle = { height: "7rem" };
     const confirmStyle = { backgroundColor: "#00838F", color: "#ffffff" };
     return fetchedRequests ? (

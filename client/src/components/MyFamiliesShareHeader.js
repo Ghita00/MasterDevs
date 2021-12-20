@@ -195,6 +195,12 @@ class MyFamiliesShareHeader extends React.Component {
     history.push("/myfamiliesshare/invites");
   };
 
+  handlePendingChildActivities = () => {
+    const { history } = this.props;
+    history.push("/myfamiliesshare/childActivities");
+  };
+
+
   handleConfirmModalClose = (choice) => {
     const userId = JSON.parse(localStorage.getItem("user")).id;
     if (choice === "agree") {
@@ -453,7 +459,25 @@ class MyFamiliesShareHeader extends React.Component {
           <div className="col-6-10">
             <h1 onClick={this.sendMeNotification}>{texts.header}</h1>
           </div>
+          {this.state.verified && ( 
+            <div className="col-1-10">
+              <button
+                type="button"
+                className="transparentButton"
+                onClick={this.handlePendingChildActivities}
+              >
+                <img                  
+                  src={Images.babyFaceWhite}
+                  className="activityInfoImage"
+                  alt="baby face icon"  
+                  />
+                  {pendingInvites > 0 && (
+                    <span className="invites-badge">{pendingInvites}</span>
+                  )}
+              </button>
+            </div>)}
           {this.state.verified && (
+            
           <div className="col-1-10">
             <button
               type="button"

@@ -101,6 +101,7 @@ class ChildListItem extends React.Component {
                 <img
                   src={Images.childImage}
                   alt="figliNostri"
+                  className="fas fa-baby"
                   route={route}
                   className="center"
                   width={'60'} 

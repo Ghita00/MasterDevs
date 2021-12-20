@@ -106,8 +106,6 @@ class ProfileScreen extends React.Component {
 
     await this.getProfile(JSON.parse(localStorage.getItem("user")).id);
 
-    console.log(this.state.isParent);
-
     //if (true) {  // da fixare 
       const relatives = await getMyChildren(profileId);  
       this.setState({
@@ -132,10 +130,7 @@ class ProfileScreen extends React.Component {
     const { fetchedProfile, relatives } = this.state;
     const currentPath = match.url;
     const { profile } = this.state;
-
-    console.log(relatives);
-
-
+    
     return fetchedProfile ? (
       <React.Fragment>
         <ProfileHeader

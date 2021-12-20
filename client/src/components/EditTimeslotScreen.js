@@ -65,7 +65,6 @@ class EditTimeslotScreen extends React.Component {
     let timeslot;
     if (action === "edit") {
       timeslot = await getTimeslot(`/api${pathname}`);
-      console.log(timeslot);
       timeslot.date = moment(timeslot.start.dateTime).format("YYYY-MM-DD");
       timeslot.startTime = moment(timeslot.start.dateTime).format("HH:mm");
       timeslot.endTime = moment(timeslot.end.dateTime).format("HH:mm");

@@ -821,7 +821,6 @@ router.get('/:id/checkchildren', (req, res, next) => {
     .lean()
     .exec()
     .then(profile => {
-      console.log(profile)
       res.json(profile)
     }).catch(next)
 })

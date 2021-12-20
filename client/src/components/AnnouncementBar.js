@@ -42,7 +42,7 @@ class AnnouncementBar extends React.Component {
     axios
     .get(`/api/users/${user_id}/checkchildren`)
     .then((response) => {
-      this.setState({verified: response.data !== null}, ()=>{console.log(this.state.verified)})
+      this.setState({verified: response.data !== null})
     })
     .catch((error) => {
       Log.error(error);

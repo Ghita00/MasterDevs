@@ -234,7 +234,7 @@ class TimeslotScreen extends React.Component {
       parents,
       admins,
       external: "",
-    }, ()=>{console.log(parents)});
+    });
     this.getProfile(userId);
     this.getRights(userId);
   }
@@ -667,7 +667,6 @@ class TimeslotScreen extends React.Component {
       children,
       timeslot,
     } = this.state;
-    console.log(unfilteredChildrenProfiles)
     const childrenProfiles = unfilteredChildrenProfiles.filter((profile) =>
       children.includes(profile.child_id)
     );
