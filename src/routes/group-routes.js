@@ -496,7 +496,7 @@ router.patch('/:id/members', async (req, res, next) => {
   } catch (err) { next(err) }
 })
 
-router.delete('/:groupId/members/:memberId', async (req, res, next) => {
+router.delete('/:groupId/members/:memberId', async (req, res, next) => { // api per togliere un membro
   if (!req.user_id) {
     return res.status(401).send('Not authenticated')
   }

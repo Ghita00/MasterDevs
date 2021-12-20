@@ -29,9 +29,9 @@ const ChooseGroupList = ({ groupIds, groupBools }) => {
                 <li key={index} style={{ margin: "1rem 0" }}>
                   {
                     groupBools !== undefined ?
-                    <input type="checkbox"  className="choices" id = {groupIds[index]} value = {groupIds[index]} checked={groupBools[index]}/>
+                    <input type="checkbox"  className="choices" onClick="this.checked=!this.checked;" id = {groupIds[index]} value = {groupIds[index]} checked={groupBools[index]}/>
                     :
-                    <input type="checkbox"  className="choices" id = {groupIds[index]} value = {groupIds[index]}/>
+                    <input type="checkbox"  className="choices" onClick="this.checked=!this.checked;" id = {groupIds[index]} value = {groupIds[index]}/>
                   }
                   <ChooseGroupItem groupId={groupIds[index]} />
                 </li>

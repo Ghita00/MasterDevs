@@ -1,7 +1,6 @@
 import React from "react";
 import Texts from "../Constants/Texts";
 import axios from "axios";
-// import getMyGroups from "./MyFamiliesShareScreen";
 import ChooseGroupList from "./ChooseGroupList";
 
 
@@ -37,6 +36,28 @@ class ChildProfileGroupScreen extends React.Component{
       
   };
 
+  handleSave = ()=>{
+    const groups = document.getElementsByClassName('choices')
+    const {childId} = this.state
+    const {history} = this.props
+    for(var i=0 ; i < groups.length ; i++){
+      //group_list.push({id: groups[i].id, checked: groups[i].checked})
+      if(groups[i].checked){
+        console.log('Iscrivi/lascia in '+groups[i].id)
+        axios
+        .post(`/api/childrenProfile/${groups[i].id}/members/${childId}`)
+      } else {
+        console.log('Togli da '+groups[i].id)
+        axios
+        .delete(`/api/groups/${groups[i].id}/members/${childId}`)
+      }
+    }
+    // axios
+    // .patch(`/api/childrenProfile/${childId}/setgroups`,{group_list: group_list})
+    history.goBack();
+    
+  }
+
   async componentDidMount(){
     const list = await this.getMyGroups(this.state.profileId)
     const list_child = await this.getMyChildGroups(this.state.childId)
@@ -66,17 +87,41 @@ class ChildProfileGroupScreen extends React.Component{
   }
 
   renderGroupSection = () => {
-    const { language } = this.props;
+    const { language, history } = this.props;
     const {groups, child_groups} = this.state;
     const texts = Texts['it'].myFamiliesShareScreen;
     return (
-      <div className="myGroupsContainer">
-        <div className="myGroupsContainerHeader">{texts.myGroups} </div>
-        {groups.length > 0 ? (
-          <ChooseGroupList groupIds={groups} groupBools={child_groups}/>
-        ) : (
-          <div className="myGroupsContainerPrompt">{texts.myGroupsPrompt}</div>
-        )}
+      <div>
+        <div id="profileHeaderContainer">
+          <div className="row no-gutters" id="profileHeaderOptions">
+            <div className="col-2-10">
+                <button
+                  type="button"
+                  className="transparentButton center"
+                  onClick={() => history.goBack()}
+                >
+                  <i className="fas fa-arrow-left" />
+                </button>
+            </div>
+            <div className="col-2-10">
+              <button
+                type="button"
+                className="transparentButton center"
+                onClick={this.handleSave}
+              >
+                <i className="fas fa-check" />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="myGroupsContainer">
+          <div className="myGroupsContainerHeader">{texts.myGroups} </div>
+          {groups.length > 0 ? (
+            <ChooseGroupList groupIds={groups} groupBools={child_groups}/>
+          ) : (
+            <div className="myGroupsContainerPrompt">{texts.myGroupsPrompt}</div>
+          )}
+        </div>
       </div>
     );
   };
