@@ -106,6 +106,7 @@ class ProfileChildren extends React.Component {
             position: "fixed",
           }}
         >
+        {myProfile &&(
           <Fab
             color="primary"
             aria-label="Add"
@@ -114,6 +115,7 @@ class ProfileChildren extends React.Component {
           >
             <i className="fas fa-child" />
           </Fab>
+        )}
         </div>
         {this.state.options && (
           <React.Fragment>
@@ -128,6 +130,7 @@ class ProfileChildren extends React.Component {
               }}
             >
               <div className=" activitiesFabLabel"><div>Bimbo</div></div>
+              
               <Fab
                 color="primary"
                 aria-label="Add"
