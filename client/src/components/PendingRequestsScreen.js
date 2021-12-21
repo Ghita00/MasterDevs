@@ -117,7 +117,7 @@ class PendingRequestsScreen extends React.Component {
           .then((res) => {
             console.log(res.data)
             const activities = res.data.filter(
-              (activity) => activity.status === "accepted"
+              (activity) => activity.status === "proposed"
             );
             this.setState({ fetchedRequests: true, requests: activities },()=>{console.log(this.state.requests)});
           })

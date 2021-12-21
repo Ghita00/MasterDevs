@@ -1134,9 +1134,10 @@ router.post('/:id/activities', async (req, res, next) => {
     if (!(events && activity)) {
       return res.status(400).send('Bad Request')
     }
-    const isParent = (await Profile.findOne(user_id)) !== null
+    const isParent = (await Profile.findOne({ user_id })) !== null
     const activity_id = objectid()
-    activity.status = member.admin ? 'accepted' : (isParent ? 'pending' : 'Proposed')
+    activity.status = member.admin ? 'accepted' : (isParent ? 'pending' : 'proposed')
+    console.log(isParent)
     activity.activity_id = activity_id
     const group = await Group.findOne({ group_id })
     activity.group_name = group.name

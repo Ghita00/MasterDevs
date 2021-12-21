@@ -52,11 +52,9 @@ router.patch('/rights/:child_user_id/changerights', async (req, res, next) => {
 router.get('/:id/activities', async (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
   const userId = req.params.id
-  const child_ids = await Parent.find({ parent_id: userId })
-    .map(child => child.child_id)
-  console.log(child_ids)
+  let child_ids = (await Parent.find({ parent_id: userId })).map(child => child.child_id)
+  // child_ids = child_ids
   const activities_ids = await Activity.find({ creator_id: { $in: child_ids } })
-  console.log(activities_ids)
   res.json(activities_ids)
 })
 module.exports = router
