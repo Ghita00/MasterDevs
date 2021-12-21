@@ -1208,10 +1208,13 @@ router.patch('/:id/activities/:activityId', async (req, res, next) => {
     const activity = await Activity.findOne({
       activity_id: req.params.activityId
     })
+    const creator = (await Activity.findOne({ activity_id })).creator_id
+    const isParent = (await Parent.findOne({ parent_id: user_id, child_id: creator })) !== null
+    console.log(isParent)
     if (!member) {
-      return res.status(401).send('Unauthorized')
+      return res.status(401).send('Unauthorized-not-member')
     }
-    if (!(member.admin || activity.creator_id === user_id)) {
+    if ((!member.admin && !isParent) || activity.creator_id === user_id) {
       return res.status(401).send('Unauthorized')
     }
     if (
@@ -1241,20 +1244,23 @@ router.delete('/:groupId/activities/:activityId', async (req, res, next) => {
   try {
     const group_id = req.params.groupId
     const user_id = req.user_id
+    const activity_id = req.params.activityId
     const member = await Member.findOne({
       group_id,
       user_id,
       group_accepted: true,
       user_accepted: true
     })
+    const creator = (await Activity.findOne({ activity_id })).creator_id
+    const isParent = (await Parent.findOne({ parent_id: user_id, child_id: creator })) !== null
+    console.log(isParent)
     if (!member) {
-      return res.status(401).send('Unauthorized')
+      return res.status(401).send('Unauthorized-not-member')
     }
-    if (!member.admin) {
+    if (!member.admin && !isParent) {
       return res.status(401).send('Unauthorized')
     }
     const group = await Group.findOne({ group_id })
-    const activity_id = req.params.activityId
     const resp = await calendar.events.list({
       calendarId: group.calendar_id,
       sharedExtendedProperty: `activityId=${activity_id}`

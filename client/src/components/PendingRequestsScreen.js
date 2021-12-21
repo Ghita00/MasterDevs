@@ -119,7 +119,7 @@ class PendingRequestsScreen extends React.Component {
             const activities = res.data.filter(
               (activity) => activity.status === "proposed"
             );
-            this.setState({ fetchedRequests: true, requests: activities },()=>{console.log(this.state.requests)});
+            this.setState({ fetchedRequests: true, requests: activities });
           })
           .catch((error) => {
             Log.error(error);
@@ -183,7 +183,21 @@ class PendingRequestsScreen extends React.Component {
             Log.error(error);
           });
         break;
-      case "child_activities": //TO DO
+      case "child_activities": 
+        const filteredActivity = requests.filter(
+          (req) => req.activity_id !== request.activity_id
+        );
+        axios
+          .patch(`/api/groups/${request.group_id}/activities/${request.activity_id}`, {
+            status: "pending",
+          })
+          .then((response) => {
+            Log.info(response);
+            this.setState({ requests: filteredActivity });
+          })
+          .catch((error) => {
+            Log.error(error);
+          });
         break;
       default:
     }
@@ -224,11 +238,12 @@ class PendingRequestsScreen extends React.Component {
           });
         break;
       case "group_activities":
+      case "child_activities":
         const filterdActivities = requests.filter(
           (req) => req.activity_id !== request.activity_id
         );
         axios
-          .delete(`/api/groups/${groupId}/activities/${request.activity_id}`)
+          .delete(`/api/groups/${request.group_id}/activities/${request.activity_id}`)
           .then((response) => {
             Log.info(response);
             this.setState({ requests: filterdActivities });
@@ -237,8 +252,6 @@ class PendingRequestsScreen extends React.Component {
             Log.error(error);
           });
         break;
-      case "child_activities": //TO DO
-          break;
       default:
     }
   };
@@ -280,8 +293,23 @@ class PendingRequestsScreen extends React.Component {
             className="fas fa-certificate center"
           />
         );
-      case "child_activities":
-        return  <div></div>
+      case "child_activities": 
+        return (
+          <i
+            role="button"
+            tabIndex={-42}
+            onClick={() =>
+              history.push(
+                `/groups/${request.group_id}/activities/${request.activity_id}`
+              )
+            }
+            style={{
+              fontSize: "3rem",
+              color: request.color,
+            }}
+            className="fas fa-certificate center"
+          />
+        );
       default:
         return <div />;
     }
