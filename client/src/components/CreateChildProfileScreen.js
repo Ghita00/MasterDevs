@@ -156,7 +156,6 @@ class CreateChildProfileScreen extends React.Component {
       })
       .catch((error) => {
         Log.error(error);
-        console.log('ops')
       }); 
   };
 

@@ -79,7 +79,7 @@ class GroupActivities extends React.Component {
       showAddOptions: false,
       fetchedData: false,
       optionsModalIsOpen: false,
-      activity_right: false,
+      activity_right: true,
       verified: false
     };
   }
@@ -295,6 +295,7 @@ class GroupActivities extends React.Component {
             position: "fixed",
           }}
         >
+        {this.state.activity_right &&(  
           <Fab
             color="primary"
             aria-label="Add"
@@ -305,6 +306,7 @@ class GroupActivities extends React.Component {
           >
             <i className={showAddOptions ? "fas fa-times" : "fas fa-plus"} />
           </Fab>
+        )}
         </div>
         {showAddOptions && (
           <React.Fragment>

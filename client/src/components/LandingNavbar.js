@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -15,9 +16,6 @@ const LandingNavbar = ({ language }) => {
       <div id="landingNavButtonsContainer">
         <Link to="/login" className="loginButton">
           {texts.logIn}
-        </Link>
-        <Link to='/loginchild' className='loginChild'>
-          {'Bambino'}
         </Link>
         <Link to="/signup" className="signupButton">
           {texts.signUp}

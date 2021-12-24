@@ -42,6 +42,7 @@ const Images = {
   },
   gender: require("../images/gender.png"),
   couple: require("../images/couple.png"),
+  childImage: require("../images/figliNostri.png"),
   coupleRed: require("../images/couple-red.png"),
   coupleGreen: require("../images/couple-green.png"),
   babyFace: require("../images/baby-face.png"),

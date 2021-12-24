@@ -1,7 +1,16 @@
 import React from "react";
 import axios from "axios";
-import Log from "./Log"
+import Log from "./Log";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import Switch from "@material-ui/core/Switch";
 
+const theme = createMuiTheme({
+  palette: {
+    secondary: {
+      main: "#0a848f",
+    },
+  },
+});
 
 class ChangeRights extends React.Component {
   constructor(props){
@@ -37,19 +46,13 @@ class ChangeRights extends React.Component {
         manage: rights.manage,
       }
     )
+
   }
-  
+
   render() {
-    const {
-      activity,
-      chat,
-      partecipation,
-      manage,
-      child_id
-    } = this.state;
-    console.log(this.state)
+    
+    
     const { language } = this.props;
-    const formClass = [];
 
     const switchActivity = ()=>
     {
@@ -76,25 +79,69 @@ class ChangeRights extends React.Component {
     }
 
     return (
-    
-      <div id="changeRightsContainer">
-        <h1> diritti </h1>
-        <form
-          ref={(form) => {
-            this.formEl = form;
-          }}
-            className="rights"
-          >
-          
-          <input type="checkbox" className="choices_rights" id= "activity" name="medium" checked= {this.state.activity} onClick={function(){switchActivity()}} /><span>activity</span><br/>
-          <input type="checkbox" className="choices_rights" id="chat" name="medium" checked= {this.state.chat} onClick={function(){switchChat()}}/><span>chat</span><br/>
-          <input type="checkbox" className="choices_rights" id="partecipation" name="medium" checked= {this.state.partecipation} onClick={function(){switchPartecipation()}}/><span>partecipation</span><br/>
-          <input type="checkbox" className="choices_rights" id="manage" name="medium" checked= {this.state.manage} onClick={function(){switchManage()}}/><span>manage</span>
-        
-          </form>
-      </div>
+      <div id="editChildProfileInfoContainer" className="horizontalCenter">
+        <div className="rights" id="changeRightsContainer">
+          <div className="row no-gutters">
+            <div className="col-10-10">
+              <div className="center">
+                <h1>Permessi</h1>
+              </div>
+            </div>
+            <div className="col-1-10"></div>
+            <div className="col-2-10">
+              <h1 className="profileToggleText">{"Activity"}</h1>
+              <MuiThemeProvider theme={theme}>
+                <Switch
+                  id="choices_rights1"
+                  color="secondary"
+                  checked={this.state.activity}
+                  onClick={function(){switchActivity()}}
+                />
+            
+              </MuiThemeProvider>
+            </div>
+            <div className="col-2-10">
+              <h1 className="profileToggleText">{"Chat"}</h1>
+              <MuiThemeProvider theme={theme}>
+                <Switch
+                  id="choices_rights2"
+                  color="secondary"
+                  checked={this.state.chat}
+                  onClick={function(){switchChat()}}
+                  
+                />
+              </MuiThemeProvider>
+              </div>
+              <div className="col-3-10">
+                <h1 className="profileToggleText">{"Partecipation"}</h1>
+                <MuiThemeProvider theme={theme}>
+                  <Switch
+                    id="choices_rights3"
+                    color="secondary"
+                    checked={this.state.partecipation}
+                    onClick={function(){switchPartecipation()}}
+                  />
+                </MuiThemeProvider>
+              </div>
+              <div className="col-2-10">
+                <h1 className="profileToggleText">{"Manage"}</h1>
+                <MuiThemeProvider theme={theme}>
+                  <Switch
+                    id="choices_rights4"
+                    color="secondary"
+                    checked={this.state.manage}
+                    onClick={function(){switchManage()}}
+                  />
+                </MuiThemeProvider>
+              </div>
+            </div>
+            <hr/>
+          </div>
+        </div>
     );
   }
 }
+
+
 
 export default ChangeRights;

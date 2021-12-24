@@ -42,7 +42,7 @@ class AnnouncementBar extends React.Component {
     axios
     .get(`/api/users/${user_id}/checkchildren`)
     .then((response) => {
-      this.setState({verified: response.data !== null}, ()=>{console.log(this.state.verified)})
+      this.setState({verified: response.data !== null})
     })
     .catch((error) => {
       Log.error(error);
@@ -166,6 +166,7 @@ class AnnouncementBar extends React.Component {
           photos={photos}
           handleDelete={this.handlePreviewDelete}
         />
+        {this.state.chat && (
         <div id="announcementBarContainer" className="row no-gutters">
           <div id="announcementBubble" className="center">
             <div className="row no-gutters verticalCenter">
@@ -200,16 +201,19 @@ class AnnouncementBar extends React.Component {
                     />
                   )}
                 </label>
+                
                 <i
                   role="button"
                   tabIndex="-1"
                   className="fas fa-paper-plane"
                   onClick={this.handleSend}
                 />
+                  
               </div>
             </div>
           </div>
         </div>
+        )} 
       </React.Fragment>
     );
   }

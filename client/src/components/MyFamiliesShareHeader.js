@@ -23,9 +23,22 @@ class MyFamiliesShareHeader extends React.Component {
     readNotifications: false,
     ratingModalIsOpen: false,
     confirmModalIsOpen: false,
+    verified: false
   };
 
+  getProfile = (id) => {
+    axios
+    .get(`/api/users/${id}/checkchildren`)
+    .then((response) => {
+      this.setState({verified: response.data !== null})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
+
   componentDidMount() {
+    this.getProfile(JSON.parse(localStorage.getItem("user")).id);
     document.addEventListener("message", this.handleMessage, false);
   }
 
@@ -129,7 +142,11 @@ class MyFamiliesShareHeader extends React.Component {
         break;
       case "myprofile":
         const userId = JSON.parse(localStorage.getItem("user")).id;
-        history.push(`/profiles/${userId}/info`);
+        if (this.state.verified) {
+          history.push(`/profiles/${userId}/info`);
+        } else {
+          history.push(`/profiles/${userId}/children/${userId}`);
+        }
         break;
       case "mycalendar":
         history.push(`/myfamiliesshare/calendar`);
@@ -177,6 +194,12 @@ class MyFamiliesShareHeader extends React.Component {
     const { history } = this.props;
     history.push("/myfamiliesshare/invites");
   };
+
+  handlePendingChildActivities = () => {
+    const { history } = this.props;
+    history.push("/myfamiliesshare/childActivities");
+  };
+
 
   handleConfirmModalClose = (choice) => {
     const userId = JSON.parse(localStorage.getItem("user")).id;
@@ -294,6 +317,7 @@ class MyFamiliesShareHeader extends React.Component {
                 </div>
               </div>
             </Menu.Item>
+            {this.state.verified && (
             <Menu.Item
               style={menuItem}
               key="creategroup"
@@ -308,7 +332,8 @@ class MyFamiliesShareHeader extends React.Component {
                   <h1>{texts.createGroup}</h1>
                 </div>
               </div>
-            </Menu.Item>
+            </Menu.Item>)}
+            {this.state.verified && (
             <Menu.Item
               style={menuItemWithLine}
               key="searchgroup"
@@ -323,8 +348,8 @@ class MyFamiliesShareHeader extends React.Component {
                   <h1>{texts.searchGroup}</h1>
                 </div>
               </div>
-            </Menu.Item>
-            {window.isNative && (
+            </Menu.Item>)}
+            {window.isNative && this.state.verified && (
               <Menu.Item
                 style={menuItemWithLine}
                 key="invitefriends"
@@ -434,6 +459,25 @@ class MyFamiliesShareHeader extends React.Component {
           <div className="col-6-10">
             <h1 onClick={this.sendMeNotification}>{texts.header}</h1>
           </div>
+          {this.state.verified && ( 
+            <div className="col-1-10">
+              <button
+                type="button"
+                className="transparentButton"
+                onClick={this.handlePendingChildActivities}
+              >
+                <img                  
+                  src={Images.babyFaceWhite}
+                  className="activityInfoImage"
+                  alt="baby face icon"  
+                  />
+                  {pendingInvites > 0 && (
+                    <span className="invites-badge">{pendingInvites}</span>
+                  )}
+              </button>
+            </div>)}
+          {this.state.verified && (
+            
           <div className="col-1-10">
             <button
               type="button"
@@ -446,7 +490,7 @@ class MyFamiliesShareHeader extends React.Component {
                 )}
               </i>
             </button>
-          </div>
+          </div>)}
           <div className="col-1-10">
             <button
               type="button"

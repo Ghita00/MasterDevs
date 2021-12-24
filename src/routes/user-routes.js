@@ -633,15 +633,6 @@ router.get('/:id/groups', (req, res, next) => {
   }).catch(next)
 })
 
-router.get('/:id/childgroups', (req, res, next) => {
-  const user_id = req.params.id
-  console.log(user_id)
-  Member.find({ user_id }).then(groups => {
-    console.log(groups)
-    res.json(groups)
-  })
-})
-
 router.post('/:id/walkthrough', async (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
   try {
@@ -830,7 +821,6 @@ router.get('/:id/checkchildren', (req, res, next) => {
     .lean()
     .exec()
     .then(profile => {
-      console.log(profile)
       res.json(profile)
     }).catch(next)
 })
@@ -1224,6 +1214,22 @@ router.delete('/:userId/children/:childId', async (req, res, next) => {
   } catch (error) {
     next(error)
   }
+})
+
+router.get('/:id/parents', (req, res, next) => {
+  if (!req.user_id) { return res.status(401).send('Unauthorized') }
+  const { id } = req.params
+  Parent.find({ child_id: id })
+    .then(parents => {
+      if (parents.length === 0) {
+        res.status(404).send('Parents not found')
+      }
+      const parentIds = parents.map(parent => parent.parent_id)
+      return Profile.find({ user_id: { $in: parentIds } })
+        .then(parentProfiles => {
+          res.json(parentProfiles)
+        }).catch(next)
+    })
 })
 
 router.get('/:userId/children/:childId/parents', (req, res, next) => { // (*)

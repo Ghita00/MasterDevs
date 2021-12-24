@@ -32,12 +32,25 @@ class EditChildProfileScreen extends React.Component {
     fetchedChildData: false,
     month: moment().month() + 1,
     year: moment().year(),
+    isParent: false
   };
+
+  getProfile = (id) => {
+    axios
+    .get(`/api/users/${id}/checkchildren`)
+    .then((response) => {
+      this.setState({isParent: response.data !== null})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
 
   componentDidMount() {
     const { history } = this.props;
     const { state } = history.location;
     document.addEventListener("message", this.handleMessage, false);
+    this.getProfile(JSON.parse(localStorage.getItem("user")).id);
     if (state !== undefined) {
       this.setState({ ...state });
     } else {
@@ -183,15 +196,18 @@ class EditChildProfileScreen extends React.Component {
     bodyFormData.append("birthdate", birthdate);
     
     // da qui salviamo i diritti
-    let choices_rights = document.getElementsByClassName("choices_rights");
-    console.log(choices_rights)
-    if(choices_rights.length > 0){
+    let activity_rights = document.getElementById("choices_rights1");
+    let chat_rights = document.getElementById("choices_rights2");
+    let partecipation_rights = document.getElementById("choices_rights3");
+    let manage_rights = document.getElementById("choices_rights4");
+    console.log(activity_rights,chat_rights,partecipation_rights,manage_rights);
+    if(activity_rights !== undefined && activity_rights !== null){
       axios
       .patch(`/api/childrenProfile/rights/${childId}/changerights`,
-        {activity: choices_rights[0].checked,
-        chat: choices_rights[1].checked,
-        partecipation: choices_rights[2].checked,
-        manage: choices_rights[3].checked})
+        {activity: activity_rights.checked,
+        chat: chat_rights.checked,
+        partecipation: partecipation_rights.checked,
+        manage: manage_rights.checked})
       .then((response) => {
         Log.info(response);
         //history.goBack();
@@ -278,8 +294,7 @@ class EditChildProfileScreen extends React.Component {
       sessionStorage.setItem("verified", this.props.location.verified)
     }
     let auth = JSON.parse(sessionStorage.getItem("verified"));
-    
-    
+
     return fetchedChildData ? (
       <React.Fragment>
         <div
@@ -478,7 +493,7 @@ class EditChildProfileScreen extends React.Component {
         </div>
 
         <div>
-        {(auth && 
+        {(auth && this.state.isParent &&
         <ChangeRights id={this.props.match.params.childId}/>)}
         </div>
 
