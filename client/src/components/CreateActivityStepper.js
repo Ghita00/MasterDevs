@@ -209,6 +209,10 @@ class CreateActivityStepper extends React.Component {
           enqueueSnackbar(texts.pendingMessage, {
             variant: "info",
           });
+        } else if (response.data.status === "proposed") {
+          enqueueSnackbar(texts.pendingParentMessage, {
+            variant: "info",
+          });
         }
         Log.info(response);
         history.goBack();

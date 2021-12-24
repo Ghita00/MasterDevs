@@ -1145,6 +1145,7 @@ const en = {
   },
   createActivityStepper: {
     pendingMessage: "The activity is pending confirmation from an admin",
+    pendingParentMessage: "The activity is pending confirmation from your parent",
     continue: "Continue",
     cancel: "Cancel",
     finish: "Create",
@@ -3722,6 +3723,7 @@ const it = {
   createActivityStepper: {
     pendingMessage:
       "L'attività è in attesa di conferma da parte di un amministratore",
+    pendingParentMessage: "L'attività è in attesa di conferma da parte di un tuo genitore",
     continue: "Continua",
     cancel: "Cancella",
     finish: "Crea",
