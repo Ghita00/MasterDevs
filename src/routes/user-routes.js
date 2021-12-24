@@ -633,6 +633,15 @@ router.get('/:id/groups', (req, res, next) => {
   }).catch(next)
 })
 
+router.get('/:id/childgroups', (req, res, next) => {
+  const user_id = req.params.id
+  console.log(user_id)
+  Member.find({ user_id }).then(groups => {
+    console.log(groups)
+    res.json(groups)
+  })
+})
+
 router.post('/:id/walkthrough', async (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
   try {
