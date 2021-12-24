@@ -22,7 +22,21 @@ const getMyGroups = (userId) => {
       return [];
     });
 };
-
+const getMyPendingChildRequest = (userId) => {
+  return axios
+    .get(`/api/childrenProfile/${userId}/activities`)
+    .then((res) => {
+      console.log(res.data)
+      const activities = res.data.filter(
+        (activity) => activity.status === "proposed"
+      ); 
+      return activities.length;
+    })
+    .catch((error) => {
+      Log.error(error);
+      return 0;
+    });
+  }
 const getMyTimeslots = (userId) => {
   return axios
     .get(`/api/users/${userId}/events`)
@@ -65,6 +79,7 @@ class MyFamiliesShareScreen extends React.Component {
       myTimeslots: [],
       myGroups: [],
       pendingInvites: 0,
+      pendingChildRequest:0
     };
   }
 
@@ -81,6 +96,8 @@ class MyFamiliesShareScreen extends React.Component {
     const pendingInvites = groups.filter(
       (group) => group.group_accepted && !group.user_accepted
     ).length;
+    // 
+    const pendingChildRequest = await getMyPendingChildRequest(userId);
     const unreadNotifications = await getMyUnreadNotifications(userId);
     let myTimeslots = await getMyTimeslots(userId);
     myTimeslots = myTimeslots.filter(
@@ -106,6 +123,7 @@ class MyFamiliesShareScreen extends React.Component {
       myGroups,
       myTimeslots,
       pendingInvites,
+      pendingChildRequest,
     });
   }
 
@@ -181,13 +199,14 @@ class MyFamiliesShareScreen extends React.Component {
   };
 
   render() {
-    const { pendingInvites, unreadNotifications, fetchedUserInfo } = this.state;
+    const { pendingInvites, unreadNotifications, fetchedUserInfo, pendingChildRequest } = this.state;
     return (
       <React.Fragment>
         <div id="drawerContainer">
           <MyFamiliesShareHeader
             pendingInvites={pendingInvites}
             pendingNotifications={unreadNotifications}
+            pendingChildRequest={pendingChildRequest}
           />
           {fetchedUserInfo && (
             <div id="myFamiliesShareMainContainer">

@@ -215,7 +215,8 @@ class MyFamiliesShareHeader extends React.Component {
   };
 
   render() {
-    const { language, pendingInvites, pendingNotifications } = this.props;
+    console.log(this.props)
+    const { language, pendingInvites, pendingNotifications, pendingChildRequest } = this.props;
     const {
       confirmModalIsOpen,
       notificationModalIsOpen,
@@ -466,14 +467,14 @@ class MyFamiliesShareHeader extends React.Component {
                 className="transparentButton"
                 onClick={this.handlePendingChildActivities}
               >
+              {pendingChildRequest > 0 && (
+                  <span className="invites-badge">{pendingChildRequest}</span>
+                )}
                 <img                  
                   src={Images.babyFaceWhite}
                   className="activityInfoImage"
                   alt="baby face icon"  
                   />
-                  {pendingInvites > 0 && (
-                    <span className="invites-badge">{pendingInvites}</span>
-                  )}
               </button>
             </div>)}
           {this.state.verified && (
@@ -520,6 +521,7 @@ class MyFamiliesShareHeader extends React.Component {
 }
 
 MyFamiliesShareHeader.propTypes = {
+  pendingChildRequest : PropTypes.number,
   pendingInvites: PropTypes.number,
   pendingNotifications: PropTypes.number,
   language: PropTypes.string,
