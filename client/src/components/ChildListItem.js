@@ -59,7 +59,7 @@ class ChildListItem extends React.Component {
   }
 
   render() {
-    const { language, history, childId } = this.props;
+    const { userId, language, history, childId } = this.props;
     const { pathname } = history.location;
     const { child, fetchedChild, verified } = this.state;
     const texts = Texts[language].childListItem;
@@ -96,23 +96,20 @@ class ChildListItem extends React.Component {
                 </h1>
                 <h2>{texts[child.gender]}</h2>
               </div>
-              {this.state.verified && (
-              <div className="col-5-10">
-                <img
-                  src={Images.childImage}
-                  alt="figliNostri"
-                  className="fas fa-baby"
-                  route={route}
-                  className="center"
-                  width={'60'} 
-                  height={'60'} 
-                  align="right" 
-                  vertical-align="middle"
-                />
-              </div>
-            )}
             </div>
-
+            {this.state.verified &&
+              ( 
+                <img onClick={function() {
+                    history.push({
+                      pathname: route+'/groups',
+                      user_id: userId,
+                      child_id: childId
+                    })
+                  }} 
+                  src={Images.couple} width={'60'} height={'60'} align="right" vertical-align="middle" alt="birthday icon"/>
+              )
+            } 
+            
             
           </React.Fragment>
         ) : (
