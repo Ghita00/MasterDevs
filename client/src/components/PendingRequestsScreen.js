@@ -110,15 +110,14 @@ class PendingRequestsScreen extends React.Component {
             this.setState({ fetchedRequests: true, requests: [] });
           });
         break;
-      case "child_activities": //TO DO
-          //console.log(await this.getMyGroups(userId))
+      case "child_activities": 
           axios
           .get(`/api/childrenProfile/${userId}/activities`)
           .then((res) => {
             console.log(res.data)
             const activities = res.data.filter(
               (activity) => activity.status === "proposed"
-            );
+            ); 
             this.setState({ fetchedRequests: true, requests: activities });
           })
           .catch((error) => {

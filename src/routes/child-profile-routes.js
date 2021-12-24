@@ -3,6 +3,8 @@ const router = new express.Router()
 
 const ChildProfile = require('../models/childProfile')
 const Member = require('../models/member')
+const Parent = require('../models/parent')
+const Activity = require('../models/activity')
 
 router.get('/', (req, res, next) => {
   if (!req.child_user_id) { return res.status(401).send('Not authenticated') }
@@ -49,40 +51,6 @@ router.patch('/rights/:child_user_id/changerights', async (req, res, next) => {
   await ChildProfile.updateOne({ child_user_id }, exec).then(console.log('cambia attività')) */
 })
 
-router.post('/rights/:child_user_id/changeactivity/:bool', async (req, res, next) => {
-  if (!req.user_id) { return res.status(401).send('Not authenticated') }
-  console.log('activity' + !req.params.bool)
-  let input = !req.params.bool
-  let exec = { $set: { activity: input } }
-  let child_user_id = req.params.child_user_id
-  console.log('cambia attività')
-  await ChildProfile.updateOne({ child_user_id }, exec).then(console.log('cambia attività'))
-})
-
-router.post('/rights/:child_user_id/changechat/:bool', async (req, res, next) => {
-  if (!req.user_id) { return res.status(401).send('Not authenticated') }
-  console.log('chat' + !req.params.bool)
-  let input = !req.params.bool
-  let exec = { $set: { chat: input } }
-  await ChildProfile.updateOne({ child_user_id: req.params.child_user_id }, exec)
-})
-
-router.post('/rights/:child_user_id/changepartecipation/:bool', async (req, res, next) => {
-  if (!req.user_id) { return res.status(401).send('Not authenticated') }
-  console.log('partecipate' + !req.params.bool)
-  let input = !req.params.bool
-  let exec = { $set: { partecipation: input } }
-  await ChildProfile.updateOne({ child_user_id: req.params.child_user_id }, exec)
-})
-
-router.post('/rights/:child_user_id/changemanage/:bool', async (req, res, next) => {
-  if (!req.user_id) { return res.status(401).send('Not authenticated') }
-  console.log('manage' + !req.params.bool)
-  let input = !req.params.bool
-  let exec = { $set: { manage: input } }
-  await ChildProfile.updateOne({ child_user_id: req.params.child_user_id }, exec)
-})
-
 router.post('/:group_id/members/:child_id', async (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
   const { group_id, child_id } = req.params
@@ -105,6 +73,13 @@ router.post('/:group_id/members/:child_id', async (req, res, next) => {
       .then(res.status(200).send('Child added in ' + group_id))
       .catch(next)
   }
+})
+router.get('/:id/activities', async (req, res, next) => {
+  if (!req.user_id) { return res.status(401).send('Not authenticated') }
+  const userId = req.params.id
+  let child_ids = (await Parent.find({ parent_id: userId })).map(child => child.child_id)
+  const activities_ids = await Activity.find({ creator_id: { $in: child_ids } })
+  res.json(activities_ids)
 })
 
 module.exports = router
