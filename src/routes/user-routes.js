@@ -959,6 +959,7 @@ router.post('/:id/children', childProfileUpload.single('photo'), async (req, res
   const {
     birthdate, given_name, family_name, gender, allergies, other_info, special_needs, background, image: imagePath
   } = req.body
+  console.log(birthdate, given_name, family_name, gender, allergies, other_info, special_needs, background)
   const { file } = req
   if (!(birthdate && given_name && family_name && gender && background)) {
     return res.status(400).send('Bad Request')
@@ -1015,8 +1016,9 @@ router.post('/:id/children', childProfileUpload.single('photo'), async (req, res
 router.post('/:id/childrenProfile', childProfileUpload.single('photo'), async (req, res, next) => {
   if (req.user_id !== req.params.id) { return res.status(401).send('Unauthorized') }
   const {
-    image: imagePath, given_name, family_name, gender, background, other_info, special_needs, allergies, birthdate
+    image: imagePath, given_name, family_name, gender, background, other_info, special_needs, allergies, birthdate, id
   } = req.body
+  console.log(req.body)
   const { file } = req
   if (!(birthdate && given_name && family_name && gender && background)) {
     return res.status(400).send('Bad Request')
@@ -1034,7 +1036,10 @@ router.post('/:id/childrenProfile', childProfileUpload.single('photo'), async (r
     suspended: false
   }
   const image_id = objectid()
-  const child_id = objectid()
+  let child_id = objectid()
+  if (id !== undefined) {
+    child_id = id
+  }
   const image = {
     image_id,
     owner_type: 'child',
@@ -1081,9 +1086,14 @@ router.post('/:id/childrenProfile', childProfileUpload.single('photo'), async (r
 
   try {
     await User.create(user)
-    await Image.create(image)
-    await Child.create(child)
-    await Parent.create(parent)
+    if (id === undefined) {
+      await Image.create(image)
+      await Child.create(child)
+      await Parent.create(parent)
+      console.log('qui')
+    } else {
+      console.log('qui no')
+    }
     await ChildProfile.create(child_profile)
     let groups = req.body.selectedGroups
     for (var i = 0; i < groups.length; i++) {

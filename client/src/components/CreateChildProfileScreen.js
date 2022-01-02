@@ -65,6 +65,7 @@ class CreateChildProfileScreen extends React.Component {
       sessionStorage.setItem("info", JSON.stringify(this.props.location.info))
     }
     let o = JSON.parse('['+sessionStorage.getItem("info")+']')[0];
+    console.log(this.props.location.info)
     this.setState({
       file:o[0],
       image:o[1],
@@ -78,7 +79,8 @@ class CreateChildProfileScreen extends React.Component {
       birthdate: Date.parse(o[9]),
       myGroups: myGroups
       
-    })
+    },
+    () => {console.log(this.state)})
     // console.log(pendingInvites)
 
   }
@@ -145,6 +147,8 @@ class CreateChildProfileScreen extends React.Component {
   submit = () => {
     const { history, dispatch } = this.props;
     const info = this.state
+    info['id'] = JSON.parse('['+sessionStorage.getItem("info")+']')[0][10]
+    console.log(info['id'])
     const profileId = this.props.match.params.profileId
 
     
@@ -157,7 +161,7 @@ class CreateChildProfileScreen extends React.Component {
       .catch((error) => {
         Log.error(error);
         console.log('ops')
-      }); 
+      });
   };
 
   handleSubmit = (event) => {

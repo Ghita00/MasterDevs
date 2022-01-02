@@ -10,6 +10,7 @@ import withLanguage from "./LanguageContext";
 import Avatar from "./Avatar";
 import Log from "./Log";
 import Images from "../Constants/Images";
+import CreateChildProfileScreen from "./CreateChildProfileScreen";
 
 class ChildListItem extends React.Component {
   state = { fetchedChild: false, child: {}, verified: false};
@@ -21,7 +22,7 @@ class ChildListItem extends React.Component {
       .get(`/api/users/${userId}/children/${childId}`)
       .then((response) => {
         const child = response.data;
-        this.setState({ fetchedChild: true, child});
+        this.setState({ fetchedChild: true, child}, ()=> {console.log(this.state.child)});
       })
       .catch((error) => {
         Log.error(error);
@@ -58,8 +59,9 @@ class ChildListItem extends React.Component {
       });
   }
 
+
   render() {
-    const { language, history, childId } = this.props;
+    const { language, history, userId, childId } = this.props;
     const { pathname } = history.location;
     const { child, fetchedChild, verified } = this.state;
     const texts = Texts[language].childListItem;
@@ -101,6 +103,31 @@ class ChildListItem extends React.Component {
                 <img src={Images.couple} width={'60'} height={'60'} align="right" vertical-align="middle" alt="birthday icon"/>
               )
             } 
+            <div>
+              
+              {!this.state.verified &&
+              (
+                <img src={Images.babyFace} width={'60'} height={'60'} align="right" vertical-align="middle" alt="conversion button"
+                      onClick={() => history.push({
+                        pathname: `/profiles/${userId}/children/create/profile`,
+                        info: [
+                          child.file,
+                          child.image,
+                          child.given_name,
+                          child.family_name,
+                          child.gender,
+                          child.background,
+                          child.other_info,
+                          child.special_needs,
+                          child.allergies,
+                          child.birthdate,
+                          childId
+                        ]
+                      })}
+                />
+              )
+            } 
+            </div>
             </div>
             
             
