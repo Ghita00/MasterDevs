@@ -27,7 +27,7 @@ const getMyPendingChildRequest = (userId) => {
   return axios
     .get(`/api/childrenProfile/${userId}/activities`)
     .then((res) => {
-      console.log(res.data)
+     
       const activities = res.data.filter(
         (activity) => activity.status === "proposed"
       ); 

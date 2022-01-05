@@ -87,8 +87,7 @@ router.post('/', async (req, res, next) => {
     return res.status(400).send('Bad Request')
   }
   try {
-    const user =
-     User.findOne({ email })
+    const user = await User.findOne({ email })
     if (user) {
       return res.status(409).send('User already exists')
     }
@@ -165,6 +164,7 @@ router.post('/', async (req, res, next) => {
     next(err)
   }
 })
+/** TODO marti */
 router.post('/authenticate/email', async (req, res, next) => {
   const {
     email, password, deviceToken, language, origin
@@ -470,7 +470,7 @@ router.post('/changepassword', async (req, res, next) => {
     next(error)
   }
 })
-
+/* differenzia bambini da bambini utenti */
 router.get('/:id/checkchildren', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Unauthorized') }
   const user_id = req.params.id
@@ -484,7 +484,7 @@ router.get('/:id/checkchildren', (req, res, next) => {
     }).catch(next)
 })
 
-router.get('/:id', (req, res, next) => { // (*)
+router.get('/:id', (req, res, next) => {
   if (req.user_id !== req.params.id) { return res.status(401).send('Unauthorized') }
   const { id } = req.params
   User.findOne({ user_id: id }).then(user => {
@@ -632,12 +632,10 @@ router.get('/:id/groups', (req, res, next) => {
     res.json(groups)
   }).catch(next)
 })
-
-router.get('/:id/childgroups', (req, res, next) => {
+/* trova i gruppi in cui fa ià parte il bambino */
+router.get('/:id/childgroups', (req, res) => {
   const user_id = req.params.id
-  console.log(user_id)
   Member.find({ user_id }).then(groups => {
-    console.log(groups)
     res.json(groups)
   })
 })
@@ -793,7 +791,7 @@ router.get('/:id/events', async (req, res, next) => {
   }
 })
 
-router.get('/:id/profile', (req, res, next) => { // (*)
+router.get('/:id/profile', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Unauthorized') }
   const user_id = req.params.id
   Profile.findOne({ user_id })
@@ -803,6 +801,7 @@ router.get('/:id/profile', (req, res, next) => { // (*)
     .exec()
     .then(profile => {
       if (!profile) {
+        /* restituisce il profilo del bambino utente */
         const child_id = req.params.id
         Child.findOne({ child_id })
           .populate('image')
@@ -820,7 +819,7 @@ router.get('/:id/profile', (req, res, next) => { // (*)
       }
     }).catch(next)
 })
-
+/* differenzia utente da bambini utenti */
 router.get('/:id/checkchildren', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Unauthorized') }
   const user_id = req.params.id
@@ -1033,7 +1032,7 @@ router.post('/:id/children', childProfileUpload.single('photo'), async (req, res
     next(error)
   }
 })
-
+/* creazione e aggiornamento ad un bambino utente */
 router.post('/:id/childrenProfile', childProfileUpload.single('photo'), async (req, res, next) => {
   if (req.user_id !== req.params.id) { return res.status(401).send('Unauthorized') }
   const {
@@ -1057,6 +1056,7 @@ router.post('/:id/childrenProfile', childProfileUpload.single('photo'), async (r
   }
   const image_id = objectid()
   let child_id = objectid()
+  /* condizione per trovare se esisteva già un id del bambino o meno */
   if (id !== undefined) {
     child_id = id
   }
@@ -1105,14 +1105,15 @@ router.post('/:id/childrenProfile', childProfileUpload.single('photo'), async (r
   }
 
   try {
+    /* creazione di un bambino utente */
     await User.create(user)
     await ChildProfile.create(child_profile)
-    if (id === undefined) {
+    if (id === undefined) { /* condizionale per la crezione di un nuovo bambino */
       await Image.create(image)
       await Child.create(child)
       await Parent.create(parent)
-      console.log('qui')
     }
+    /* immissione del bambino utene all'interno dei gruppi selezionati */
     let groups = req.body.selectedGroups
     for (var i = 0; i < groups.length; i++) {
       let member = {
@@ -1149,7 +1150,7 @@ router.get('/:userId/children/:childId', (req, res, next) => {
     }).catch(next)
 })
 
-router.get('/:userId/childUser/:childId', (req, res, next) => {
+router.get('/:userId/childUser/:childId', (req, res, next) => { /* dato un id lo cerca nella tabella ChildProfile */
   if (!req.user_id) { return res.status(401).send('Unauthorized') }
   const child_user_id = req.params.childId
   ChildProfile.findOne({ child_user_id })
@@ -1161,7 +1162,7 @@ router.get('/:userId/childUser/:childId', (req, res, next) => {
     }).catch(next)
 })
 
-router.get('/MemberChildUser/:groupId/:childId', (req, res, next) => {
+router.get('/MemberChildUser/:groupId/:childId', (req, res, next) => { /* dato l'id di un ChildProfile e uno di un gruppo, controlla se esso ne è un membro */
   const group_id = req.params.groupId
   const user_id = req.params.childId
   Member.findOne({ group_id, user_id })
@@ -1220,6 +1221,7 @@ router.delete('/:userId/children/:childId', async (req, res, next) => {
     await Child.deleteOne({ child_id })
     await Parent.deleteMany({ child_id })
     await Image.deleteOne({ owner_id: child_id })
+    /* cancellazione anche della parte utente, se esiste */
     if (ChildProfile.findOne({ child_user_id: child_id }) !== null) {
       await ChildProfile.deleteOne({ child_user_id: child_id })
       await Member.deleteMany({ user_id: child_id })
@@ -1230,7 +1232,7 @@ router.delete('/:userId/children/:childId', async (req, res, next) => {
     next(error)
   }
 })
-
+/* dato l'id di un ChildProfile prende le informazioni dei profili dei suoi genitori */
 router.get('/:id/parents', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Unauthorized') }
   const { id } = req.params

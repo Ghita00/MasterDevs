@@ -8,6 +8,7 @@ import Texts from "../Constants/Texts";
 import Avatar from "./Avatar";
 import Log from "./Log";
 
+/* trova i gruppi in cui è l'utente  */
 const getGroup = (groupId) => {
   return axios
     .get(`/api/groups/${groupId}`)
@@ -23,7 +24,7 @@ const getGroup = (groupId) => {
       };
     });
 };
-
+/* trova i membri all'interno di un gruppo */
 const getGroupMembers = (groupId) => {
   return axios
     .get(`/api/groups/${groupId}/members`)
@@ -41,16 +42,14 @@ class ChooseGroupItem extends React.Component {
 
   async componentDidMount() {
     const { groupId } = this.props;
-    const group = await getGroup(groupId);
-    const members = await getGroupMembers(groupId);
-    // group.kids = await getGroupKids(groupId);
-    //group.settings = await getGroupSettings(groupId);
+    const group = await getGroup(groupId); /* prende il gruppo dal database e ne mostra il nome ed il logo */
+    const members = await getGroupMembers(groupId); /* prende i membri effettivi del gruppo (genitori + ragazzi utenti) e ne mostra il numero*/
     group.members = members.filter(
       (member) => member.user_accepted && member.group_accepted
     );
     this.setState({ fetchedGroupData: true, group });
   }
-
+ /* TODO */
   handleNavigation = () => {
     const { history } = this.props;
     const { group } = this.state;
@@ -67,7 +66,6 @@ class ChooseGroupItem extends React.Component {
         tabIndex={-42}
         className="row no-gutters"
         id="suggestionContainer"
-        //onClick={this.handleNavigation}
       >
         <div className="col-2-10">
           <Avatar

@@ -17,7 +17,7 @@ class ChildProfileInfo extends React.Component {
     deleteIndex: "",
     verified: false
   };
-
+  /* funzione che verifica se l'account è di un adulto */
   getProfile = (id) => {
     axios
     .get(`/api/users/${id}/checkchildren`)
@@ -105,6 +105,7 @@ class ChildProfileInfo extends React.Component {
     } = this.props;
     const { profileId } = match.params;
     const { confirmDialogIsOpen, modalIsOpen, verified } = this.state;
+    /* constante che definisce se l'utente è un user o un bambino */
     const isParent = (JSON.parse(localStorage.getItem("user")).id === profileId) && verified;
     const texts = Texts[language].childProfileInfo;
     return (

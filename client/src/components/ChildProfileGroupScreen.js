@@ -26,7 +26,7 @@ class ChildProfileGroupScreen extends React.Component{
       })
       
   };
-  /* trovare i gruppi a cui partecipa mia figlia*/
+  /* trovare i gruppi di cui fa già parte l'account bambino */
   getMyChildGroups = async (id) => {
     return axios
       .get(`/api/users/${id}/childgroups`)
@@ -35,31 +35,27 @@ class ChildProfileGroupScreen extends React.Component{
       })
       
   };
-  /* TODO*/
+  /* salva i nuovi gruppi del bambino/a */
   handleSave = ()=>{
     const groups = document.getElementsByClassName('choices')
     const {childId} = this.state
     const {history} = this.props
     for(var i=0 ; i < groups.length ; i++){
-      //group_list.push({id: groups[i].id, checked: groups[i].checked})
       if(groups[i].checked){
         axios
         .post(`/api/childrenProfile/${groups[i].id}/members/${childId}`)
       } else {
-        console.log('Togli da '+groups[i].id)
         axios
         .delete(`/api/groups/${groups[i].id}/members/${childId}`)
       }
     }
-    // axios
-    // .patch(`/api/childrenProfile/${childId}/setgroups`,{group_list: group_list})
     history.goBack();
     
   }
 
   async componentDidMount(){
-    const list = await this.getMyGroups(this.state.profileId)
-    const list_child = await this.getMyChildGroups(this.state.childId)
+    const list = await this.getMyGroups(this.state.profileId) /* crea la lista delle scelte in base ai gruppi a cui è iscritto l'utente */
+    const list_child = await this.getMyChildGroups(this.state.childId) /* marca i gruppi a cui il ragazzo/a è già iscritto */
     
 
     

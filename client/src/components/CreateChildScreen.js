@@ -168,17 +168,21 @@ class CreateChildScreen extends React.Component {
     bodyFormData.append("special_needs", special_needs);
     bodyFormData.append("allergies", allergies);
     bodyFormData.append("birthdate", birthdate);
-    // const auth =(this.props.location.bool)
+    /**variabile utilizzata per controllare quale tipo di procedura utilizzare tra creazione
+     * di un bambino o un bambino utente
+    */
     if(this.props.location.bool !== undefined){
       sessionStorage.setItem("bool", this.props.location.bool)
     }
     let auth = JSON.parse(sessionStorage.getItem("bool"));
+    /* bambino utente */
     if(auth){ 
       const { pathname } = history.location;
       history.push({
         pathname:`${pathname}/profile`,
         info: [file, image, given_name, family_name, gender, background, other_info, special_needs, allergies, birthdate]})
-    } else {
+    } else { 
+    /*bambino */
     axios
       .post(`/api/users/${userId}/children`, bodyFormData, {
         headers: {

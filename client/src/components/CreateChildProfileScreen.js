@@ -7,7 +7,6 @@ import Texts from "../Constants/Texts";
 import withLanguage from "./LanguageContext";
 import Log from "./Log";
 import axios from "axios";
-// import getMyGroups from "./MyFamiliesShareScreen";
 import ChooseGroupList from "./ChooseGroupList";
 
 
@@ -35,7 +34,7 @@ class CreateChildProfileScreen extends React.Component {
     };
     
   }
-
+  /* trova i gruppi dell'utente */
   getMyGroups = (id) => {
     return axios
       .get(`/api/users/${id}/groups`)
@@ -50,17 +49,12 @@ class CreateChildProfileScreen extends React.Component {
   
 
   async componentDidMount() {
-
     let id = this.props.match.params.profileId
     const groups = await this.getMyGroups(id);
     const myGroups = groups
      .filter((group) => group.user_accepted && group.group_accepted)
-     .map((group) => group.group_id);
-    // const pendingInvites = groups
-    //  .filter(
-    //  (group) => group.group_accepted && !group.user_accepted
-    //).length;
-    
+     .map((group) => group.group_id); 
+     /*  utilizzata per l'upgrade da bambino a bambino utente */   
     if(this.props.location.info !== undefined){
       sessionStorage.setItem("info", JSON.stringify(this.props.location.info))
     }
@@ -79,11 +73,8 @@ class CreateChildProfileScreen extends React.Component {
       myGroups: myGroups
       
     })
-    // console.log(pendingInvites)
-
   }
 
-  
   renderGroupSection = () => {
     const { language } = this.props;
     const { myGroups } = this.state;
@@ -141,11 +132,12 @@ class CreateChildProfileScreen extends React.Component {
 
     return true;
   };
-
+  /** TODO */
   submit = () => {
     const { history, dispatch } = this.props;
     const info = this.state;
     const profileId = this.props.match.params.profileId;
+
     info['id'] = JSON.parse('['+sessionStorage.getItem("info")+']')[0][10];
 
     axios

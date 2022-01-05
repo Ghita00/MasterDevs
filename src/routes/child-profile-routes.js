@@ -24,33 +24,26 @@ router.get('/', (req, res, next) => {
       res.json(profiles)
     }).catch(next)
 })
-
+/* dato l'id di un utente bambino/a, prende dal database i permessi */
 router.get('/rights/:child_user_id/getRights', (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
   ChildProfile.findOne({ child_user_id: req.params.child_user_id })
     .then(rights => {
-      console.log(rights)
       res.json(rights)
     })
     .catch(next)
 })
-
+/* dato l'id di un utente bambino/a, aggiorna i permessi */
 router.patch('/rights/:child_user_id/changerights', async (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
   const {
     activity, chat, partecipation, manage
   } = req.body
-  console.log(activity, chat, partecipation, manage)
   let child_user_id = req.params.child_user_id
   let exec = { $set: { activity: activity, chat: chat, partecipation: partecipation, manage: manage } }
   await ChildProfile.updateOne({ child_user_id }, exec).then(console.log('update eseguito'))
-  /* let input = !req.params.bool
-  let exec = { $set: { activity: input } }
-  let child_user_id = req.params.child_user_id
-  console.log('cambia attività')
-  await ChildProfile.updateOne({ child_user_id }, exec).then(console.log('cambia attività')) */
 })
-
+/* aggiunge un bambino utente ad un gruppo e lo fa diventare membro */
 router.post('/:group_id/members/:child_id', async (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
   const { group_id, child_id } = req.params
@@ -60,7 +53,6 @@ router.post('/:group_id/members/:child_id', async (req, res, next) => {
     group_accepted: true,
     user_accepted: true
   })
-  console.log(!cond)
   if (!cond) {
     let member = {
       group_id: group_id,
@@ -74,6 +66,8 @@ router.post('/:group_id/members/:child_id', async (req, res, next) => {
       .catch(next)
   }
 })
+
+/* dato l'id di un utente bambino/a prende dal database le attività da lui proposte che devono essere accettate dal genitore */
 router.get('/:id/activities', async (req, res, next) => {
   if (!req.user_id) { return res.status(401).send('Not authenticated') }
   const userId = req.params.id

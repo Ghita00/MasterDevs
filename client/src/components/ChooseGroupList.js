@@ -28,7 +28,7 @@ const ChooseGroupList = ({ groupIds, groupBools }) => {
               {indexes.map((index) => (
                 <li key={index} style={{ margin: "1rem 0" }}>
                   {
-                    groupBools !== undefined ?
+                    groupBools !== undefined ? /* controlla se l'opzione del gruppo deve essere marcata, questo serve se stai creando un nuovo account o lo stai aggiungendo/rimuovendo da un gruppo dopo */
                     <input type="checkbox"  className="choices" onClick="this.checked=!this.checked;" id = {groupIds[index]} value = {groupIds[index]} checked={groupBools[index]}/>
                     :
                     <input type="checkbox"  className="choices" onClick="this.checked=!this.checked;" id = {groupIds[index]} value = {groupIds[index]}/>

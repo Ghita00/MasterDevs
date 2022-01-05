@@ -495,8 +495,8 @@ router.patch('/:id/members', async (req, res, next) => {
     res.status(200).send(message)
   } catch (err) { next(err) }
 })
-
-router.delete('/:groupId/members/:memberId', async (req, res, next) => { // api per togliere un membro
+/* modificata la funzione per eliminare un membro da un gruppo, aggiunte gli accorgimenti per i ChildProfile */
+router.delete('/:groupId/members/:memberId', async (req, res, next) => {
   if (!req.user_id) {
     return res.status(401).send('Not authenticated')
   }
@@ -1136,8 +1136,7 @@ router.post('/:id/activities', async (req, res, next) => {
     }
     const isParent = (await Profile.findOne({ user_id })) !== null
     const activity_id = objectid()
-    activity.status = member.admin ? 'accepted' : (isParent ? 'pending' : 'proposed')
-    console.log(isParent)
+    activity.status = member.admin ? 'accepted' : (isParent ? 'pending' : 'proposed') /* quando qualcuno è un utente bambino segna l'attività come 'proposta' */
     activity.activity_id = activity_id
     const group = await Group.findOne({ group_id })
     activity.group_name = group.name
@@ -1209,8 +1208,7 @@ router.patch('/:id/activities/:activityId', async (req, res, next) => {
       activity_id: req.params.activityId
     })
     const creator = (await Activity.findOne({ activity_id })).creator_id
-    const isParent = (await Parent.findOne({ parent_id: user_id, child_id: creator })) !== null
-    console.log(isParent)
+    const isParent = (await Parent.findOne({ parent_id: user_id, child_id: creator })) !== null /* permette solo ad un genitore di modificare l'attività di un figlio */
     if (!member) {
       return res.status(401).send('Unauthorized-not-member')
     }
@@ -1253,7 +1251,6 @@ router.delete('/:groupId/activities/:activityId', async (req, res, next) => {
     })
     const creator = (await Activity.findOne({ activity_id })).creator_id
     const isParent = (await Parent.findOne({ parent_id: user_id, child_id: creator })) !== null
-    console.log(isParent)
     if (!member) {
       return res.status(401).send('Unauthorized-not-member')
     }
@@ -1527,9 +1524,8 @@ router.patch(
             oldChildren.splice(oldChildren.indexOf(c), 1)
           }
         })
-        if (children.includes(req.user_id)) {
+        if (children.includes(req.user_id)) { /* funzione modificata per permettere ad un ChildProfile di iscriversi ad una attività */
           extendedProperties.shared.children = JSON.stringify([...new Set([...oldChildren, req.user_id])])
-          console.log(extendedProperties.shared.children)
           extendedProperties.shared.parents = JSON.stringify(oldParents.filter(u => u !== req.user_id))
         } else if (oldChildren.includes(req.user_id)) {
           extendedProperties.shared.children = JSON.stringify(oldChildren.filter(u => u !== req.user_id))

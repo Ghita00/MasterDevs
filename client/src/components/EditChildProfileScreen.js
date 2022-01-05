@@ -8,7 +8,7 @@ import withLanguage from "./LanguageContext";
 import Texts from "../Constants/Texts";
 import LoadingSpinner from "./LoadingSpinner";
 import Log from "./Log";
-import ChangeRights from "./ChangeRights";
+import ChangeRights from "./ChangeRights"; /* Componente per cambiare i diritti del figlio */
 
 const dataURLtoFile = (dataurl, filename) => {
   const arr = dataurl.split(",");
@@ -32,9 +32,9 @@ class EditChildProfileScreen extends React.Component {
     fetchedChildData: false,
     month: moment().month() + 1,
     year: moment().year(),
-    isParent: false
+    isParent: false /* valore che controlla se l'utente è il genitore dell'utente */
   };
-
+  /* funzione che verifica se l'account è di un adulto */
   getProfile = (id) => {
     axios
     .get(`/api/users/${id}/checkchildren`)
@@ -195,12 +195,12 @@ class EditChildProfileScreen extends React.Component {
     bodyFormData.append("allergies", allergies);
     bodyFormData.append("birthdate", birthdate);
     
-    // da qui salviamo i diritti
+    /* da qui salviamo i diritti */
     let activity_rights = document.getElementById("choices_rights1");
     let chat_rights = document.getElementById("choices_rights2");
     let partecipation_rights = document.getElementById("choices_rights3");
     let manage_rights = document.getElementById("choices_rights4");
-    console.log(activity_rights,chat_rights,partecipation_rights,manage_rights);
+    
     if(activity_rights !== undefined && activity_rights !== null){
       axios
       .patch(`/api/childrenProfile/rights/${childId}/changerights`,
@@ -210,11 +210,9 @@ class EditChildProfileScreen extends React.Component {
         manage: manage_rights.checked})
       .then((response) => {
         Log.info(response);
-        //history.goBack();
       })
       .catch((error) => {
         Log.error(error);
-        //history.goBack();
       });
     }
     
@@ -289,7 +287,7 @@ class EditChildProfileScreen extends React.Component {
     if (formIsValidated) {
       formClass.push("was-validated");
     }
-    
+    /* grazie a questo valore controlliamo se l'utente è verificato, salviamo in sessionStorage per evitare che si perda refreshando la pagina */
     if(this.props.location.verified !== undefined){
       sessionStorage.setItem("verified", this.props.location.verified)
     }
@@ -493,7 +491,7 @@ class EditChildProfileScreen extends React.Component {
         </div>
 
         <div>
-        {(auth && this.state.isParent &&
+        {(auth && this.state.isParent && /* permette solo al genitore di modificare i permessi dei figli */
         <ChangeRights id={this.props.match.params.childId}/>)}
         </div>
 
