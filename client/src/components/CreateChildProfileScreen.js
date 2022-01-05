@@ -144,10 +144,10 @@ class CreateChildProfileScreen extends React.Component {
 
   submit = () => {
     const { history, dispatch } = this.props;
-    const info = this.state
-    const profileId = this.props.match.params.profileId
+    const info = this.state;
+    const profileId = this.props.match.params.profileId;
+    info['id'] = JSON.parse('['+sessionStorage.getItem("info")+']')[0][10];
 
-    
     axios
       .post(`/api/users/${profileId}/childrenProfile`, info)
       .then((response) => {

@@ -161,7 +161,7 @@ class TimeslotScreen extends React.Component {
       },
     },
     adminChanges: {},
-    verified: false,
+    verified: true,
     partecipation: false
   };
 
@@ -203,6 +203,8 @@ class TimeslotScreen extends React.Component {
     let parents;
     const members = await getGroupMembers(groupId);
     const admins = members.filter((p) => p.admin).map((m) => m.user_id);
+    this.getProfile(userId);
+    this.getRights(userId);
     if (timeslot.userCanEdit) {
       children = await getGroupChildren(groupId);
       parents = members.map((m) => m.user_id);
@@ -235,8 +237,6 @@ class TimeslotScreen extends React.Component {
       admins,
       external: "",
     });
-    this.getProfile(userId);
-    this.getRights(userId);
   }
 
   componentWillUnmount() {

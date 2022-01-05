@@ -1037,7 +1037,7 @@ router.post('/:id/children', childProfileUpload.single('photo'), async (req, res
 router.post('/:id/childrenProfile', childProfileUpload.single('photo'), async (req, res, next) => {
   if (req.user_id !== req.params.id) { return res.status(401).send('Unauthorized') }
   const {
-    image: imagePath, given_name, family_name, gender, background, other_info, special_needs, allergies, birthdate
+    image: imagePath, given_name, family_name, gender, background, other_info, special_needs, allergies, birthdate, id
   } = req.body
   const { file } = req
   if (!(birthdate && given_name && family_name && gender && background)) {
@@ -1056,7 +1056,10 @@ router.post('/:id/childrenProfile', childProfileUpload.single('photo'), async (r
     suspended: false
   }
   const image_id = objectid()
-  const child_id = objectid()
+  let child_id = objectid()
+  if (id !== undefined) {
+    child_id = id
+  }
   const image = {
     image_id,
     owner_type: 'child',
@@ -1103,10 +1106,13 @@ router.post('/:id/childrenProfile', childProfileUpload.single('photo'), async (r
 
   try {
     await User.create(user)
-    await Image.create(image)
-    await Child.create(child)
-    await Parent.create(parent)
     await ChildProfile.create(child_profile)
+    if (id === undefined) {
+      await Image.create(image)
+      await Child.create(child)
+      await Parent.create(parent)
+      console.log('qui')
+    }
     let groups = req.body.selectedGroups
     for (var i = 0; i < groups.length; i++) {
       let member = {

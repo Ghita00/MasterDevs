@@ -112,6 +112,19 @@ const getActivityParents = (ids) => {
     });
 };
 
+const isParent = async (id, creator_id)=>{
+  return axios
+  .get(`/api/users/${creator_id}/parents`)
+  .then((response) => {
+    const list = []
+    response.data.forEach((adult) => {list.push(adult.user_id)})
+    return (list.includes(id))
+  })
+  .catch((error) => {
+    return false
+  })
+}
+
 class ActivityScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -182,8 +195,9 @@ class ActivityScreen extends React.Component {
         member.group_accepted &&
         member.user_accepted
     )[0].admin;
-    const userIsCreator = userId === activity.creator_id;
-    const userCanEdit = userIsAdmin || userIsCreator;
+    const userIsCreator = userId === activity.creator_id
+    const userIsParent = await isParent(userId, activity.creator_id);
+    const userCanEdit = userIsAdmin || userIsCreator || userIsParent;
     this.setState({ activity, fetchedActivityData: true, userCanEdit });
   }
 

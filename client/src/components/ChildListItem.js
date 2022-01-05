@@ -10,6 +10,7 @@ import withLanguage from "./LanguageContext";
 import Avatar from "./Avatar";
 import Log from "./Log";
 import Images from "../Constants/Images";
+import CreateChildProfileScreen from "./CreateChildProfileScreen";
 
 class ChildListItem extends React.Component {
   state = { fetchedChild: false, child: {}, verified: false};
@@ -109,8 +110,30 @@ class ChildListItem extends React.Component {
                   src={Images.couple} width={'60'} height={'60'} align="right" vertical-align="middle" alt="birthday icon"/>
               )
             } 
-            
-            
+            <div>
+              {!this.state.verified &&
+              (
+                <img src={Images.babyFace} width={'60'} height={'60'} align="right" vertical-align="middle" alt="conversion button"
+                      onClick={() => history.push({
+                        pathname: `/profiles/${userId}/children/create/profile`,
+                        info: [
+                          child.file,
+                          child.image,
+                          child.given_name,
+                          child.family_name,
+                          child.gender,
+                          child.background,
+                          child.other_info,
+                          child.special_needs,
+                          child.allergies,
+                          child.birthdate,
+                          childId
+                        ]
+                      })}
+                />
+              )
+            } 
+            </div>
           </React.Fragment>
         ) : (
           <Skeleton avatar active paragraph={{ rows: 1 }} />
