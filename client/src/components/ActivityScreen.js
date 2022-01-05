@@ -111,7 +111,7 @@ const getActivityParents = (ids) => {
       return [];
     });
 };
-
+/* funzione utilizzata per differenziare account utente e bambino */
 const isParent = async (id, creator_id)=>{
   return axios
   .get(`/api/users/${creator_id}/parents`)
@@ -196,6 +196,7 @@ class ActivityScreen extends React.Component {
         member.user_accepted
     )[0].admin;
     const userIsCreator = userId === activity.creator_id
+    /* assegnamento funzione isParent, utilizzata per il cambiamento del userCanEdit */ 
     const userIsParent = await isParent(userId, activity.creator_id);
     const userCanEdit = userIsAdmin || userIsCreator || userIsParent;
     this.setState({ activity, fetchedActivityData: true, userCanEdit });

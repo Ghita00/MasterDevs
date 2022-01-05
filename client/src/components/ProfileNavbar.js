@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import Texts from "../Constants/Texts";
 import withLanguage from "./LanguageContext";
 
-const ProfileNavbar = ({isParent, language, history }) => {
+const ProfileNavbar = ({ language, history }) => {
   const handleActiveTab = (event) => {
     const { pathname } = history.location;
     const parentPath = pathname.slice(0, pathname.lastIndexOf("/"));
@@ -30,7 +30,7 @@ const ProfileNavbar = ({isParent, language, history }) => {
           </h1>
 
         </div>
-        {//isParent ? (
+        {
         <div className="col-1-2">
           <h1
             id="children"
@@ -40,17 +40,7 @@ const ProfileNavbar = ({isParent, language, history }) => {
             {texts.children} 
           </h1>
         </div>
-        /*) : (
-        <div className="col-1-2">
-          <h1
-            id="parents"
-            className={activeTab === "parents" ? "profileTabActive" : ""}
-            onClick={handleActiveTab}
-          >
-            {"GENITORI"} 
-          </h1>
-        </div>
-        )*/}
+        }
       </div>
     </div>
   );

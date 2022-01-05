@@ -19,7 +19,7 @@ class ChildProfileHeader extends React.Component {
     isParent: false,
     manage: false
   };
-
+  /* funzione che verifica nel database il permesso di modificare il proprio profilo */
   getRights = (id) => {
     axios
     .get(`/api/childrenProfile/rights/${id}/getRights`)
@@ -30,7 +30,7 @@ class ChildProfileHeader extends React.Component {
       Log.error(error);
     });
   }
-
+  /* funzione che verifica se l'account è di un adulto */
   getProfile = (id) => {
     axios
     .get(`/api/users/${id}/checkchildren`)
@@ -60,13 +60,7 @@ class ChildProfileHeader extends React.Component {
   handleEdit = () => {
     const { history } = this.props;
     const { pathname } = history.location;
-    const newPath = `${pathname}/edit`; /*
-    if(this.props.location.verified !== undefined){
-      sessionStorage.setItem("verified", this.props.location.bool)
-    }
-    let auth = JSON.parse(sessionStorage.getItem("verified"));
-    console.log('auth '+auth)
-    this.setState({verified: auth})*/
+    const newPath = `${pathname}/edit`; 
     history.push({
       pathname: newPath,
       verified: this.props.location.verified
@@ -144,9 +138,11 @@ class ChildProfileHeader extends React.Component {
               </button>
             </div>
             <div className="col-6-10" />
+            {/* verificare se l'utente è il proprietario del profilo */}
             {profileId === JSON.parse(localStorage.getItem("user")).id ? (
               <React.Fragment>
                 <div className="col-1-10">
+                {/* verifica se l'utente può modificare il profilo */}
                 {(this.state.isParent || this.state.manage) && (
                   <button
                     type="button"

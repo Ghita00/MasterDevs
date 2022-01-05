@@ -15,7 +15,6 @@ class PendingRequestsScreen extends React.Component {
     let requests_type;
     const { history } = this.props;
     const { pathname } = history.location;
-    console.log(pathname)
     if (pathname.includes("members")) {
       requests_type = "group_members";
     } else if (pathname.includes("invites")) {
@@ -23,7 +22,7 @@ class PendingRequestsScreen extends React.Component {
     } else if(pathname.includes("activities")){
       requests_type = "group_activities";
     } else{
-      requests_type = "child_activities"
+      requests_type = "child_activities" /* listà di attività proposte dai ragazzi ancora da confermare */
     }
     
     this.state = {
@@ -31,7 +30,7 @@ class PendingRequestsScreen extends React.Component {
       requests_type,
     };
   }
-  getMyGroups = async (id) => {
+  getMyGroups = async (id) => { /* funzione che prende dal database i gruppi di cui si fa parte */
     return  axios
       .get(`/api/users/${id}/groups`)
       .then((response) => {
@@ -110,7 +109,7 @@ class PendingRequestsScreen extends React.Component {
             this.setState({ fetchedRequests: true, requests: [] });
           });
         break;
-      case "child_activities": 
+      case "child_activities": /* filtra le attività ancora da accettare */
           axios
           .get(`/api/childrenProfile/${userId}/activities`)
           .then((res) => {
@@ -182,7 +181,7 @@ class PendingRequestsScreen extends React.Component {
             Log.error(error);
           });
         break;
-      case "child_activities": 
+      case "child_activities": /* filtra le attività ancora da accettare */
         const filteredActivity = requests.filter(
           (req) => req.activity_id !== request.activity_id
         );
@@ -237,7 +236,7 @@ class PendingRequestsScreen extends React.Component {
           });
         break;
       case "group_activities":
-      case "child_activities":
+      case "child_activities": /* toglie dalla lista le attività accettate */
         const filterdActivities = requests.filter(
           (req) => req.activity_id !== request.activity_id
         );
@@ -292,7 +291,7 @@ class PendingRequestsScreen extends React.Component {
             className="fas fa-certificate center"
           />
         );
-      case "child_activities": 
+      case "child_activities": /* renderizza le attività proposte dai ragazzi */
         return (
           <i
             role="button"

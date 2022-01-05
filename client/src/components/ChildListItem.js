@@ -10,9 +10,9 @@ import withLanguage from "./LanguageContext";
 import Avatar from "./Avatar";
 import Log from "./Log";
 import Images from "../Constants/Images";
-import CreateChildProfileScreen from "./CreateChildProfileScreen";
 
 class ChildListItem extends React.Component {
+  /*verified: variabile utitlizzata per la verifica di un utente bambino*/ 
   state = { fetchedChild: false, child: {}, verified: false};
 
   componentDidMount() {
@@ -38,24 +38,14 @@ class ChildListItem extends React.Component {
           }
         });
       });
+    /* chiamata al database per trovare i bambini utenti */
     axios
       .get(`/api/users/${userId}/childUser/${childId}`)
       .then((response) => {
         this.setState({ verified: response.data.child_id !== null});
       })
       .catch((error) => {
-        Log.error(error);/*
-        this.setState({
-          fetchedChild: true,
-          child: {
-            image: { path: "" },
-            birthdate: new Date(),
-            gender: "unspecified",
-            given_name: "",
-            family_name: "",
-            child_id: "",
-          }
-        });*/
+        Log.error(error);
       });
   }
 
@@ -111,6 +101,7 @@ class ChildListItem extends React.Component {
               )
             } 
             <div>
+              {/*TODO */ }
               {!this.state.verified &&
               (
                 <img src={Images.babyFace} width={'60'} height={'60'} align="right" vertical-align="middle" alt="conversion button"

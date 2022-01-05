@@ -24,7 +24,7 @@ class ChangeRights extends React.Component {
     child_id: this.props.id
   };
 }
-
+  /* funzione che verifica nel database i permessi del bambino */
   getRights = () => {
     return axios
     .get(`/api/childrenProfile/rights/${this.state.child_id}/getRights`)
@@ -36,7 +36,9 @@ class ChangeRights extends React.Component {
       return [];
     });
   }
+ 
   async componentDidMount(){
+     /* riempimento dei diritti del bambino*/
     let rights = await this.getRights();
     this.setState(
       {    
@@ -46,37 +48,18 @@ class ChangeRights extends React.Component {
         manage: rights.manage,
       }
     )
-
   }
 
   render() {
-    
-    
     const { language } = this.props;
-
-    const switchActivity = ()=>
-    {
-      //axios.post(`/api/childrenProfile/rights/${child_id}/changeactivity/${activity}`)
-      this.setState({activity: !this.state.activity})
-    }
-    
-    const switchChat = ()=>
-    {
-      //axios.post(`/api/childrenProfile/rights/${child_id}/changeactivity/${activity}`)
-      this.setState({chat: !this.state.chat})
-    }
-
-    const switchPartecipation = ()=>
-    {
-      //axios.post(`/api/childrenProfile/rights/${child_id}/changeactivity/${activity}`)
-      this.setState({partecipation: !this.state.partecipation})
-    }
-
-    const switchManage = ()=>
-    {
-      //axios.post(`/api/childrenProfile/rights/${child_id}/changeactivity/${activity}`)
-      this.setState({manage: !this.state.manage})
-    }
+     /* cambia il diritto del bambino di creare un'attività nello state */
+    const switchActivity = ()=> { this.setState({activity: !this.state.activity}) }
+    /* cambia il diritto del bambino di scrivere in chat nello state */
+    const switchChat = ()=> { this.setState({chat: !this.state.chat}) }
+    /* cambia il diritto del bambino di partecipare ad un'attività nello state */
+    const switchPartecipation = ()=> { this.setState({partecipation: !this.state.partecipation}) }
+    /* cambia il diritto del bambino di modificare il proprio profilo nello state */
+    const switchManage = ()=> { this.setState({manage: !this.state.manage}) }
 
     return (
       <div id="editChildProfileInfoContainer" className="horizontalCenter">

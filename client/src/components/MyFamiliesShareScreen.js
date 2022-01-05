@@ -22,6 +22,7 @@ const getMyGroups = (userId) => {
       return [];
     });
 };
+/* ricerca delle attività proposte dal bambino non ancora accettate dal genitore */
 const getMyPendingChildRequest = (userId) => {
   return axios
     .get(`/api/childrenProfile/${userId}/activities`)

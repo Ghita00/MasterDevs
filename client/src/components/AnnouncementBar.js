@@ -25,8 +25,9 @@ const dataURLtoFile = (dataurl, filename) => {
 };
 
 class AnnouncementBar extends React.Component {
-  state = { message: "", photos: [] , verified:false, chat:false};
+  state = { message: "", photos: [] , verified:true, chat:true};
 
+  /* funzione che verifica nel database il permesso di modificare le chat */
   getRights = (id) => {
     axios
     .get(`/api/childrenProfile/rights/${id}/getRights`)
@@ -38,6 +39,7 @@ class AnnouncementBar extends React.Component {
     });
   }
 
+  /* funzione che verifica se l'account è di un adulto */
   getProfile = (user_id) => {
     axios
     .get(`/api/users/${user_id}/checkchildren`)
@@ -73,7 +75,7 @@ class AnnouncementBar extends React.Component {
   };
 
   handleSend = () => {
-   
+    /* verificare la possibilità di scrivere nella chat*/ 
     if (this.state.verified || this.state.chat){
       const { groupId, handleRefresh } = this.props;
       const { message, photos } = this.state;
@@ -166,6 +168,7 @@ class AnnouncementBar extends React.Component {
           photos={photos}
           handleDelete={this.handlePreviewDelete}
         />
+        { /* verificare la possibilità di scrivere nella chat*/ }
         {this.state.chat && (
         <div id="announcementBarContainer" className="row no-gutters">
           <div id="announcementBubble" className="center">

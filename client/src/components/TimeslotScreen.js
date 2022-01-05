@@ -161,10 +161,10 @@ class TimeslotScreen extends React.Component {
       },
     },
     adminChanges: {},
-    verified: true,
-    partecipation: false
+    verified: true, /* valore boolean per verificare che l'utente è un adulto */
+    partecipation: false /* valore boolean per verificare che l'utente bambino ha il permesso di gestire le partecipazioni */
   };
-
+  /* funzione che verifica nel database il permesso di modificare le partecipazioni */
   getRights = (id) => {
     axios
     .get(`/api/childrenProfile/rights/${id}/getRights`)
@@ -175,7 +175,7 @@ class TimeslotScreen extends React.Component {
       Log.error(error);
     });
   }
-
+  /* funzione che verifica se l'account è di un adulto */
   getProfile = (user_id) => {
     axios
     .get(`/api/users/${user_id}/checkchildren`)
@@ -211,7 +211,7 @@ class TimeslotScreen extends React.Component {
     } else {
       children = await getUsersChildren(userId);
       parents = [userId];
-      if(!this.state.verified){
+      if(!this.state.verified){ /* serve a permettere ad un ragazzo di partecipare a/togliersi da una attività */
         children = [userId]
       }
     }
@@ -327,7 +327,7 @@ class TimeslotScreen extends React.Component {
   };
 
   handleSave = () => {
-    if(this.state.verified || this.state.partecipation){
+    if(this.state.verified || this.state.partecipation){ /* questo controllo si accerta che l'utente possa modificare le partecipazioni */
       const { history } = this.props;
       const { pathname } = history.location;
       const { timeslot, adminChanges } = JSON.parse(JSON.stringify(this.state));

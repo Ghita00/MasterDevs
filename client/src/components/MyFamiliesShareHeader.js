@@ -26,6 +26,7 @@ class MyFamiliesShareHeader extends React.Component {
     verified: false
   };
 
+  /* funzione che verifica se l'account è di un adulto */
   getProfile = (id) => {
     axios
     .get(`/api/users/${id}/checkchildren`)
@@ -142,6 +143,7 @@ class MyFamiliesShareHeader extends React.Component {
         break;
       case "myprofile":
         const userId = JSON.parse(localStorage.getItem("user")).id;
+        /* differenzia la visualizzazione del porfilo utente e bambino*/ 
         if (this.state.verified) {
           history.push(`/profiles/${userId}/info`);
         } else {
@@ -194,7 +196,7 @@ class MyFamiliesShareHeader extends React.Component {
     const { history } = this.props;
     history.push("/myfamiliesshare/invites");
   };
-
+  /* funzione per andare alla schermata delle attività proposte dai bambini */
   handlePendingChildActivities = () => {
     const { history } = this.props;
     history.push("/myfamiliesshare/childActivities");
@@ -215,7 +217,6 @@ class MyFamiliesShareHeader extends React.Component {
   };
 
   render() {
-    console.log(this.props)
     const { language, pendingInvites, pendingNotifications, pendingChildRequest } = this.props;
     const {
       confirmModalIsOpen,
@@ -460,6 +461,7 @@ class MyFamiliesShareHeader extends React.Component {
           <div className="col-6-10">
             <h1 onClick={this.sendMeNotification}>{texts.header}</h1>
           </div>
+          {/*notificazine delle attivita proposte dai figli e non ancora accettate */}
           {this.state.verified && ( 
             <div className="col-1-10">
               <button
