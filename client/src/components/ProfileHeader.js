@@ -17,10 +17,10 @@ class ProfileHeader extends React.Component {
     confirmDialogIsOpen: false,
     action: "",
     imageModalIsOpen: false,
-    verified: false,
-    manage: false
+    verified: false, /* valore boolean per verificare che l'utente è un adulto */
+    manage: false /* valore boolean per verificare che l'utente bambino ha il permesso di gestire il proprio profilo */
   };
-
+  /* funzione che verifica nel database il permesso di modificare le informazioni del profilo */
   getRights = (id) => {
     axios
     .get(`/api/childrenProfile/rights/${id}/getRights`)
@@ -31,7 +31,7 @@ class ProfileHeader extends React.Component {
       Log.error(error);
     });
   }
-
+  /* funzione che verifica se l'account è di un adulto */
   getProfile = (user_id) => {
     axios
     .get(`/api/users/${user_id}/checkchildren`)
@@ -70,9 +70,9 @@ class ProfileHeader extends React.Component {
     const parentPath = pathname.slice(0, pathname.lastIndexOf("/"));
     const newPath = `${parentPath}/edit`;
     const userId = JSON.parse(localStorage.getItem("user")).id
-    if(this.state.verified){
+    if(this.state.verified){ /* questo controllo si accerta che l'utente sia un genitore */
       history.push(newPath);
-    } else if(this.state.manage){
+    } else if(this.state.manage){ /* questo controllo si accerta che l'utente bambino possa modificare le informazioni */
       history.push(`${parentPath}/children/${userId}/edit`);
     } else {
       alert("non puoi modificare")
@@ -223,7 +223,12 @@ class ProfileHeader extends React.Component {
             <button
               type="button"
               className="transparentButton center"
-              onClick={() => history.goBack()}
+              onClick={() => {if (history.length === 1) {
+                                  history.replace("/myfamiliesshare");
+                                } else {
+                                  history.goBack();
+                                }}
+              }
             >
               <i className="fas fa-arrow-left" />
             </button>

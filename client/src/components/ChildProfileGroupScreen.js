@@ -17,7 +17,7 @@ class ChildProfileGroupScreen extends React.Component{
     }
 
   }
-
+  /* trovare i gruppi dell'utente */ 
   getMyGroups = async (id) => {
     return axios
       .get(`/api/users/${id}/groups`)
@@ -26,7 +26,7 @@ class ChildProfileGroupScreen extends React.Component{
       })
       
   };
-
+  /* trovare i gruppi a cui partecipa mia figlia*/
   getMyChildGroups = async (id) => {
     return axios
       .get(`/api/users/${id}/childgroups`)
@@ -35,7 +35,7 @@ class ChildProfileGroupScreen extends React.Component{
       })
       
   };
-
+  /* TODO*/
   handleSave = ()=>{
     const groups = document.getElementsByClassName('choices')
     const {childId} = this.state
@@ -43,7 +43,6 @@ class ChildProfileGroupScreen extends React.Component{
     for(var i=0 ; i < groups.length ; i++){
       //group_list.push({id: groups[i].id, checked: groups[i].checked})
       if(groups[i].checked){
-        console.log('Iscrivi/lascia in '+groups[i].id)
         axios
         .post(`/api/childrenProfile/${groups[i].id}/members/${childId}`)
       } else {
