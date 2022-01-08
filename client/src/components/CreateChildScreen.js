@@ -313,8 +313,8 @@ class CreateChildScreen extends React.Component {
                 type="button"
                 className="transparentButton center"
                 onClick={this.handleSave}
-              >
-                <i className="fas fa-check" />
+              > 
+                <i className="fas fa-arrow-right" />
               </button>
             </div>
           </div>

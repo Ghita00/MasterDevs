@@ -278,7 +278,11 @@ class TimeslotScreen extends React.Component {
     const { history } = this.props;
     const { pathname } = history.location;
     const route = `${pathname}/edit`;
-    history.push(route);
+    if(this.state.verified || this.state.partecipation){
+      history.push(route);
+    }else{
+      alert('non ci sta');
+    }
   };
 
   handleEmergency = () => {
@@ -919,7 +923,7 @@ class TimeslotScreen extends React.Component {
         </div>
         <div id="activityMainContainer" style={{ marginTop: 0 }}>
           <div className="row no-gutters" style={rowStyle}>
-            {timeslot.extendedProperties.shared.status === "ongoing" && (
+            {timeslot.extendedProperties.shared.status === "ongoing" && (this.state.partecipation || this.state.verified) && (
               <React.Fragment>
                 <div className="activityInfoHeader">
                   {timeslot.userCanEdit
@@ -927,7 +931,8 @@ class TimeslotScreen extends React.Component {
                     : texts.userAvailability
                   }
                 </div>
-                {this.getUserSubscribe()}
+                {
+                this.getUserSubscribe()}
                 { 
                   // sistemata visualizzazione altri bambini
                 }

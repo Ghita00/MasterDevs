@@ -87,7 +87,7 @@ class ChildProfileGroupScreen extends React.Component{
     const texts = Texts['it'].myFamiliesShareScreen;
     return (
       <div>
-        <div id="profileHeaderContainer">
+        <div id="groupMembersHeaderContainer">
           <div className="row no-gutters" id="profileHeaderOptions">
             <div className="col-2-10">
                 <button
@@ -97,6 +97,9 @@ class ChildProfileGroupScreen extends React.Component{
                 >
                   <i className="fas fa-arrow-left" />
                 </button>
+            </div>
+            <div className="col-6-10">
+              <h1 className="center">I miei gruppi</h1>
             </div>
             <div className="col-2-10">
               <button
@@ -109,10 +112,15 @@ class ChildProfileGroupScreen extends React.Component{
             </div>
           </div>
         </div>
+        <br/>
+        <br/>
         <div className="myGroupsContainer">
-          <div className="myGroupsContainerHeader">{texts.myGroups} </div>
+          {/*todo bimbo serio che sta in gruppo non appare nulla :(*/}
+          {console.log(groups)}
           {groups.length > 0 ? (
-            <ChooseGroupList groupIds={groups} groupBools={child_groups}/>
+            <ChooseGroupList 
+              groupIds={groups} 
+              groupBools={child_groups}/>
           ) : (
             <div className="myGroupsContainerPrompt">{texts.myGroupsPrompt}</div>
           )}

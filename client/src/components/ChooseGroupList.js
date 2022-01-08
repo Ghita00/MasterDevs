@@ -9,6 +9,8 @@ const ChooseGroupList = ({ groupIds, groupBools }) => {
   const blocks = [...Array(Math.ceil(length / 4)).keys()];
   return (
     <div className="suggestionsContainer">
+      <br/>
+      <br/>
       <ul>
           
         {blocks.map((block, blockIndex) => {
@@ -26,15 +28,26 @@ const ChooseGroupList = ({ groupIds, groupBools }) => {
             <LazyLoad key={blockIndex} height={350} once offset={150}>
             
               {indexes.map((index) => (
-                <li key={index} style={{ margin: "1rem 0" }}>
-                  {
-                    groupBools !== undefined ? /* controlla se l'opzione del gruppo deve essere marcata, questo serve se stai creando un nuovo account o lo stai aggiungendo/rimuovendo da un gruppo dopo */
-                    <input type="checkbox"  className="choices" onClick="this.checked=!this.checked;" id = {groupIds[index]} value = {groupIds[index]} checked={groupBools[index]}/>
-                    :
-                    <input type="checkbox"  className="choices" onClick="this.checked=!this.checked;" id = {groupIds[index]} value = {groupIds[index]}/>
-                  }
-                  <ChooseGroupItem groupId={groupIds[index]} />
-                </li>
+                
+                <div className="row no-gutters">
+                  <div className="col-2-10"></div>
+                  <div className="col-1-10">
+                    <li key={index} style={{ margin: "2rem 0" }}>
+                      {
+                        groupBools !== undefined ? /* controlla se l'opzione del gruppo deve essere marcata, questo serve se stai creando un nuovo account o lo stai aggiungendo/rimuovendo da un gruppo dopo */
+                        <input type="checkbox"  className="choices horizontalCenter" onClick="this.checked=!this.checked;" id = {groupIds[index]} value = {groupIds[index]} checked={groupBools[index] }/>
+                        : 
+                        <input type="checkbox"  className="choices horizontalCenter" onClick="this.checked=!this.checked;" id = {groupIds[index]} value = {groupIds[index]}/>
+                      }
+                    <br/>
+                    </li>
+                    
+                  </div>
+                  <div className="col-5-10">
+                    <ChooseGroupItem groupId={groupIds[index]}  />
+                  </div>
+                </div>
+                
               ))}
             </LazyLoad>
           );

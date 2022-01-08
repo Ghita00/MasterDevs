@@ -142,7 +142,32 @@ class ActivityScreen extends React.Component {
       showChildren: false,
       groupId,
       activityId,
+      partecipation: false,
+      verified: false
     };
+  }
+
+   /* funzione che verifica nel database il permesso di modificare le partecipazioni */
+   getRights = (id) => {
+    axios
+    .get(`/api/childrenProfile/rights/${id}/getRights`)
+    .then((response) => {
+      this.setState({ partecipation: response.data.partecipation})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
+  }
+  /* funzione che verifica se l'account è di un adulto */
+  getProfile = (user_id) => {
+    axios
+    .get(`/api/users/${user_id}/checkchildren`)
+    .then((response) => {
+      this.setState({verified: response.data !== null})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
   }
 
   async componentDidMount() {
@@ -200,6 +225,8 @@ class ActivityScreen extends React.Component {
     const userIsParent = await isParent(userId, activity.creator_id);
     const userCanEdit = userIsAdmin || userIsCreator || userIsParent;
     this.setState({ activity, fetchedActivityData: true, userCanEdit });
+    this.getRights(userId);
+    this.getProfile(userId);
   }
 
   handleRedirect = (suspended, child_id) => {
@@ -550,6 +577,8 @@ class ActivityScreen extends React.Component {
             {this.renderParticipants("children")}
           </div>
         </div>
+        
+        {(this.state.verified || this.state.partecipation) &&(
         <Fab
           color="primary"
           aria-label="Add"
@@ -558,6 +587,7 @@ class ActivityScreen extends React.Component {
         >
           <i className="fas fa-plus" />
         </Fab>
+        )}
         <TimeslotsList dates={activity.dates} timeslots={activity.timeslots} />
       </React.Fragment>
     ) : (

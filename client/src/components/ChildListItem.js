@@ -70,7 +70,7 @@ class ChildListItem extends React.Component {
                 className="center"
               />
             </div>
-            <div className="col-7-10">
+            <div className="col-3-10">
               <div
                 role="button"
                 tabIndex={-42}
@@ -85,45 +85,60 @@ class ChildListItem extends React.Component {
                 <h1>
                   {`${moment().diff(child.birthdate, "years")} ${texts.age}`}
                 </h1>
-                <h2>{texts[child.gender]}</h2>
+                
+                <h2>{texts[child.gender] === undefined ? "Bambin*" : texts[child.gender] }</h2>
               </div>
             </div>
-            {this.state.verified &&
-              ( 
-                <img onClick={function() {
-                    history.push({
-                      pathname: route+'/groups',
-                      user_id: userId,
-                      child_id: childId
-                    })
-                  }} 
-                  src={Images.couple} width={'60'} height={'60'} align="right" vertical-align="middle" alt="birthday icon"/>
-              )
-            } 
-            <div>
-              {/*TODO */ }
-              {!this.state.verified &&
-              (
-                <img src={Images.babyFace} width={'60'} height={'60'} align="right" vertical-align="middle" alt="conversion button"
-                      onClick={() => history.push({
-                        pathname: `/profiles/${userId}/children/create/profile`,
-                        info: [
-                          child.file,
-                          child.image,
-                          child.given_name,
-                          child.family_name,
-                          child.gender,
-                          child.background,
-                          child.other_info,
-                          child.special_needs,
-                          child.allergies,
-                          child.birthdate,
-                          childId
-                        ]
-                      })}
-                />
-              )
-            } 
+            <div className="col-2-10">
+              {this.state.verified &&
+                ( 
+                  <img onClick={function() {
+                      history.push({
+                        pathname: route+'/groups',
+                        user_id: userId,
+                        child_id: childId
+                      })
+                    }} 
+                    
+                    src={/*cambia icona*/ Images.couple} 
+                    width={'60'} 
+                    height={'60'}  
+                    align="right" 
+                    vertical-align="middle"             
+                    alt="birthday icon"/>
+                )
+              } 
+              <div>
+                {/*TODO cambia icona*/ }
+                {!this.state.verified &&
+                (
+                  <img 
+                    src={Images.babyFace} 
+                    width={'60'} 
+                    height={'60'} 
+                    align="right" 
+                    vertical-align="middle" 
+                    alt="conversion button"
+                        onClick={() => history.push({
+                          pathname: `/profiles/${userId}/children/create/profile`,
+                          info: [
+                            child.file,
+                            child.image,
+                            child.given_name,
+                            child.family_name,
+                            child.gender,
+                            child.background,
+                            child.other_info,
+                            child.special_needs,
+                            child.allergies,
+                            child.birthdate,
+                            childId
+                          ]
+                        })}
+                  />
+                )
+              } 
+              </div>
             </div>
           </React.Fragment>
         ) : (

@@ -80,8 +80,16 @@ class CreateChildProfileScreen extends React.Component {
     const { myGroups } = this.state;
     const texts = Texts[language].myFamiliesShareScreen;
     return (
-      <div className="myGroupsContainer">
-        <div className="myGroupsContainerHeader">{texts.myGroups} </div>
+      <div className="myGroupsContainer ">
+        <div className="myGroupsContainerHeader ">
+          <div className="row no-gutters">
+            <div className="col-2-10"></div>
+            <div className="col-2-10">
+              <h1 className="center">{texts.myGroups}</h1>
+            </div>
+            <div className="col-2-10"></div>
+          </div>
+        </div>
         {myGroups.length > 0 ? (
           <ChooseGroupList groupIds={myGroups} />
         ) : (
@@ -221,7 +229,10 @@ class CreateChildProfileScreen extends React.Component {
       formClass.push("was-validated");
     }
     return (
-      <form
+      
+        
+          
+        <form
         ref={(form) => {
           this.formEl = form;
         }}
@@ -229,8 +240,41 @@ class CreateChildProfileScreen extends React.Component {
         className={formClass}
         noValidate
       >
-        
-        
+        <div id="groupMembersHeaderContainer">
+          <div className="row no-gutters" id="profileHeaderOptions">
+            <div className="col-2-10">
+                <button
+                  type="button"
+                  className="transparentButton center"
+                  onClick={() => { const { history } = this.props;
+                  if (history.length === 1) {
+                    history.replace("/myfamiliesshare");
+                  } else {
+                    history.goBack();
+                  }
+                }}
+                >
+                  <i className="fas fa-arrow-left" />
+                </button>
+            </div>
+            <div className="col-6-10">
+              <h1 className="center">Dati account</h1>
+            </div>
+            <div className="col-2-10">
+              
+              <button
+                type="submit"
+                className="transparentButton center"
+              >
+                <i className="fas fa-check" />
+              </button>
+            </div>
+          </div>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        {/*todo non sappaiamo gestire gli span al centro*/}
         <input
           type="email"
           placeholder={texts.email}
@@ -262,21 +306,14 @@ class CreateChildProfileScreen extends React.Component {
           required
           value={passwordConfirm}
         />
-        <span>{texts.passwordPrompt}</span>
         <span className="invalid-feedback" id="passwordConfirmErr" />
-        {this.renderGroupSection()}
         <div className="row no-gutters">
-          <input
-            type="submit"
-            style={
-              this.filledInput()
-                ? { backgroundColor: "#00838F", color: "#ffffff" }
-                : {}
-            }
-            className="signUpConfirmButton horizontalCenter"
-            value={texts.confirm}
-          />
+          <div className="col-3-10"></div>
+          <div className="col-4-10">{texts.passwordPrompt}</div>
         </div>
+
+        {this.renderGroupSection()}
+        
       </form>
     );
   }

@@ -458,9 +458,14 @@ class MyFamiliesShareHeader extends React.Component {
               <i className="fas fa-align-justify" />
             </button>
           </div>
-          <div className="col-6-10">
-            <h1 onClick={this.sendMeNotification}>{texts.header}</h1>
+
+          <div className="col-5-10">
+            <h1 
+              className="center"
+              onClick={this.sendMeNotification}>{texts.header}
+            </h1> 
           </div>
+          
           {/*notificazine delle attivita proposte dai figli e non ancora accettate */}
           {this.state.verified && ( 
             <div className="col-1-10">
@@ -473,14 +478,15 @@ class MyFamiliesShareHeader extends React.Component {
                   <span className="invites-badge">{pendingChildRequest}</span>
                 )}
                 <img                  
-                  src={Images.babyFaceWhite}
+                  //todo da cmbiare icona, bimbo bianco
+                  src={Images.familyShareLogo} 
                   className="activityInfoImage"
                   alt="baby face icon"  
                   />
               </button>
             </div>)}
-          {this.state.verified && (
-            
+
+          {this.state.verified && ( 
           <div className="col-1-10">
             <button
               type="button"
@@ -511,7 +517,7 @@ class MyFamiliesShareHeader extends React.Component {
                     {pendingNotifications}
                   </span>
                 ) : (
-                  <div />
+                  <div></div>
                 )}
               </i>
             </button>
