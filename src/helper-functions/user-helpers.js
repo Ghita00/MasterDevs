@@ -37,7 +37,9 @@ const getUsersGroupEvents = (calId, userId, usersChildrenIds) =>
             usersChildrenIds.filter(
               childId => childrenIds.indexOf(childId) !== -1
             ).length > 0
-          if (userFlag || childFlag) {
+          /* controlla che sia un bambino utente */
+          const childUserFlag = childrenIds.indexOf(userId) !== -1
+          if (userFlag || childFlag || childUserFlag) {
             return true
           } else {
             return false
