@@ -85,8 +85,7 @@ class ChildListItem extends React.Component {
                 <h1>
                   {`${moment().diff(child.birthdate, "years")} ${texts.age}`}
                 </h1>
-                
-                <h2>{texts[child.gender] === undefined ? "Bambin*" : texts[child.gender] }</h2>
+                <h2>{texts[child.gender] === undefined ? texts.undefined : texts[child.gender] }</h2>
               </div>
             </div>
             <div className="col-2-10">
@@ -100,7 +99,7 @@ class ChildListItem extends React.Component {
                       })
                     }} 
                     
-                    src={/*cambia icona*/ Images.couple} 
+                    src={/* todo cambia icona*/ Images.couple} 
                     width={'60'} 
                     height={'60'}  
                     align="right" 

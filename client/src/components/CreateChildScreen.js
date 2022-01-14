@@ -314,7 +314,11 @@ class CreateChildScreen extends React.Component {
                 className="transparentButton center"
                 onClick={this.handleSave}
               > 
+              {this.props.location.bool === true ? (
                 <i className="fas fa-arrow-right" />
+              ) : (
+                <i className="fas fa-check" />
+              )}              
               </button>
             </div>
           </div>

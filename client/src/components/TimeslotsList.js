@@ -179,6 +179,7 @@ class TimeslotsList extends React.Component {
   };
 
   render() {
+    console.log('hei')
     const { language } = this.props;
     const { filterDrawerVisible, filter } = this.state;
     const texts = Texts[language].timeslotsList;

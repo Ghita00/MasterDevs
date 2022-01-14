@@ -101,7 +101,7 @@ class AnnouncementBar extends React.Component {
         this.setState({ message: "", photos: [] });
       }
     }
-    else{
+    else{ // togliere
       alert("non puoi scrivere");
     }
   };

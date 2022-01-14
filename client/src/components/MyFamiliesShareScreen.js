@@ -97,7 +97,7 @@ class MyFamiliesShareScreen extends React.Component {
     const pendingInvites = groups.filter(
       (group) => group.group_accepted && !group.user_accepted
     ).length;
-    // 
+    //?
     const pendingChildRequest = await getMyPendingChildRequest(userId);
     const unreadNotifications = await getMyUnreadNotifications(userId);
     let myTimeslots = await getMyTimeslots(userId);

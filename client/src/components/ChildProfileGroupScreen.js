@@ -2,6 +2,7 @@ import React from "react";
 import Texts from "../Constants/Texts";
 import axios from "axios";
 import ChooseGroupList from "./ChooseGroupList";
+import withLanguage from "./LanguageContext";
 
 
 
@@ -35,6 +36,13 @@ class ChildProfileGroupScreen extends React.Component{
       })
       
   };
+  handleGoBack = (history) => {
+    if (history.length === 1) {
+      history.replace("/myfamiliesshare");
+    } else {
+      history.goBack();
+    }
+  };
   /* salva i nuovi gruppi del bambino/a */
   handleSave = ()=>{
     const groups = document.getElementsByClassName('choices')
@@ -49,7 +57,7 @@ class ChildProfileGroupScreen extends React.Component{
         .delete(`/api/groups/${groups[i].id}/members/${childId}`)
       }
     }
-    history.goBack();
+    this.handleGoBack(history);
     
   }
 
@@ -84,7 +92,7 @@ class ChildProfileGroupScreen extends React.Component{
   renderGroupSection = () => {
     const { language, history } = this.props;
     const {groups, child_groups} = this.state;
-    const texts = Texts['it'].myFamiliesShareScreen;
+    const texts = Texts[language].myFamiliesShareScreen;
     return (
       <div>
         <div id="groupMembersHeaderContainer">
@@ -115,8 +123,7 @@ class ChildProfileGroupScreen extends React.Component{
         <br/>
         <br/>
         <div className="myGroupsContainer">
-          {/*todo bimbo serio che sta in gruppo non appare nulla :(*/}
-          {console.log(groups)}
+          
           {groups.length > 0 ? (
             <ChooseGroupList 
               groupIds={groups} 
@@ -138,4 +145,4 @@ class ChildProfileGroupScreen extends React.Component{
   }
 }
 
-export default ChildProfileGroupScreen;
+export default withLanguage(ChildProfileGroupScreen);

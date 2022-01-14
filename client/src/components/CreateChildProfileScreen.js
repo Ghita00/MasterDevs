@@ -142,7 +142,7 @@ class CreateChildProfileScreen extends React.Component {
   };
   /** TODO */
   submit = () => {
-    const { history, dispatch } = this.props;
+    const { history } = this.props;
     const info = this.state;
     const profileId = this.props.match.params.profileId;
 
@@ -324,7 +324,6 @@ CreateChildProfileScreen.propTypes = {
   history: PropTypes.object,
   error: PropTypes.bool,
   enqueueSnackbar: PropTypes.func,
-  dispatch: PropTypes.func,
 };
 
 function mapStateToProps(state) {

@@ -3,6 +3,7 @@ import axios from "axios";
 import Log from "./Log";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
+import Texts from "../Constants/Texts";
 
 const theme = createMuiTheme({
   palette: {
@@ -52,6 +53,8 @@ class ChangeRights extends React.Component {
 
   render() {
     const { language } = this.props;
+    console.log(language);
+    const texts = Texts[language].editChildProfileScreen;
      /* cambia il diritto del bambino di creare un'attività nello state */
     const switchActivity = ()=> { this.setState({activity: !this.state.activity}) }
     /* cambia il diritto del bambino di scrivere in chat nello state */
@@ -67,7 +70,8 @@ class ChangeRights extends React.Component {
           <div className="row no-gutters">
             <div className="col-10-10">
               <div className="center">
-                <h1>Permessi</h1>
+                
+                <h1>{ texts.permission }</h1>
               </div>
             </div>
             <div className="col-1-10"></div>

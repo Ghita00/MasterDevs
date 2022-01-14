@@ -107,7 +107,7 @@ class Reply extends React.Component {
                     className="transparentButton center"
                     onClick={() => this.handleConfirmDialogOpen(reply.reply_id)}
                   >
-                    <i className="fas fa-times" />
+                  <i className="fas fa-times" />
                   </button>
                 )}
               </div>

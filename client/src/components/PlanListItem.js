@@ -125,10 +125,10 @@ class PlanListItem extends React.Component {
             className="col-2-10"
             style={{ borderBottom: "1px solid rgba(0,0,0,0.1)" }}
           >
-            <i
-              style={{ fontSize: "2rem" }}
-              className="fas fa-chevron-right center"
-            />
+          <i
+            style={{ fontSize: "2rem" }}
+            className="fas fa-chevron-right center"
+          />
           </div>
         </div>
         <ParticipantsDialog

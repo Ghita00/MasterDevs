@@ -62,7 +62,7 @@ class ProfileChildren extends React.Component {
     history.push({
       pathname: `${pathname}/create`,
       bool: false
-    });//cambiato
+    });//?cambiato
   };
 
   showOptions(){
@@ -129,7 +129,7 @@ class ProfileChildren extends React.Component {
                 alignItems: "center",
               }}
             >
-              <div className=" activitiesFabLabel"><div>Bimbo</div></div>
+              <div className=" activitiesFabLabel"><div>{texts.child}</div></div>
               
               <Fab
                 color="primary"
@@ -137,7 +137,7 @@ class ProfileChildren extends React.Component {
                 className={"Child"}
                 onClick={this.addChild}
               >
-                <i className="fas fa-child" />
+              <i className="fas fa-child" />
               </Fab>
             </div>
             <div
@@ -150,14 +150,14 @@ class ProfileChildren extends React.Component {
                 alignItems: "center",
               }}
             >
-              <div className=" activitiesFabLabel"><div>Bimbo utente</div></div>
+              <div className=" activitiesFabLabel"><div>{texts.childUser}</div></div>
               <Fab
                 color="primary"
                 aria-label="Add"
                 className={"ChildP"}
                 onClick={this.addChildProfile}
               >
-                <i className={"fas fa-plus"} />
+              <i className={"fas fa-plus"} />
               </Fab>
             </div>
           </React.Fragment>

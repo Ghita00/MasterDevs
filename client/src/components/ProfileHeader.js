@@ -74,7 +74,7 @@ class ProfileHeader extends React.Component {
       history.push(newPath);
     } else if(this.state.manage){ /* questo controllo si accerta che l'utente bambino possa modificare le informazioni */
       history.push(`${parentPath}/children/${userId}/edit`);
-    } else {
+    } else { //togliere
       alert("non puoi modificare")
     }
   };
@@ -201,7 +201,7 @@ class ProfileHeader extends React.Component {
           this.handleConfirmDialogOpen("delete");
         },
       },
-      // {
+      //? {
       //   label: texts.suspend,
       //   style: "optionsModalButton",
       //   handle: () => {

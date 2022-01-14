@@ -135,7 +135,7 @@ class GroupActivities extends React.Component {
       } = this.state;
       const path = `/groups/${groupId}/${type}/create`;
       history.push(path);
-    }else {
+    }else { // togliere 
       alert("non puoi fare attività")
     }
 

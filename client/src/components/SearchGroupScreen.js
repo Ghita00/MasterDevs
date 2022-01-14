@@ -115,7 +115,7 @@ class SearchGroupScreen extends React.Component {
                 className="transparentButton center"
                 onClick={this.handleSearchVisibility}
               >
-                <i className="fas fa-search" />
+              <i className="fas fa-search" />
               </button>
             </div>
           </div>

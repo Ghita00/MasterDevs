@@ -280,7 +280,7 @@ class TimeslotScreen extends React.Component {
     const route = `${pathname}/edit`;
     if(this.state.verified || this.state.partecipation){
       history.push(route);
-    }else{
+    }else{// togliere
       alert('non ci sta');
     }
   };
@@ -357,10 +357,7 @@ class TimeslotScreen extends React.Component {
         .catch((error) => {
           Log.error(error);
         });
-    } else {
-      alert('non puoi modificare le partecipazioni')
-    }
-    
+      }
   };
 
   handleConfirmDialogClose = (choice) => {

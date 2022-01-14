@@ -509,10 +509,14 @@ router.delete('/:groupId/members/:memberId', async (req, res, next) => {
     group_accepted: true,
     user_accepted: true
   })
+  const isParentUser = await Parent.findOne({
+    parent_id: user_id,
+    child_id: member_id
+  })
   if (!edittingUser) {
     return res.status(401).send('Unauthorized')
   }
-  if (!edittingUser.admin) {
+  if (!edittingUser.admin && !isParentUser) {
     return res.status(401).send('Unauthorized')
   }
   try {
@@ -559,6 +563,7 @@ router.delete('/:groupId/members/:memberId', async (req, res, next) => {
 
     await Member.deleteOne({ group_id, user_id: member_id })
     await nh.removeMemberNotification(member_id, group_id)
+    await Member.deleteMany({ group_id, user_id: { $in: usersChildrenIds } })
     res.status(200).send('User removed from group')
   } catch (error) {
     next(error)

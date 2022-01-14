@@ -361,8 +361,7 @@ class PendingRequestsScreen extends React.Component {
     } else if (requests_type === "group_activities"){
       backNavTitle = texts.activities;
     } else{
-      // backNavTitle = texts.child_activities;
-      backNavTitle = "Proposte bambini"
+      backNavTitle = texts.childSuggestion
     }
     
     const rowStyle = { height: "7rem" };

@@ -99,7 +99,7 @@ class ProfileFramily extends React.Component {
             id="addFramilyThumbnail"
             onClick={this.addFramilyMember}
           >
-            <i className="fas fa-user-plus" />
+          <i className="fas fa-user-plus" />
           </button>
         )}
       </div>

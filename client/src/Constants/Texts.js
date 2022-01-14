@@ -182,6 +182,8 @@ const en = {
   profileChildren: {
     addChildPrompt:
       "You haven't added any children yet. Click the child icon to add a new child",
+    child:"child", 
+    childUser:"user child",
   },
   myCalendarScreen: {
     backNavTitle: "My Calendar",
@@ -1065,6 +1067,7 @@ const en = {
     confirmDialogTitle: "Are you sure you want to delete this?",
   },
   childListItem: {
+    undefined:"child", 
     boy: "Boy",
     girl: "Girl",
     age: "years old",
@@ -1105,6 +1108,7 @@ const en = {
     file: "Choose File",
     unspecified: "Unspecified",
     requiredErrr: "Please fill out this field.",
+    permission: "Permission",
   },
   createChildScreen: {
     backNavTitle: "Add child",
@@ -1293,6 +1297,7 @@ const en = {
     activities: "Pending Activities",
     confirm: "CONFIRM",
     delete: "DELETE",
+    childSuggestion: "child suggestions",
   },
   forgotPasswordScreen: {
     prompt: "Please enter your email to receive a link to change your password",
@@ -1504,6 +1509,8 @@ const nl = {
   profileChildren: {
     addChildPrompt:
       "Je hebt nog geen kinderen toegevoegd. Klik op het kindpictogram om een ​​nieuw kind toe te voegen",
+    child:"baby", 
+    childUser:"kind gebruiker",
   },
   myCalendarScreen: {
     backNavTitle: "Mijn Kalender",
@@ -2361,7 +2368,7 @@ const nl = {
   announcementHeader: {
     confirmDialogTitle: "Weet je zeker dat je dit wilt verwijderen?",
   },
-  childListItem: { boy: "Jongen", girl: "Meisje", age: "jaar oud" },
+  childListItem: {undefined:"kinderen", boy: "Jongen", girl: "Meisje", age: "jaar oud" },
   childProfileHeader: {
     delete: "verwijder kind",
     confirmDialogTitle: "Ben je zeker dat je je kind wilt verwijderen",
@@ -2397,6 +2404,7 @@ const nl = {
     file: "Kies een bestand",
     unspecified: "Ongedefinieerd",
     requiredErr: "Vul alstublieft dit veld in.",
+    permission: "Toestemming"
   },
   createChildScreen: {
     backNavTitle: "Voeg kind toe",
@@ -2434,6 +2442,7 @@ const nl = {
   createPlanScreen: { backNavTitle: "Nieuwe Plan" },
   createActivityStepper: {
     pendingMessage: "De activiteit wacht op bevestiging van een beheerder",
+    pendingParentMessage: "De activiteit wacht op bevestiging van je ouder",
     continue: "Ga verder",
     cancel: "Annuleer",
     finish: "Maak aan",
@@ -2577,6 +2586,7 @@ const nl = {
     activities: "Activiteit aanvragen",
     confirm: "Bevestig",
     delete: "Verwijder",
+    childSuggestion: "voorstellen voor kinderen",
   },
   forgotPasswordScreen: {
     prompt:
@@ -2783,6 +2793,8 @@ const it = {
   profileChildren: {
     addChildPrompt:
       "Non hai ancora aggiunto figli. Fare clic sull'icona figlio per aggiungere un nuovo figlio",
+    child:"bimbo", 
+    childUser:"bimbo utente",
   },
   myCalendarScreen: {
     backNavTitle: "Il mio calendario",
@@ -3642,6 +3654,7 @@ const it = {
     confirmDialogTitle: "Confermi l'eliminazione?",
   },
   childListItem: {
+    undefined: "bambin*",
     boy: "Bambino",
     girl: "Bambina",
     age: "anni",
@@ -3663,6 +3676,7 @@ const it = {
     specialNeeds: "Bisogni speciali",
     addAdditional: "AGGIUNGI",
     addParent: "AGGIUNGI GENITORE",
+    
   },
   editChildProfileScreen: {
     backNavTitle: "Modifica profilo",
@@ -3682,6 +3696,7 @@ const it = {
     file: "Scegli file",
     unspecified: "Non specificato",
     requiredErr: "Perfavore compila questo campo.",
+    permission: "Permessi",
   },
   createChildScreen: {
     backNavTitle: "Aggiungi un/a bambino/a",
@@ -3706,6 +3721,7 @@ const it = {
       "Si prega di accettare i termini d'uso e l'informativa sulla provacy per procedere",
     unspecified: "Non specificato",
     requiredErr: "Perfavore compila questo campo.",
+    
   },
   additionalInfoScreen: {
     backNavTitle: "Informazioni",
@@ -3870,6 +3886,7 @@ const it = {
     invites: "Inviti in sospeso",
     confirm: "CONFERMA",
     delete: "ELIMINA",
+    childSuggestion: "proposte bambini",
   },
   forgotPasswordScreen: {
     prompt:
@@ -4084,6 +4101,8 @@ const el = {
   profileChildren: {
     addChildPrompt:
       "Δεν έχετε προσθέσει ακόμη παιδιά. Κάντε κλικ στο εικονίδιο για να προσθέσετε ένα νέο παιδί",
+    child:"μωρό", 
+    childUser:"παιδί χρήστης ",
   },
   myCalendarScreen: {
     backNavTitle: "Το ημερολόγιο μου",
@@ -4942,7 +4961,7 @@ const el = {
   announcementHeader: {
     confirmDialogTitle: "Είστε σίγουροι ότι θέλετε να το διαγράψετε;",
   },
-  childListItem: { boy: "Αγόρι", girl: "Κορίτσι", age: "χρονών" },
+  childListItem: { undefined: "παιδιά", boy: "Αγόρι", girl: "Κορίτσι", age: "χρονών" },
   childProfileHeader: {
     delete: "Διαγραφή παιδιού",
     confirmDialogTitle: "Είστε σίγουροι ότι θέλετε να διαγράψετε το παιδί;",
@@ -4979,6 +4998,7 @@ const el = {
     file: "Επιλέξτε αρχείο",
     unspecified: "Απροσδιόριστο",
     requiredErr: "Παρακαλούμε συμπληρώσετε αυτό το πεδίο.",
+    permission: "άδειες",
   },
   createChildScreen: {
     backNavTitle: "Προσθήκη παιδιού",
@@ -5017,6 +5037,7 @@ const el = {
   createActivityStepper: {
     pendingMessage:
       "Η δραστηριότητα επίκειται επιβεβαίωσης από κάποιον διαχειριστή",
+    pendingParentMessage: "Η δραστηριότητα περιμένει επιβεβαίωση από τον γονέα σας",
     continue: "Συνέχεια",
     cancel: "Ακύρωση",
     finish: "Δημιουργία",
@@ -5162,6 +5183,7 @@ const el = {
     activities: "Εκκρεμείς δραστηριότητες",
     confirm: "ΕΠΙΒΕΒΑΙΩΣΗ",
     delete: "ΔΙΑΓΡΑΦΗ",
+    childSuggestion: "προτάσεις για παιδιά",
   },
   forgotPasswordScreen: {
     prompt:
@@ -5380,6 +5402,8 @@ const hu = {
   profileChildren: {
     addChildPrompt:
       "Még nem adott meg gyermeket. Kattintson a gyermek ikonra új gyermek hozzáadásáért",
+    child:"baba", 
+    childUser:"gyermek felhasználó",
   },
   myCalendarScreen: {
     backNavTitle: "Eseménynaptáram",
@@ -6273,6 +6297,7 @@ const hu = {
     confirmDialogTitle: "Biztosan törölni szeretné ezt?",
   },
   childListItem: {
+    undefined:"gyermekek",
     boy: "Fiú",
     girl: "Lány",
     age: "Éves",
@@ -6313,6 +6338,7 @@ const hu = {
     file: "File kiválasztása",
     unspecified: "Meghatározhatatlan",
     requiredErrr: "Kérjük, töltse ki ezt a mezőt",
+    permission: "Engedélyeket",
   },
   createChildScreen: {
     backNavTitle: "Gyermek hozzáadása",
@@ -6351,6 +6377,7 @@ const hu = {
   },
   createActivityStepper: {
     pendingMessage: "A tevékenység a rendszergazda megerősítésétől függ",
+    pendingParentMessage: "A tevékenység a szülő megerősítésére vár",
     continue: "Folytatás",
     cancel: "Visszavonás",
     finish: "Létrehozás",
@@ -6495,6 +6522,7 @@ const hu = {
     activities: "Függőben lévő tevékenység",
     confirm: "Megerősítés",
     delete: "Törlés",
+    childSuggestion: "javaslatok gyerekeknek",
   },
   forgotPasswordScreen: {
     prompt:
@@ -6707,6 +6735,8 @@ const fr = {
   profileChildren: {
     addChildPrompt:
       "Vous n'avez pas encore ajouté d'enfants. Cliquez sur l'icône enfant pour ajouter un nouvel enfant",
+    child:"baby", 
+    childUser:"utilisateur enfant",
   },
   myCalendarScreen: {
     backNavTitle: "Mon calendrier",
@@ -7613,6 +7643,7 @@ const fr = {
     confirmDialogTitle: "Êtes-vous sûr de vouloir supprimer ceci ?",
   },
   childListItem: {
+    undefined:"enfants",
     boy: "Garçon",
     girl: "Fille",
     age: "ans",
@@ -7653,6 +7684,7 @@ const fr = {
     file: "Choisir un fichier",
     unspecified: "Non spécifié",
     requiredErrr: "Veuillez remplir ce champ.",
+    permission: "Autorisations",
   },
   createChildScreen: {
     backNavTitle: "Ajouter un enfant",
@@ -7692,6 +7724,7 @@ const fr = {
   createActivityStepper: {
     pendingMessage:
       "L'activité est en attente de confirmation de la part d'un administrateur",
+    pendingParentMessage: "L'activité est en attente de confirmation de votre parent",
     continue: "Continuer",
     cancel: "Annuler",
     finish: "Créer",
@@ -7841,6 +7874,7 @@ const fr = {
     activities: "Activités en attente",
     confirm: "CONFIRMER",
     delete: "SUPPRIMER",
+    childSuggestion: "propositions d'enfants",
   },
   forgotPasswordScreen: {
     prompt:

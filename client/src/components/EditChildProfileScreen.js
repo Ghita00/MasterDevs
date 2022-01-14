@@ -492,7 +492,7 @@ class EditChildProfileScreen extends React.Component {
 
         <div>
         {(auth && this.state.isParent && /* permette solo al genitore di modificare i permessi dei figli */
-        <ChangeRights id={this.props.match.params.childId}/>)}
+        <ChangeRights language={this.props.language}  id={this.props.match.params.childId}/>)}
         </div>
 
       </React.Fragment>

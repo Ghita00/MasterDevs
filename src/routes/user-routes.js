@@ -730,6 +730,7 @@ router.delete('/:userId/groups/:groupId', async (req, res, next) => {
       calendar.events.patch({ calendarId: group.calendar_id, eventId: event.id, resource: timeslotPatch })
     }))
     await Member.deleteOne({ user_id, group_id })
+    await Member.deleteMany({ group_id, user_id: { $in: usersChildrenIds } })
     res.status(200).send('User left group')
   } catch (error) {
     next(error)
