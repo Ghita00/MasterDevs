@@ -164,17 +164,17 @@ router.post('/', async (req, res, next) => {
     next(err)
   }
 })
-/** TODO marti */
+/** API per l'autenticazione di un'utente */
 router.post('/authenticate/email', async (req, res, next) => {
   const {
     email, password, deviceToken, language, origin
   } = req.body
   try {
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email }) /* recupero delle informazioni utente tramite la mail */
     if (!user) {
       return res.status(401).send('Authentication failure')
     }
-    const passwordMatch = await user.comparePassword(password)
+    const passwordMatch = await user.comparePassword(password) /* confronto della password inserita con quella associata all'account */
     if (!passwordMatch) {
       return res.status(401).send('Authentication failure')
     }
@@ -190,7 +190,7 @@ router.post('/authenticate/email', async (req, res, next) => {
         })
       }
     }
-
+    /* recupera il profilo se l'account è genitore */
     if (user.role === 'parent') {
       const profile = await Profile.findOne({ user_id: user.user_id })
         .populate('image')
@@ -225,7 +225,7 @@ router.post('/authenticate/email', async (req, res, next) => {
       }
       await user.save()
       res.json(response)
-    } else if (user.role === 'child') {
+    } else if (user.role === 'child') { /* recupera il profilo se l'account è figlio */
       const child = await Child.findOne({ child_id: user.user_id })
         .populate('image')
         .lean()

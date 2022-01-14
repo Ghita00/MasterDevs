@@ -140,7 +140,7 @@ class CreateChildProfileScreen extends React.Component {
 
     return true;
   };
-  /** TODO */
+  /** funzione di inserimento nel database dei dati recuperati per la conversione o creazione di un bambino utente */
   submit = () => {
     const { history } = this.props;
     const info = this.state;

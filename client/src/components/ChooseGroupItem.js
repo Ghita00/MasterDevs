@@ -49,7 +49,7 @@ class ChooseGroupItem extends React.Component {
     );
     this.setState({ fetchedGroupData: true, group });
   }
- /* TODO */
+ /* reindirizza alla pagine che elenca le attività collegate al gruppo considerato */
   handleNavigation = () => {
     const { history } = this.props;
     const { group } = this.state;
