@@ -107,7 +107,7 @@ class ChildProfileGroupScreen extends React.Component{
                 </button>
             </div>
             <div className="col-6-10">
-              <h1 className="center">I miei gruppi</h1>
+              <h1 className="center">{texts.myGroups}</h1>
             </div>
             <div className="col-2-10">
               <button

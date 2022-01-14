@@ -99,7 +99,7 @@ class ChildListItem extends React.Component {
                       })
                     }} 
                     
-                    src={/* todo cambia icona*/ Images.couple} 
+                    src={Images.childProfile} 
                     width={'60'} 
                     height={'60'}  
                     align="right" 
@@ -108,11 +108,10 @@ class ChildListItem extends React.Component {
                 )
               } 
               <div>
-                {/*TODO cambia icona*/ }
                 {!this.state.verified &&
                 (
                   <img 
-                    src={Images.babyFace} 
+                    src={Images.childSimple} 
                     width={'60'} 
                     height={'60'} 
                     align="right" 

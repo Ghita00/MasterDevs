@@ -274,7 +274,6 @@ class CreateChildProfileScreen extends React.Component {
         <br/>
         <br/>
         <br/>
-        {/*todo non sappaiamo gestire gli span al centro*/}
         <input
           type="email"
           placeholder={texts.email}

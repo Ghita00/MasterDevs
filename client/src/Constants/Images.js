@@ -59,5 +59,8 @@ const Images = {
   thumbtackRegular: require("../images/thumbtackRegular.png"),
   euroSignRegular: require("../images/euroSignRegular.png"),
   promptImage: require("../images/promptImage.png"),
+  childProfile: require("../images/colored.png"),
+  childSimple: require("../images/notColored.png"),
+  childActivity: require("../images/activity.png"),
 };
 export default Images;

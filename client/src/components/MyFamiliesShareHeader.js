@@ -478,8 +478,7 @@ class MyFamiliesShareHeader extends React.Component {
                   <span className="invites-badge">{pendingChildRequest}</span>
                 )}
                 <img                  
-                  //todo da cmbiare icona, bimbo bianco
-                  src={Images.familyShareLogo} 
+                  src={Images.childActivity} 
                   className="activityInfoImage"
                   alt="baby face icon"  
                   />

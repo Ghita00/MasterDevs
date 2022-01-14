@@ -3886,7 +3886,7 @@ const it = {
     invites: "Inviti in sospeso",
     confirm: "CONFERMA",
     delete: "ELIMINA",
-    childSuggestion: "proposte bambini",
+    childSuggestion: "Proposte bambini",
   },
   forgotPasswordScreen: {
     prompt:
@@ -6522,7 +6522,7 @@ const hu = {
     activities: "Függőben lévő tevékenység",
     confirm: "Megerősítés",
     delete: "Törlés",
-    childSuggestion: "javaslatok gyerekeknek",
+    childSuggestion: "Javaslatok gyerekeknek",
   },
   forgotPasswordScreen: {
     prompt:
@@ -7874,7 +7874,7 @@ const fr = {
     activities: "Activités en attente",
     confirm: "CONFIRMER",
     delete: "SUPPRIMER",
-    childSuggestion: "propositions d'enfants",
+    childSuggestion: "Propositions d'enfants",
   },
   forgotPasswordScreen: {
     prompt:

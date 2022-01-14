@@ -140,7 +140,11 @@ class ProfileHeader extends React.Component {
 
   handleBackNav = () => {
     const { history } = this.props;
-    history.goBack();
+    if (document.referrer.includes("create")) {
+      history.replace("/myfamiliesshare");
+    } else {
+      history.goBack();
+    }
   };
 
   handleConfirmDialogOpen = (action) => {
@@ -223,12 +227,7 @@ class ProfileHeader extends React.Component {
             <button
               type="button"
               className="transparentButton center"
-              onClick={() => {if (history.length === 1) {
-                                  history.replace("/myfamiliesshare");
-                                } else {
-                                  history.goBack();
-                                }}
-              }
+              onClick={this.handleBackNav}
             >
               <i className="fas fa-arrow-left" />
             </button>
