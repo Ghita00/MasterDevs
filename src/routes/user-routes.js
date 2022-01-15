@@ -515,6 +515,9 @@ router.delete('/:id', async (req, res, next) => {
     })
     await Parent.deleteMany({ parent_id: user_id })
     await Child.deleteMany({ child_id: { $in: childDeleteIds } })
+    await User.deleteMany({ user_id: { $in: childDeleteIds } })
+    await ChildProfile.deleteMany({ child_user_id: { $in: childDeleteIds } })
+    await Member.deleteMany({ user_id: { $in: childDeleteIds } })
     await Image.deleteMany({ owner_id: { $in: childDeleteIds } })
     // await Framily.deleteMany({ user_id});
     // await Framily.deleteMany({ framily_id: user_id });
