@@ -145,7 +145,7 @@ class ChildProfileInfo extends React.Component {
             <div className="col-2-10">
               <img src={Images.couple} alt="birthday icon" />
             </div>
-            <div className="col-3-10">
+            <div className="col-8-10">
               {parents[0] ? (
                 <div>
                   <h1 onClick={() => this.handleRedirectToParent(parents[0])}>

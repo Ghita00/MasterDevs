@@ -480,7 +480,7 @@ class MyFamiliesShareHeader extends React.Component {
                 <img                  
                   src={Images.childActivity} 
                   className="activityInfoImage"
-                  alt="baby face icon"  
+                  alt="childActivity icon"  
                   />
               </button>
             </div>)}

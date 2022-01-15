@@ -59,15 +59,12 @@ class ChildContact extends React.Component {
               this.handleRedirect(profile.suspended, profile.child_id)
             }
           >
-            <h1>{`${profile.given_name} ${profile.family_name}`}</h1>
-            
-            
-            
+            <h1>{`${profile.given_name} ${profile.family_name}`}</h1> 
           </div>
         </div>
         <div>
         { this.state.verified && (
-          <img src={Images.couple} width={'60'} height={'60'} align="right" vertical-align="middle" alt="birthday icon"/>
+          <img src={Images.checkver} width={'40'} height={'40'} align="right" vertical-align="middle" alt="birthday icon"/>
         )}
         </div>
       </div>

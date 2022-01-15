@@ -62,5 +62,6 @@ const Images = {
   childProfile: require("../images/colored.png"),
   childSimple: require("../images/notColored.png"),
   childActivity: require("../images/activity.png"),
+  checkver: require("../images/checkver.png"),
 };
 export default Images;

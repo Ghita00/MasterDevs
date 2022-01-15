@@ -342,9 +342,9 @@ class CreateTimeslotModal extends React.Component {
                 <div className="col-2-10">
                   <img
                     style={{ opacity: 0.54 }}
-                    src={Images.babyFace}
+                    src={Images.childSimple}
                     className="center"
-                    alt="baby face icon"
+                    alt="childSimple icon"
                   />
                 </div>
                 <div className="col-6-10">

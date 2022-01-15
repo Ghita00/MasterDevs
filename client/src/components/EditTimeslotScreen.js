@@ -633,9 +633,9 @@ class EditTimeslotScreen extends React.Component {
             <div className="row no-gutters" style={rowStyle}>
               <div className="col-2-10">
                 <img
-                  src={Images.babyFace}
+                  src={Images.childSimple}
                   className="activityInfoImage"
-                  alt="baby face icon"
+                  alt="childSimple icon"
                 />
               </div>
               <div className="col-6-10">

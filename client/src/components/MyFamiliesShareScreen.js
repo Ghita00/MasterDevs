@@ -80,8 +80,20 @@ class MyFamiliesShareScreen extends React.Component {
       myTimeslots: [],
       myGroups: [],
       pendingInvites: 0,
-      pendingChildRequest:0
+      pendingChildRequest:0,
+      verified : false,
     };
+  }
+
+  getProfile = (id) => {
+    axios
+    .get(`/api/users/${id}/checkchildren`)
+    .then((response) => {
+      this.setState({verified: response.data !== null})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
   }
 
   async componentDidMount() {
@@ -126,6 +138,7 @@ class MyFamiliesShareScreen extends React.Component {
       pendingInvites,
       pendingChildRequest,
     });
+    this.getProfile(JSON.parse(localStorage.getItem("user")).id);
   }
 
   renderGroupSection = () => {
@@ -171,6 +184,8 @@ class MyFamiliesShareScreen extends React.Component {
     const { myGroups } = this.state;
     if (myGroups.length === 0) {
       return (
+        <React.Fragment>
+        {this.state.verified && (
         <div className="myPromptSection">
           <div className="myPromptActionsContainer">
             <button
@@ -194,6 +209,8 @@ class MyFamiliesShareScreen extends React.Component {
             alt="confetti icon"
           />
         </div>
+      )}
+      </React.Fragment>
       );
     }
     return null;

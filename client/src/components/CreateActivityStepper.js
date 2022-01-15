@@ -158,11 +158,24 @@ class CreateActivityStepper extends React.Component {
       },
       stepWasValidated: false,
       creating: false,
+      verified : false,
     };
+  }
+
+  getProfile = (id) => {
+    axios
+    .get(`/api/users/${id}/checkchildren`)
+    .then((response) => {
+      this.setState({verified: response.data !== null})
+    })
+    .catch((error) => {
+      Log.error(error);
+    });
   }
 
   componentDidMount() {
     document.addEventListener("message", this.handleMessage, false);
+    this.getProfile(JSON.parse(localStorage.getItem("user")).id);
   }
 
   componentWillUnmount() {
@@ -432,6 +445,9 @@ class CreateActivityStepper extends React.Component {
     const texts = Texts[language].createActivityStepper;
     const steps = texts.stepLabels;
     const { activeStep, stepWasValidated, creating } = this.state;
+    console.log(this.state.verified);
+    const finish = (this.state.verified == true) ? texts.finish : texts.childFinish;
+    console.log(texts.childFinish);
     return (
       <div className={classes.root}>
         {creating && <LoadingSpinner />}
@@ -466,7 +482,7 @@ class CreateActivityStepper extends React.Component {
                           }
                         >
                           {activeStep === steps.length - 1
-                            ? texts.finish
+                            ? finish
                             : texts.continue}
                         </Button>
                         <Button

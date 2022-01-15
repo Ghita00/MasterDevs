@@ -57,10 +57,10 @@ const TimeslotPreview = ({ timeslot, history }) => {
               <img
                 src={
                   previewStyle === "timeslotPreviewSuccess"
-                    ? Images.coupleWhite
+                    ? Images.childSimple
                     : Images.couple
                 }
-                alt="couple icon"
+                alt="childProfile icon"
                 className="timeslotPreviewIcon"
               />
             </div>
@@ -71,10 +71,10 @@ const TimeslotPreview = ({ timeslot, history }) => {
               <img
                 src={
                   previewStyle === "timeslotPreviewSuccess"
-                    ? Images.babyFaceWhite
-                    : Images.babyFace
+                    ? Images.couple
+                    : Images.childSimple
                 }
-                alt="baby icon"
+                alt="child icon"
                 className="timeslotPreviewIcon"
               />
             </div>

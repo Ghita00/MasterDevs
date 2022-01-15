@@ -288,7 +288,7 @@ class ActivityScreen extends React.Component {
               <i className="fas fa-user-friends" />
             ) : (
               <img
-                src={Images.babyFace}
+                src={Images.childSimple}
                 alt="map marker icon"
                 className="activityInfoImage"
               />
