@@ -71,7 +71,9 @@ const updateDeviceToken = (userId, deviceToken) => {
       Log.error(error);
     });
 };
-
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 class MyFamiliesShareScreen extends React.Component {
   constructor() {
     super();
@@ -98,6 +100,9 @@ class MyFamiliesShareScreen extends React.Component {
 
   async componentDidMount() {
     const deviceToken = localStorage.getItem("deviceToken");
+    if(!(JSON.parse(localStorage.getItem("user")).id)){
+      sleep(500);
+    }
     const userId = JSON.parse(localStorage.getItem("user")).id;
     if (deviceToken !== undefined && deviceToken !== "undefined") {
       await updateDeviceToken(userId, deviceToken);
@@ -109,7 +114,6 @@ class MyFamiliesShareScreen extends React.Component {
     const pendingInvites = groups.filter(
       (group) => group.group_accepted && !group.user_accepted
     ).length;
-    //?
     const pendingChildRequest = await getMyPendingChildRequest(userId);
     const unreadNotifications = await getMyUnreadNotifications(userId);
     let myTimeslots = await getMyTimeslots(userId);
@@ -138,7 +142,7 @@ class MyFamiliesShareScreen extends React.Component {
       pendingInvites,
       pendingChildRequest,
     });
-    this.getProfile(JSON.parse(localStorage.getItem("user")).id);
+    this.getProfile(userId);
   }
 
   renderGroupSection = () => {

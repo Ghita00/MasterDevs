@@ -140,9 +140,16 @@ class ProfileHeader extends React.Component {
 
   handleBackNav = () => {
     const { history } = this.props;
-    if (document.referrer.includes("create")) {
-      history.replace("/myfamiliesshare");
+    if(this.props.location.goback !== undefined){
+      sessionStorage.setItem("goback", JSON.stringify(this.props.location.goback))
+    }
+    let goback = JSON.parse('['+sessionStorage.getItem("goback")+']')[0];
+    console.log(goback)
+    if (goback) {
+      // se nell' indirizzo precedente c'era la pagina di creazione, torna alla pagina principale
+      history.push("/myfamiliesshare");
     } else {
+      // altrimenti torna alla pagina precedente
       history.goBack();
     }
   };
@@ -175,7 +182,7 @@ class ProfileHeader extends React.Component {
   };
 
   render() {
-    const { language, match, history, photo, name } = this.props;
+    const { language, match, photo, name } = this.props;
     const { profileId } = match.params;
     const texts = Texts[language].profileHeader;
     const {

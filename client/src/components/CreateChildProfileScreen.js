@@ -152,7 +152,10 @@ class CreateChildProfileScreen extends React.Component {
       .post(`/api/users/${profileId}/childrenProfile`, info)
       .then((response) => {
         Log.info(response);    
-        history.push(`/profiles/${profileId}/children`);
+        history.push({
+          pathname: `/profiles/${profileId}/children`,
+          goback: true
+        });
       })
       .catch((error) => {
         Log.error(error);

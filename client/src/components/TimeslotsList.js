@@ -20,7 +20,14 @@ const getUsersChildren = (userId) => {
     });
 };
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 const handleTimeslots = (timeslots, usersChildren) => {
+  if(!(JSON.parse(localStorage.getItem("user")).id)){
+    sleep(500);
+  }
   const userId = JSON.parse(localStorage.getItem("user")).id;
   const sortedTimeslots = timeslots.sort((a, b) => {
     return moment.utc(a.start.dateTime).diff(moment.utc(b.start.dateTime));

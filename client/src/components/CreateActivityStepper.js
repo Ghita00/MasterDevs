@@ -446,7 +446,7 @@ class CreateActivityStepper extends React.Component {
     const steps = texts.stepLabels;
     const { activeStep, stepWasValidated, creating } = this.state;
     console.log(this.state.verified);
-    const finish = (this.state.verified == true) ? texts.finish : texts.childFinish;
+    const finish = (this.state.verified === true) ? texts.finish : texts.childFinish;
     console.log(texts.childFinish);
     return (
       <div className={classes.root}>
